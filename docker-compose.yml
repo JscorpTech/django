@@ -4,7 +4,7 @@ services:
   web:
     build: .
     restart: always
-    command: ${COMMAND}
+    command: ${COMMAND:-python3 manage.py runserver 0.0.0.0:8000}
     volumes:
       - .:/code
     ports:
