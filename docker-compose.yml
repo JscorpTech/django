@@ -4,7 +4,7 @@ services:
   web:
     build: .
     restart: always
-    command: ./entrypoint.sh
+    command: ${COMMAND}
     volumes:
       - .:/code
     ports:
@@ -28,7 +28,6 @@ services:
     image: ngrok/ngrok:latest
     ports:
       - ${NGROK_ADMIN_PORT}:4040
-    restart: unless-stopped
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
     command: http http://web:8000 --domain=${NGROK_DOMAIN}
