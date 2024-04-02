@@ -19,7 +19,13 @@ INSTALLED_APPS = [
     #####################
     # my install modules
     #####################
-    "jazzmin",
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.import_export",  # optional, if django-import-export package is used
+    "unfold.contrib.guardian",  # optional, if django-guardian package is used
+    "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
+
     "modeltranslation",
 
     #####################
@@ -122,7 +128,7 @@ INSTALLED_APPS += [
 ]
 
 CONFIGS = [
-    "config.conf.jazzmin",
+    "config.conf.unfold",
     "config.conf.cache",
     "config.conf.ckeditor",
     "config.conf.jwt",

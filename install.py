@@ -1,16 +1,11 @@
 from time import sleep
 
-try:
-    import yaml
-    import typer
-    from rich import print
-    from rich.progress import Progress, SpinnerColumn, TextColumn
-except (ModuleNotFoundError, ImportError) as e:
-    import os
+import typer
+import yaml
+from rich import print
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
-    os.system("pip install pyyaml")
-    os.system("pip install typer")
-    os.system("pip install rich")
+# Pre-requisite: Ensure dependencies (pyyaml, typer, rich) are pre-installed or managed via a requirements.txt file
 
 data = {
     "version": "3.11",
@@ -19,16 +14,9 @@ data = {
             "build": ".",
             "restart": "always",
             "command": "${COMMAND:-python3 manage.py runserver 0.0.0.0:8000}",
-            "volumes": [
-                ".:/code"
-            ],
-            "ports": [
-                "8001:8000"
-            ],
-            "depends_on": [
-                "db",
-                "redis"
-            ]
+            "volumes": [".:/code"],
+            "ports": ["8001:8000"],
+            "depends_on": ["db", "redis"]
         },
         "db": {
             "image": "postgres:13",
@@ -38,9 +26,7 @@ data = {
                 "POSTGRES_USER": "postgres",
                 "POSTGRES_PASSWORD": "2309"
             },
-            "volumes": [
-                "pg_data:/var/lib/postgresql/data"
-            ]
+            "volumes": ["pg_data:/var/lib/postgresql/data"]
         },
         "redis": {
             "restart": "always",
@@ -48,9 +34,7 @@ data = {
         },
         "ngrok": {
             "image": "ngrok/ngrok:latest",
-            "ports": [
-                "${NGROK_ADMIN_PORT}:4040"
-            ],
+            "ports": ["${NGROK_ADMIN_PORT}:4040"],
             "environment": {
                 "NGROK_AUTHTOKEN": "${NGROK_AUTHTOKEN}"
             },
@@ -61,38 +45,17 @@ data = {
                 "context": ".",
                 "dockerfile": "ViteDockerfile"
             },
-            "ports": [
-                "${VITE_PORT}:5173"
-            ],
-            "volumes": [
-                ".:/code",
-                "/code/node_modules"
-            ]
+            "ports": ["${VITE_PORT}:5173"],
+            "volumes": [".:/code", "/code/node_modules"]
         },
         "celery": {
             "build": ".",
-            "command": "celery -A config worker --loglevel=info",
+            "command": "sh ./scripts/celery.sh",
             "restart": "always",
-            "volumes": [
-                ".:/code"
-            ],
-            "depends_on": [
-                "web",
-                "redis"
-            ]
+            "ports": ["${CELERY_PORT:-5555}:5555"],
+            "volumes": [".:/code"],
+            "depends_on": ["web", "redis"]
         },
-        "celery-beat": {
-            "build": ".",
-            "command": "celery -A config beat --loglevel=info",
-            "restart": "always",
-            "volumes": [
-                ".:/code"
-            ],
-            "depends_on": [
-                "web",
-                "redis"
-            ]
-        }
     },
     "volumes": {
         "pg_data": None
@@ -100,66 +63,39 @@ data = {
 }
 
 
-def green(text):
-    print(f"[bold green]{text}[/bold green]", end="")
+def prompt_service_installation(service_name, default=True, color="green"):
+    print(f"[bold {color}]Install {service_name}?[/bold {color}]", end="")
+    response = typer.confirm("", default=default)
+    if not response:
+        del data["services"][service_name.lower().replace(" ", "-")]
 
 
-def yellow(text):
-    print(f"[bold yellow]{text}[/bold yellow]", end="")
-
-
-def main():
-    green("Install Postgresql?")
-    db = typer.confirm("", default=True)
-    if not db:
-        del data["services"]['db']
-    green("Install Redis?")
-    redis = typer.confirm("", default=True)
-    if not redis:
-        del data["services"]['redis']
-
-    green("Install Ngrok?")
-    ngrok = typer.confirm("", default=True)
-    if not ngrok:
-        del data["services"]['ngrok']
-
-    yellow("Install Vite?")
-    vite = typer.confirm("", default=False)
-    if not vite:
-        del data["services"]['vite']
-
-    yellow("Install Celery?")
-    celery = typer.confirm("", default=False)
-    if not celery:
-        del data["services"]['celery']
-
-    yellow("Install Celerybeat")
-    celerybeat = typer.confirm("", default=False)
-    if not celerybeat:
-        del data["services"]['celery-beat']
-
-    green("Django Port?")
+def update_port():
+    print("[bold green]Django Port?[/bold green]", end="")
     port = typer.prompt("", default=8000)
     data["services"]["web"]["ports"][0] = f"{port}:8000"
 
-    yaml_str = yaml.dump(
-        data,
-        sort_keys=False,
-        default_flow_style=False,
-        allow_unicode=True
-    )
 
-    with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            transient=True,
-    ) as progress:
-        progress.add_task(description="Kuting...", total=None)
-        with open('docker-compose.yml', 'w') as file:
-            file.write(yaml_str)
-        sleep(2)
-    print("")
-    print("[bold green]Bajarildi :boom:[/bold green]")
+def write_docker_compose():
+    yaml_str = yaml.dump(data, sort_keys=False, default_flow_style=False, allow_unicode=True)
+    with open('docker-compose.yml', 'w') as file:
+        file.write(yaml_str)
+
+
+def main():
+    for service in [("Postgresql", True), ("Redis", True), ("Ngrok", True), ("Vite", False, "yellow"),
+                    ("Celery", False, "yellow")]:
+        prompt_service_installation(*service)
+
+    update_port()
+
+    with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), transient=True) as progress:
+        progress.add_task(description="Writing docker-compose.yml...", total=None)
+        sleep(2)  # Simulate time taken to process
+
+    write_docker_compose()
+
+    print("\n[bold green]Configuration successful! :boom:[/bold green]")
 
 
 if __name__ == "__main__":

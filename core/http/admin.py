@@ -3,10 +3,10 @@
 #####################
 
 from django.contrib import admin
-from django.contrib.admin import TabularInline
 from django.contrib.auth.admin import UserAdmin
 from import_export.admin import ImportExportModelAdmin
 from modeltranslation.admin import TabbedTranslationAdmin
+from unfold.admin import ModelAdmin, TabularInline
 
 from core.http.forms import PostAdminForm
 from core.http.models import Post, User, SmsConfirm, FrontendTranslation, Comment
@@ -20,7 +20,7 @@ class PostInline(TabularInline):
     extra = 1
 
 
-class PostAdmin(TabbedTranslationAdmin, ImportExportModelAdmin):
+class PostAdmin(TabbedTranslationAdmin, ImportExportModelAdmin, ModelAdmin):
     fields: tuple = ('title', "desc", "image")
     resource_classes: list = [PostResource]
     search_fields: list = ['title', 'desc']
@@ -30,7 +30,7 @@ class PostAdmin(TabbedTranslationAdmin, ImportExportModelAdmin):
     inlines = [PostInline]
 
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(UserAdmin, ModelAdmin):
     list_display = ['phone', "first_name", "last_name"]
 
 
@@ -40,7 +40,7 @@ class FrontendInline(TabularInline):
     extra = 1
 
 
-class FrontendTranslationAdmin(TabbedTranslationAdmin, ImportExportModelAdmin):
+class FrontendTranslationAdmin(TabbedTranslationAdmin, ImportExportModelAdmin, ModelAdmin):
     fields: tuple = ("key", "value")
     required_languages: tuple = ('uz',)
     list_display = ["key", "value"]
@@ -49,8 +49,18 @@ class FrontendTranslationAdmin(TabbedTranslationAdmin, ImportExportModelAdmin):
     resource_classes = [FrontendTranslationResource]
 
 
-admin.site.register(Comment)
+class SmsConfirmAdmin(ModelAdmin):
+    list_display = ["phone", "code", "resend_count", "try_count"]
+    search_fields = ["phone", "code"]
+
+
+class CommentAdmin(ModelAdmin):
+    list_display = ["text"]
+    search_fields = ["text"]
+
+
+admin.site.register(Comment, CommentAdmin)
 admin.site.register(FrontendTranslation, FrontendTranslationAdmin)
-admin.site.register(SmsConfirm)
+admin.site.register(SmsConfirm, SmsConfirmAdmin)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Post, PostAdmin)
