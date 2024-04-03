@@ -7,9 +7,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.db import models
 from django_select2.forms import Select2MultipleWidget
+from import_export.admin import ImportExportModelAdmin
 from modeltranslation.admin import TabbedTranslationAdmin
-from unfold.admin import ModelAdmin, TabularInline
-from unfold.contrib.import_export.admin import ExportActionModelAdmin
+from django.contrib.admin import ModelAdmin, TabularInline
+
 
 from core.http.forms import PostAdminForm
 from core.http.models import Post, User, SmsConfirm, FrontendTranslation, Comment, Tags
@@ -26,7 +27,7 @@ class TagsInline(TabularInline):
     extra = 1
 
 
-class PostAdmin(TabbedTranslationAdmin, ModelAdmin, ExportActionModelAdmin):
+class PostAdmin(TabbedTranslationAdmin, ModelAdmin, ImportExportModelAdmin):
     fields: tuple = ('title', "desc", "image", 'tags')
     search_fields: list = ['title', 'desc']
     list_filter = ['title']
@@ -40,12 +41,12 @@ class PostAdmin(TabbedTranslationAdmin, ModelAdmin, ExportActionModelAdmin):
     }
 
 
-class TagsAdmin(ModelAdmin, ExportActionModelAdmin):
+class TagsAdmin(ModelAdmin, ImportExportModelAdmin):
     fields: tuple = ('name',)
     search_fields: list = ['name']
 
 
-class CustomUserAdmin(UserAdmin, ModelAdmin, ExportActionModelAdmin):
+class CustomUserAdmin(UserAdmin, ModelAdmin, ImportExportModelAdmin):
     list_display = ['phone', "first_name", "last_name"]
 
 
@@ -55,7 +56,7 @@ class FrontendInline(TabularInline):
     extra = 1
 
 
-class FrontendTranslationAdmin(TabbedTranslationAdmin, ModelAdmin, ExportActionModelAdmin):
+class FrontendTranslationAdmin(TabbedTranslationAdmin, ModelAdmin, ImportExportModelAdmin):
     fields: tuple = ("key", "value")
     required_languages: tuple = ('uz',)
     list_display = ["key", "value"]
@@ -67,12 +68,12 @@ class SmsConfirmAdmin(ModelAdmin):
     search_fields = ["phone", "code"]
 
 
-class CommentAdmin(ModelAdmin, ExportActionModelAdmin):
+class CommentAdmin(ModelAdmin, ImportExportModelAdmin):
     list_display = ["text"]
     search_fields = ["text"]
 
 
-class GroupAdmin(ModelAdmin, ExportActionModelAdmin):
+class GroupAdmin(ModelAdmin, ImportExportModelAdmin):
     list_display = ['name']
     search_fields = ["name"]
     filter_horizontal = (
