@@ -10,10 +10,12 @@ django-extensions==3.2.3
 django-filter==23.5
 django-import-export==3.3.7
 django-jazzmin==2.6.0
+django-jet==1.0.8
 django-modeltranslation==0.18.11
 django-polymorphic==3.1.0
 django-redis==5.4.0
 django-rosetta==0.10.0
+django-select2==8.1.2
 django-unfold==0.21.1
 django-unicorn==0.58.1
 djangorestframework-simplejwt==5.3.1

@@ -40,6 +40,7 @@ class BaseMake(BaseCommand):
         parser.add_argument('name')
 
     def handle(self, *args, **options):
+
         name = options.get("name")
         stub = open(os.path.join(settings.BASE_DIR, f'stub/{self.path}.stub'),
                     'r')
@@ -64,4 +65,3 @@ class BaseMake(BaseCommand):
             file.write(stub)
             file.close()
         self.console.success(f"{self.name} created")
-

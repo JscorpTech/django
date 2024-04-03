@@ -25,6 +25,17 @@ class User(AbstractUser):
         return self.phone
 
 
+class Tags(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = _("Tags")
+        verbose_name = _("Tag")
+
+
 class PendingUser(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -124,6 +135,7 @@ class Post(BaseComment):
     title = models.CharField(max_length=255)
     desc = models.TextField()
     image = models.ImageField(upload_to='posts/', blank=True)
+    tags = models.ManyToManyField(Tags)
 
     def __str__(self):
         return self.title

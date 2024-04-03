@@ -4,14 +4,15 @@
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from import_export.admin import ImportExportModelAdmin
+from django.contrib.auth.models import Group
+from django.db import models
+from django_select2.forms import Select2MultipleWidget
 from modeltranslation.admin import TabbedTranslationAdmin
 from unfold.admin import ModelAdmin, TabularInline
+from unfold.contrib.import_export.admin import ExportActionModelAdmin
 
 from core.http.forms import PostAdminForm
-from core.http.models import Post, User, SmsConfirm, FrontendTranslation, Comment
-from core.http.resources import FrontendTranslationResource
-from core.http.resources import PostResource
+from core.http.models import Post, User, SmsConfirm, FrontendTranslation, Comment, Tags
 
 
 class PostInline(TabularInline):
@@ -20,17 +21,31 @@ class PostInline(TabularInline):
     extra = 1
 
 
-class PostAdmin(TabbedTranslationAdmin, ImportExportModelAdmin, ModelAdmin):
-    fields: tuple = ('title', "desc", "image")
-    resource_classes: list = [PostResource]
+class TagsInline(TabularInline):
+    model = Post.tags.through
+    extra = 1
+
+
+class PostAdmin(TabbedTranslationAdmin, ModelAdmin, ExportActionModelAdmin):
+    fields: tuple = ('title', "desc", "image", 'tags')
     search_fields: list = ['title', 'desc']
     list_filter = ['title']
     required_languages: tuple = ('uz',)
     form = PostAdminForm
     inlines = [PostInline]
+    formfield_overrides = {
+        models.ManyToManyField: {
+            "widget": Select2MultipleWidget
+        }
+    }
 
 
-class CustomUserAdmin(UserAdmin, ModelAdmin):
+class TagsAdmin(ModelAdmin, ExportActionModelAdmin):
+    fields: tuple = ('name',)
+    search_fields: list = ['name']
+
+
+class CustomUserAdmin(UserAdmin, ModelAdmin, ExportActionModelAdmin):
     list_display = ['phone', "first_name", "last_name"]
 
 
@@ -40,13 +55,11 @@ class FrontendInline(TabularInline):
     extra = 1
 
 
-class FrontendTranslationAdmin(TabbedTranslationAdmin, ImportExportModelAdmin, ModelAdmin):
+class FrontendTranslationAdmin(TabbedTranslationAdmin, ModelAdmin, ExportActionModelAdmin):
     fields: tuple = ("key", "value")
     required_languages: tuple = ('uz',)
     list_display = ["key", "value"]
     inlines = [FrontendInline]
-
-    resource_classes = [FrontendTranslationResource]
 
 
 class SmsConfirmAdmin(ModelAdmin):
@@ -54,11 +67,23 @@ class SmsConfirmAdmin(ModelAdmin):
     search_fields = ["phone", "code"]
 
 
-class CommentAdmin(ModelAdmin):
+class CommentAdmin(ModelAdmin, ExportActionModelAdmin):
     list_display = ["text"]
     search_fields = ["text"]
 
 
+class GroupAdmin(ModelAdmin, ExportActionModelAdmin):
+    list_display = ['name']
+    search_fields = ["name"]
+    filter_horizontal = (
+        "permissions",
+    )
+
+
+admin.site.unregister(Group)
+admin.site.register(Group, GroupAdmin)
+
+admin.site.register(Tags, TagsAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(FrontendTranslation, FrontendTranslationAdmin)
 admin.site.register(SmsConfirm, SmsConfirmAdmin)

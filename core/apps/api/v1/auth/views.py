@@ -72,7 +72,7 @@ class ConfirmView(APIView, BaseService):
             # Check Sms confirmation otp code
             if SmsService.check_confirm(phone, code=code):
                 # Create user
-                token = self.service.create_user_if_not_found(pending_user)
+                token = self.service.create_user_from_pending(pending_user)
                 return ApiResponse.success(_(Messages.OTP_CONFIRMED), token=token)
         except SmsException as e:
             return ResponseException(e)  # Response exception for APIException
