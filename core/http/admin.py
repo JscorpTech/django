@@ -27,7 +27,7 @@ class TagsInline(TabularInline):
     extra = 1
 
 
-class PostAdmin(TabbedTranslationAdmin, ModelAdmin, ImportExportModelAdmin):
+class PostAdmin(TabbedTranslationAdmin, ImportExportModelAdmin):
     fields: tuple = ('title', "desc", "image", 'tags')
     search_fields: list = ['title', 'desc']
     list_filter = ['title']
@@ -41,12 +41,12 @@ class PostAdmin(TabbedTranslationAdmin, ModelAdmin, ImportExportModelAdmin):
     }
 
 
-class TagsAdmin(ModelAdmin, ImportExportModelAdmin):
+class TagsAdmin(ImportExportModelAdmin):
     fields: tuple = ('name',)
     search_fields: list = ['name']
 
 
-class CustomUserAdmin(UserAdmin, ModelAdmin, ImportExportModelAdmin):
+class CustomUserAdmin(UserAdmin, ImportExportModelAdmin):
     list_display = ['phone', "first_name", "last_name"]
 
 
@@ -56,7 +56,7 @@ class FrontendInline(TabularInline):
     extra = 1
 
 
-class FrontendTranslationAdmin(TabbedTranslationAdmin, ModelAdmin, ImportExportModelAdmin):
+class FrontendTranslationAdmin(TabbedTranslationAdmin, ImportExportModelAdmin):
     fields: tuple = ("key", "value")
     required_languages: tuple = ('uz',)
     list_display = ["key", "value"]
@@ -68,12 +68,12 @@ class SmsConfirmAdmin(ModelAdmin):
     search_fields = ["phone", "code"]
 
 
-class CommentAdmin(ModelAdmin, ImportExportModelAdmin):
+class CommentAdmin(ImportExportModelAdmin):
     list_display = ["text"]
     search_fields = ["text"]
 
 
-class GroupAdmin(ModelAdmin, ImportExportModelAdmin):
+class GroupAdmin(ImportExportModelAdmin):
     list_display = ['name']
     search_fields = ["name"]
     filter_horizontal = (
