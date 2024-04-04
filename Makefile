@@ -33,8 +33,10 @@ chown:
 	sudo chown -R user:user ./*
 
 connect:
-	docker compose logs -f
+	docker compose logs -f ${app}
 
+push:
+	git add . && git commit -m "${comment}" && git push
 
-.PHONY: build up up-d down migrate superuser shell test
+.PHONY: up
 
