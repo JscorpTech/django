@@ -8,15 +8,11 @@ from core.http import models, serializers
 from core.http import views as http_views
 
 
-class RegisterView(views.APIView):
+class RegisterView(views.APIView, services.UserService):
     """Register new user"""
 
     serializer_class = serializers.RegisterSerializer
     throttle_classes = [throttling.UserRateThrottle]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.service = services.user.UserService()
 
     def post(self, request: request.Request):
         ser = self.serializer_class(data=request.data)
@@ -25,23 +21,19 @@ class RegisterView(views.APIView):
         phone = data.get("phone")
 
         # Create pending user
-        self.service.create_pending_user(
+        self.create_pending_user(
             phone, data.get("first_name"),
             data.get("last_name"), data.get("password")
         )
 
-        self.service.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
+        self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
         return utils.ApiResponse().success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
 
 
-class ConfirmView(views.APIView):
+class ConfirmView(views.APIView, services.UserService):
     """Confirm otp code"""
 
     serializer_class = serializers.ConfirmSerializer
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.service = services.UserService()
 
     def post(self, request: request.Request):
         ser = self.serializer_class(data=request.data)
@@ -57,7 +49,7 @@ class ConfirmView(views.APIView):
             # Check Sms confirmation otp code
             if services.SmsService.check_confirm(phone, code=code):
                 # Create user
-                token = self.service.create_user_from_pending(pending_user)
+                token = self.create_user_from_pending(pending_user)
                 return utils.ApiResponse().success(_(enums.Messages.OTP_CONFIRMED), token=token)
         except exceptions.SmsException as e:
             return utils.ResponseException(e)  # Response exception for APIException

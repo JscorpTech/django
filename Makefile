@@ -32,5 +32,9 @@ test:
 chown:
 	sudo chown -R user:user ./*
 
+connect:
+	docker compose logs -f
+
+
 .PHONY: build up up-d down migrate superuser shell test
 

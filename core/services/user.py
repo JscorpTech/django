@@ -11,8 +11,7 @@ from core.utils.exception import ResponseException
 
 class UserService(BaseService, SmsService):
 
-    @staticmethod
-    def get_token(user):
+    def get_token(self,user):
         refresh = RefreshToken.for_user(user)
 
         return {
@@ -44,7 +43,7 @@ class UserService(BaseService, SmsService):
         user.first_name = pending_user.first_name
         user.last_name = pending_user.last_name
         user.save()
-        token = UserService.get_token(user)
+        token = self.get_token(user)
         return token
 
     def change_password(self, phone, password):

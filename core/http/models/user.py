@@ -1,11 +1,18 @@
+import math
+from datetime import datetime, timezone, timedelta
 
+from django.contrib.auth import models as auth_models
+from django.db import models
 
-class User(AbstractUser):
+from common.env import env
+from core.http import managers
+
+class User(auth_models.AbstractUser):
     phone = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=255, null=True, blank=True)
     USERNAME_FIELD = u"phone"
 
-    objects = UserManager()
+    objects = managers.UserManager()
 
     def __str__(self):
         return self.phone
