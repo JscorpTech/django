@@ -5,9 +5,9 @@
 from rest_framework import viewsets, status
 from rest_framework.generics import ListAPIView
 
+from core.http import views
 from core.http.models import Post, FrontendTranslation
 from core.http.serializers import PostSerializer, FrontendTransactionSerializer
-from core.utils.response import ApiResponse
 
 
 class PostListView(viewsets.ModelViewSet):
@@ -18,7 +18,7 @@ class PostListView(viewsets.ModelViewSet):
         return super().dispatch(request, *args, **kwargs)
 
 
-class FrontendTranslationView(ListAPIView):
+class FrontendTranslationView(ListAPIView, views.ApiResponse):
     queryset = FrontendTranslation.objects.all()
     serializer_class = FrontendTransactionSerializer
 
@@ -28,7 +28,7 @@ class FrontendTranslationView(ListAPIView):
 
         for obj in serializer.data:
             data[obj["key"]] = obj["value"]
-        return ApiResponse().success(data=data, status=status.HTTP_200_OK)
+        return self.success(data=data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         queryset = self.queryset.all()

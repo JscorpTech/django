@@ -4,11 +4,10 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, permissions, request, throttling, views
 
 from core import enums, utils, exceptions, services
-from core.http import models, serializers
-from core.http import views as http_views
+from core.http import models, serializers, views as http_views
 
 
-class RegisterView(views.APIView, services.UserService):
+class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
     """Register new user"""
 
     serializer_class = serializers.RegisterSerializer
@@ -27,10 +26,10 @@ class RegisterView(views.APIView, services.UserService):
         )
 
         self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
-        return utils.ApiResponse().success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
+        return self.success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
 
 
-class ConfirmView(views.APIView, services.UserService):
+class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
     """Confirm otp code"""
 
     serializer_class = serializers.ConfirmSerializer
@@ -50,11 +49,11 @@ class ConfirmView(views.APIView, services.UserService):
             if services.SmsService.check_confirm(phone, code=code):
                 # Create user
                 token = self.create_user_from_pending(pending_user)
-                return utils.ApiResponse().success(_(enums.Messages.OTP_CONFIRMED), token=token)
+                return self.success(_(enums.Messages.OTP_CONFIRMED), token=token)
         except exceptions.SmsException as e:
             return utils.ResponseException(e)  # Response exception for APIException
         except Exception as e:
-            return utils.ApiResponse().error(e)  # Api exception for APIException
+            return self.error(e)  # Api exception for APIException
 
 
 class ResetPasswordView(http_views.AbstractSendSms):
@@ -62,14 +61,10 @@ class ResetPasswordView(http_views.AbstractSendSms):
     serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
 
 
-class ResetConfirmationCodeView(views.APIView):
+class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.UserService):
     """Reset confirm otp code"""
 
     serializer_class = serializers.ResetConfirmationSerializer
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.service = services.UserService()
 
     def post(self, request: request.Request):
         ser = self.serializer_class(data=request.data)
@@ -83,13 +78,13 @@ class ResetConfirmationCodeView(views.APIView):
         try:
             res = services.SmsService.check_confirm(phone, code)
             if res:
-                self.service.change_password(phone, password)
-                return utils.ApiResponse().success(_(enums.Messages.CHANGED_PASSWORD))
-            return utils.ApiResponse().error(_(enums.Messages.INVALID_OTP))
+                self.change_password(phone, password)
+                return self.success(_(enums.Messages.CHANGED_PASSWORD))
+            return self.error(_(enums.Messages.INVALID_OTP))
         except exceptions.SmsException as e:
-            return utils.ApiResponse().error(e, error_code=enums.Codes.INVALID_OTP_ERROR)
+            return self.error(e, error_code=enums.Codes.INVALID_OTP_ERROR)
         except Exception as e:
-            return utils.ApiResponse().error(e)
+            return self.error(e)
 
 
 class ResendView(http_views.AbstractSendSms):
@@ -97,11 +92,11 @@ class ResendView(http_views.AbstractSendSms):
     serializer_class = serializers.ResendSerializer
 
 
-class MeView(views.APIView):
+class MeView(views.APIView, http_views.ApiResponse):
     """Get user information"""
 
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request: request.Request):
         user = request.user
-        return utils.ApiResponse().success(data=serializers.UserSerializer(user).data)
+        return self.success(data=serializers.UserSerializer(user).data)

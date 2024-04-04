@@ -1,7 +1,7 @@
-build:
-	docker compose build
 up:
 	docker compose up
+build:
+	docker compose build
 up-b:
 	docker compose up -b
 

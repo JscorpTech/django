@@ -56,6 +56,11 @@ data = {
             "volumes": [".:/code"],
             "depends_on": ["web", "redis"]
         },
+        "nginx": {
+            "build": "./nginx",
+            "ports": ["81:80"],
+            "depends_on": ["web"]
+        }
     },
     "volumes": {
         "pg_data": None
@@ -76,6 +81,15 @@ def update_port():
     data["services"]["web"]["ports"][0] = f"{port}:8000"
 
 
+def update_nginx_port():
+    """Update the nginx port if already installed"""
+    if "nginx" not in data["services"]:
+        return
+    print("[bold green]Nginx Port?[/bold green]", end="")
+    port = typer.prompt("", default=81)
+    data["services"]["nginx"]['ports'][0] = f"{port}:80"
+
+
 def write_docker_compose():
     yaml_str = yaml.dump(data, sort_keys=False, default_flow_style=False, allow_unicode=True)
     with open('docker-compose.yml', 'w') as file:
@@ -83,11 +97,18 @@ def write_docker_compose():
 
 
 def main():
-    for service in [("Postgresql", True), ("Redis", True), ("Ngrok", True), ("Vite", False, "yellow"),
-                    ("Celery", False, "yellow")]:
+    for service in [
+        ("Postgresql", True),
+        ("Redis", True),
+        ("Ngrok", True),
+        ("Vite", False, "yellow"),
+        ("Celery", False, "yellow"),
+        ("nginx", False, "red")
+    ]:
         prompt_service_installation(*service)
 
     update_port()
+    update_nginx_port()
 
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), transient=True) as progress:
         progress.add_task(description="Writing docker-compose.yml...", total=None)

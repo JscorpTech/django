@@ -1,8 +1,8 @@
-from rest_framework import serializers
-from rest_framework import validators
+from django.utils.translation import gettext as _
+from rest_framework import serializers, validators
 
 from core.http import models
-from django.utils.translation import gettext as _
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255)

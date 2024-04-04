@@ -1,11 +1,11 @@
+from django.utils.translation import gettext as _
 from rest_framework import views, throttling, request
 
-from core import utils, enums, services
-from core.http import serializers
-from django.utils.translation import gettext as _
+from core import enums, services
+from core.http import serializers, views as http_views
 
 
-class AbstractSendSms(views.APIView):
+class AbstractSendSms(views.APIView, http_views.ApiResponse):
     serializer_class = serializers.ResendSerializer
     throttle_classes = [throttling.UserRateThrottle]
 
@@ -18,4 +18,4 @@ class AbstractSendSms(views.APIView):
         ser.is_valid(raise_exception=True)
         phone = ser.data.get('phone')
         self.service.send_confirmation(phone)
-        return utils.ApiResponse().success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
+        return self.success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})

@@ -1,9 +1,31 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 
-from core.utils import response
+
+class ApiResponse:
+
+    def response(self, success=True, message="", data=None, status_code=status.HTTP_200_OK, **kwargs):
+        if data is None:
+            data = {}
+        response_data = {
+            "success": success,
+            "message": message,
+            "data": data,
+            **kwargs
+        }
+        return Response(data=response_data, status=status_code)
+
+    def success(self, message="", data=None, status_code=status.HTTP_200_OK, **kwargs):
+        return self.response(True, message, data, status_code, **kwargs)
+
+    def error(self, message="", data=None, error_code=0, status_code=status.HTTP_400_BAD_REQUEST, exception=None,
+              **kwargs):
+        if isinstance(exception, exception.BreakException):
+            raise exception
+        return self.response(False, message, data, status_code, error_code=error_code, **kwargs)
 
 
-class ListApiView(generics.ListAPIView):
+class ListApiView(generics.ListAPIView, ApiResponse):
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -13,10 +35,10 @@ class ListApiView(generics.ListAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return response.ApiResponse().success(data=serializer.data)
+        return self.success(data=serializer.data)
 
 
-class CreateApiView(generics.CreateAPIView):
+class CreateApiView(generics.CreateAPIView, ApiResponse):
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)
-        return response.ApiResponse().success(self.message if hasattr(self, "message") else "Successfully created")
+        return self.success(self.message if hasattr(self, "message") else "Successfully created")

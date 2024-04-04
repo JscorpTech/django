@@ -31,6 +31,12 @@ services:
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
     command: http http://web:8000 --domain=${NGROK_DOMAIN}
+  nginx:
+    build: ./nginx
+    ports:
+      - '81:80'
+    depends_on:
+      - web
 
 #  vite:
 #    build:
