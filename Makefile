@@ -33,10 +33,14 @@ chown:
 	sudo chown -R user:user ./*
 
 connect:
-	docker compose logs -f ${app}
+	docker compose logs -f $(app)
+
+pull:
+	git pull
+
 
 push:
-	git add . && git commit -m "${comment}" && git push
+	git add . && git commit -m "$(comment)" && git push
 
 .PHONY: up
 
