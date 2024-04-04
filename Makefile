@@ -4,6 +4,8 @@ build:
 	docker compose build
 up-b:
 	docker compose up -b
+restart:
+	docker compose restart ${app}
 
 collect:
 	docker compose exec web python manage.py collectstatic
