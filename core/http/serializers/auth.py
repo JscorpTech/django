@@ -1,18 +1,8 @@
-#####################
-# Base serializers
-#####################
-from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
+from rest_framework import validators
 
-from core.http.models import PendingUser, User, FrontendTranslation, Post
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ["first_name", "last_name", "phone"]
-        model = User
-
+from core.http import models
+from django.utils.translation import gettext as _
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255)
@@ -21,10 +11,10 @@ class LoginSerializer(serializers.Serializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(max_length=255, validators=[
-        UniqueValidator(queryset=User.objects.all())])
+        validators.UniqueValidator(queryset=models.User.objects.all())])
 
     class Meta:
-        model = User
+        model = models.User
         fields = [
             "first_name", "last_name",
             "phone", "password"
@@ -47,14 +37,14 @@ class ConfirmSerializer(serializers.Serializer):
 class PendingUserSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['id', 'phone', 'first_name', 'last_name']
-        model = PendingUser
+        model = models.PendingUser
 
 
 class ResetPasswordSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=255)
 
     def validate_phone(self, value):
-        user = User.objects.filter(phone=value)
+        user = models.User.objects.filter(phone=value)
         if user.exists():
             return value
 
@@ -67,26 +57,10 @@ class ResetConfirmationSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=255)
 
     def validate_phone(self, value):
-        user = User.objects.filter(phone=value)
+        user = models.User.objects.filter(phone=value)
         if user.exists():
             return value
         raise serializers.ValidationError(_("User does not exist"))
-
-
-#####################
-# Another serializers
-#####################
-
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = ['title', "desc", "image"]
-
-
-class FrontendTransactionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FrontendTranslation
-        fields = ["key", "value"]
 
 
 class ResendSerializer(serializers.Serializer):

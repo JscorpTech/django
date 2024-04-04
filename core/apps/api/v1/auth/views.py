@@ -1,38 +1,24 @@
-from typing import Type
+import typing
 
 from django.utils.translation import gettext_lazy as _
-from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.request import Request
-from rest_framework.throttling import UserRateThrottle
-from rest_framework.views import APIView
+from rest_framework import generics, permissions, request, throttling, views
 
-from core.enums import Codes, Messages
-from core.exceptions import SmsException
-from core.http.models import PendingUser
-from core.http.serializers import (
-    RegisterSerializer, ConfirmSerializer,
-    ResetPasswordSerializer, ResetConfirmationSerializer,
-    ResendSerializer, UserSerializer
-)
-from core.services.base_service import BaseService
-from core.services.sms import SmsService
-from core.services.user import UserService
-from core.utils.exception import ResponseException
-from core.utils.response import ApiResponse
+from core import enums, utils, exceptions, services
+from core.http import models, serializers
+from core.http import views as http_views
 
 
-class RegisterView(APIView, BaseService):
+class RegisterView(views.APIView):
     """Register new user"""
 
-    serializer_class = RegisterSerializer
-    throttle_classes = [UserRateThrottle]
+    serializer_class = serializers.RegisterSerializer
+    throttle_classes = [throttling.UserRateThrottle]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.service = UserService()
+        self.service = services.user.UserService()
 
-    def post(self, request: Request):
+    def post(self, request: request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
         data = ser.data
@@ -45,20 +31,19 @@ class RegisterView(APIView, BaseService):
         )
 
         self.service.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
+        return utils.ApiResponse().success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
 
-        return ApiResponse.success(_(Messages.SEND_MESSAGE) % {'phone': phone})
 
-
-class ConfirmView(APIView, BaseService):
+class ConfirmView(views.APIView):
     """Confirm otp code"""
 
-    serializer_class = ConfirmSerializer
+    serializer_class = serializers.ConfirmSerializer
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.service = UserService()
+        self.service = services.UserService()
 
-    def post(self, request: Request):
+    def post(self, request: request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
 
@@ -67,48 +52,34 @@ class ConfirmView(APIView, BaseService):
         code = data.get("code")
 
         try:
-            pending_user = get_object_or_404(PendingUser, phone=phone)
+            pending_user = generics.get_object_or_404(models.PendingUser, phone=phone)
 
             # Check Sms confirmation otp code
-            if SmsService.check_confirm(phone, code=code):
+            if services.SmsService.check_confirm(phone, code=code):
                 # Create user
                 token = self.service.create_user_from_pending(pending_user)
-                return ApiResponse.success(_(Messages.OTP_CONFIRMED), token=token)
-        except SmsException as e:
-            return ResponseException(e)  # Response exception for APIException
+                return utils.ApiResponse().success(_(enums.Messages.OTP_CONFIRMED), token=token)
+        except exceptions.SmsException as e:
+            return utils.ResponseException(e)  # Response exception for APIException
         except Exception as e:
-            return ApiResponse.error(e)  # Api exception for APIException
+            return utils.ApiResponse().error(e)  # Api exception for APIException
 
 
-class ResetPasswordView(APIView, BaseService):
+class ResetPasswordView(http_views.AbstractSendSms):
     """Reset user password"""
-    throttle_classes = [UserRateThrottle]  # Throttle
-    serializer_class: Type[ResetPasswordSerializer] = ResetPasswordSerializer
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.service = UserService()
-
-    def post(self, request: Request):
-        ser = self.serializer_class(data=request.data)
-        ser.is_valid(raise_exception=True)
-        phone = ser.data.get('phone')
-
-        self.service.send_confirmation(phone)  # Send Confirmation otp code
-
-        return ApiResponse.success(_(Messages.SEND_MESSAGE) % {'phone': phone})
+    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
 
 
-class ResetConfirmationCodeView(APIView, BaseService):
+class ResetConfirmationCodeView(views.APIView):
     """Reset confirm otp code"""
 
-    serializer_class = ResetConfirmationSerializer
+    serializer_class = serializers.ResetConfirmationSerializer
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.service = UserService()
+        self.service = services.UserService()
 
-    def post(self, request: Request):
+    def post(self, request: request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
 
@@ -118,40 +89,27 @@ class ResetConfirmationCodeView(APIView, BaseService):
         password = data.get('password')
 
         try:
-            res = SmsService.check_confirm(phone, code)
+            res = services.SmsService.check_confirm(phone, code)
             if res:
                 self.service.change_password(phone, password)
-                return ApiResponse.success(_(Messages.CHANGED_PASSWORD))
-            return ApiResponse.error(_(Messages.INVALID_OTP))
-        except SmsException as e:
-            return ApiResponse.error(e, error_code=Codes.INVALID_OTP_ERROR)
+                return utils.ApiResponse().success(_(enums.Messages.CHANGED_PASSWORD))
+            return utils.ApiResponse().error(_(enums.Messages.INVALID_OTP))
+        except exceptions.SmsException as e:
+            return utils.ApiResponse().error(e, error_code=enums.Codes.INVALID_OTP_ERROR)
         except Exception as e:
-            return ApiResponse.error(e)
+            return utils.ApiResponse().error(e)
 
 
-class ResendView(APIView):
+class ResendView(http_views.AbstractSendSms):
     """Resend Otp Code"""
-
-    serializer_class = ResendSerializer
-    throttle_classes = [UserRateThrottle]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.service = UserService()
-
-    def post(self, request: Request):
-        ser = self.serializer_class(data=request.data)
-        ser.is_valid(raise_exception=True)
-        phone = ser.data.get('phone')
-        self.service.send_confirmation(phone)
-        return ApiResponse.success(_(Messages.SEND_MESSAGE) % {'phone': phone})
+    serializer_class = serializers.ResendSerializer
 
 
-class MeView(APIView):
+class MeView(views.APIView):
     """Get user information"""
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request: Request):
+    def get(self, request: request.Request):
         user = request.user
-        return ApiResponse.success(data=UserSerializer(user).data)
+        return utils.ApiResponse().success(data=serializers.UserSerializer(user).data)

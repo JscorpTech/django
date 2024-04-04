@@ -1,7 +1,7 @@
-from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth import base_user
 
 
-class UserManager(BaseUserManager):
+class UserManager(base_user.BaseUserManager):
 
     def create_user(self, phone, password=None, **extra_fields):
         if not phone:

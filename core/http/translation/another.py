@@ -2,9 +2,9 @@
 # Django model translation Resources
 #####################
 
-from modeltranslation.translator import TranslationOptions, translator
+from modeltranslation.translator import TranslationOptions
 
-from core.http.models import Post, FrontendTranslation
+
 
 
 class PostTranslationOption(TranslationOptions):
@@ -15,5 +15,3 @@ class FrontendTranslationOption(TranslationOptions):
     fields = ("value",)
 
 
-translator.register(Post, PostTranslationOption)
-translator.register(FrontendTranslation, FrontendTranslationOption)

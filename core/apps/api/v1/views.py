@@ -28,7 +28,7 @@ class FrontendTranslationView(ListAPIView):
 
         for obj in serializer.data:
             data[obj["key"]] = obj["value"]
-        return ApiResponse.success(data=data, status=status.HTTP_200_OK)
+        return ApiResponse().success(data=data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         queryset = self.queryset.all()

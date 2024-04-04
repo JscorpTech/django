@@ -7,8 +7,7 @@ from common.env import env
 
 class Cache:
 
-    @staticmethod
-    def remember(func, key: str):
+    def remember(self, func, key: str):
         cache_enabled = env('CACHE_ENABLED')
         key = md5(key.encode('utf-8')).hexdigest()
         response = cache.get(key)

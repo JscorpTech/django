@@ -6,27 +6,22 @@ from django.core.management import BaseCommand
 
 class Console(BaseCommand):
 
-    @staticmethod
-    def get_stdout():
+    def get_stdout(self):
         base_command = BaseCommand()
         return base_command.stdout
 
-    @staticmethod
-    def get_style():
+    def get_style(self):
         base_command = BaseCommand()
         return base_command.style
 
-    @staticmethod
-    def success(message):
-        Console.get_stdout().write(Console.get_style().SUCCESS(message))
+    def success(self,message):
+        self.get_stdout().write(self.get_style().SUCCESS(message))
 
-    @staticmethod
-    def error(message):
-        Console.get_stdout().write(Console.get_style().ERROR(message))
+    def error(self,message):
+        self.get_stdout().write(self.get_style().ERROR(message))
 
-    @staticmethod
-    def log(message):
-        Console.get_stdout().write(Console.get_style().ERROR(
+    def log(self,message):
+        self.get_stdout().write(self.get_style().ERROR(
             "\n====================\n{}\n====================\n".format(
                 message)))
 

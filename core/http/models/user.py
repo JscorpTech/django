@@ -1,17 +1,3 @@
-#####################
-# Project base models
-#####################
-
-from datetime import datetime, timedelta, timezone
-
-import math
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django.utils.translation import gettext_lazy as _
-from polymorphic.models import PolymorphicModel
-
-from common.env import env
-from core.http.managers import UserManager
 
 
 class User(AbstractUser):
@@ -23,17 +9,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.phone
-
-
-class Tags(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = _("Tags")
-        verbose_name = _("Tag")
 
 
 class PendingUser(models.Model):
@@ -55,6 +30,7 @@ class PendingUser(models.Model):
         if time_diff >= lifespan_in_seconds:
             return False
         return True
+
 
 
 class SmsConfirm(models.Model):
@@ -118,36 +94,3 @@ class SmsConfirm(models.Model):
     def __str__(self) -> str:
         return "{phone} | {code}".format(phone=self.phone,
                                          code=self.code)
-
-
-class Comment(models.Model):
-    text = models.CharField(max_length=255)
-
-    def __str__(self) -> str:
-        return self.text
-
-
-class BaseComment(PolymorphicModel):
-    comments = models.ManyToManyField(Comment)
-
-
-class Post(BaseComment):
-    title = models.CharField(max_length=255)
-    desc = models.TextField()
-    image = models.ImageField(upload_to='posts/', blank=True)
-    tags = models.ManyToManyField(Tags)
-
-    def __str__(self):
-        return self.title
-
-
-class FrontendTranslation(BaseComment):
-    key = models.CharField(max_length=255, unique=True)
-    value = models.TextField()
-
-    def __str__(self):
-        return self.key
-
-    class Meta:
-        verbose_name_plural = _("Frontend Translations")
-        verbose_name = _("Frontend Translation")
