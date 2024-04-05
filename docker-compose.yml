@@ -23,13 +23,6 @@ services:
   redis:
     restart: always
     image: redis
-  ngrok:
-    image: ngrok/ngrok:latest
-    ports:
-      - ${NGROK_ADMIN_PORT}:4040
-    environment:
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-    command: http http://web:8000 --domain=${NGROK_DOMAIN}
   nginx:
     build: ./nginx
     ports:
