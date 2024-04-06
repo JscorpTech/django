@@ -14,13 +14,13 @@ class Console(BaseCommand):
         base_command = BaseCommand()
         return base_command.style
 
-    def success(self,message):
+    def success(self, message):
         self.get_stdout().write(self.get_style().SUCCESS(message))
 
-    def error(self,message):
+    def error(self, message):
         self.get_stdout().write(self.get_style().ERROR(message))
 
-    def log(self,message):
+    def log(self, message):
         self.get_stdout().write(self.get_style().ERROR(
             "\n====================\n{}\n====================\n".format(
                 message)))

@@ -5,12 +5,12 @@ services:
     restart: always
     command: ${COMMAND:-python3 manage.py runserver 0.0.0.0:8000}
     volumes:
-      - .:/code
+    - .:/code
     ports:
-      - 8000:8000
+    - 8000:8000
     depends_on:
-      - db
-      - redis
+    - db
+    - redis
   db:
     image: postgres:13
     restart: always
@@ -19,15 +19,15 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: '2309'
     volumes:
-      - pg_data:/var/lib/postgresql/data
+    - pg_data:/var/lib/postgresql/data
   redis:
     restart: always
     image: redis
   nginx:
     build: ./nginx
     ports:
-      - 88:80
+    - 88:80
     depends_on:
-      - web
+    - web
 volumes:
   pg_data: null
