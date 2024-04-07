@@ -40,8 +40,7 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
         ser.is_valid(raise_exception=True)
 
         data = ser.data
-        phone = data.get("phone")
-        code = data.get("code")
+        phone, code = data.get("phone"), data.get("code")
 
         try:
             # Check Sms confirmation otp code
@@ -70,9 +69,7 @@ class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.
         ser.is_valid(raise_exception=True)
 
         data = ser.data
-        code = data.get('code')
-        phone = data.get('phone')
-        password = data.get('password')
+        code, phone, password = data.get('code'), data.get('phone'), data.get('password')
 
         try:
             res = services.SmsService.check_confirm(phone, code)
