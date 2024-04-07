@@ -1,10 +1,11 @@
 import typing
 
 from django.utils.translation import gettext_lazy as _
-from rest_framework import generics, permissions, request, throttling, views
+from rest_framework import permissions, request as rest_request, throttling, views
 
 from core import enums, utils, exceptions, services
-from core.http import models, serializers, views as http_views
+from core.http import serializers, views as http_views
+from core.http.models import User
 
 
 class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
@@ -13,14 +14,14 @@ class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
     serializer_class = serializers.RegisterSerializer
     throttle_classes = [throttling.UserRateThrottle]
 
-    def post(self, request: request.Request):
+    def post(self, request: rest_request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
         data = ser.data
         phone = data.get("phone")
 
         # Create pending user
-        self.create_pending_user(
+        self.create_user(
             phone, data.get("first_name"),
             data.get("last_name"), data.get("password")
         )
@@ -34,7 +35,7 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
 
     serializer_class = serializers.ConfirmSerializer
 
-    def post(self, request: request.Request):
+    def post(self, request: rest_request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
 
@@ -43,12 +44,10 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
         code = data.get("code")
 
         try:
-            pending_user = generics.get_object_or_404(models.PendingUser, phone=phone)
-
             # Check Sms confirmation otp code
             if services.SmsService.check_confirm(phone, code=code):
                 # Create user
-                token = self.create_user_from_pending(pending_user)
+                token = self.validate_user(User.objects.filter(phone=phone).first())
                 return self.success(_(enums.Messages.OTP_CONFIRMED), token=token)
         except exceptions.SmsException as e:
             return utils.ResponseException(e)  # Response exception for APIException
@@ -66,7 +65,7 @@ class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.
 
     serializer_class = serializers.ResetConfirmationSerializer
 
-    def post(self, request: request.Request):
+    def post(self, request: rest_request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
 
@@ -97,6 +96,6 @@ class MeView(views.APIView, http_views.ApiResponse):
 
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request: request.Request):
+    def get(self, request: rest_request.Request):
         user = request.user
         return self.success(data=serializers.UserSerializer(user).data)
