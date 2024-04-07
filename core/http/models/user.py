@@ -1,15 +1,21 @@
-import math
 from datetime import datetime, timezone, timedelta
 
+import math
 from django.contrib.auth import models as auth_models
 from django.db import models
 
 from common.env import env
 from core.http import managers
 
+
 class User(auth_models.AbstractUser):
     phone = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=255, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)  # User created at time
+    updated_at = models.DateTimeField(auto_now=True)  # User updated at time
+    validated_at = models.DateTimeField(null=True, blank=True)  # User validated at time
+
     USERNAME_FIELD = u"phone"
 
     objects = managers.UserManager()
@@ -17,26 +23,6 @@ class User(auth_models.AbstractUser):
     def __str__(self):
         return self.phone
 
-
-class PendingUser(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=20)
-    password = models.CharField(max_length=255, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{str(self.phone)}"
-
-    def is_valid(self) -> bool:
-        """10 mins OTP validation"""
-        lifespan_in_seconds = float(env("OTP_EXPIRE_TIME") * 60)
-        now = datetime.now(timezone.utc)
-        time_diff = now - self.created_at
-        time_diff = time_diff.total_seconds()
-        if time_diff >= lifespan_in_seconds:
-            return False
-        return True
 
 
 

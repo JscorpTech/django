@@ -1,5 +1,5 @@
 from django.utils.translation import gettext as _
-from rest_framework import serializers, validators
+from rest_framework import serializers, exceptions
 
 from core.http import models
 
@@ -10,8 +10,13 @@ class LoginSerializer(serializers.Serializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    phone = serializers.CharField(max_length=255, validators=[
-        validators.UniqueValidator(queryset=models.User.objects.all())])
+    phone = serializers.CharField(max_length=255)
+
+    def validate_phone(self, value):
+        user = models.User.objects.filter(phone=value, validated_at__isnull=False)
+        if user.exists():
+            return exceptions.ValidationError(_("Phone number already registered."), code='unique')
+        return value
 
     class Meta:
         model = models.User
@@ -32,12 +37,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ConfirmSerializer(serializers.Serializer):
     code = serializers.IntegerField(min_value=1000, max_value=9999)
     phone = serializers.CharField(max_length=255)
-
-
-class PendingUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ['id', 'phone', 'first_name', 'last_name']
-        model = models.PendingUser
 
 
 class ResetPasswordSerializer(serializers.Serializer):
