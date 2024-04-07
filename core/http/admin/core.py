@@ -1,3 +1,7 @@
+#####################
+# Admin panel register
+#####################
+
 from django.contrib import admin
 from django.contrib.auth import models as db_models
 
