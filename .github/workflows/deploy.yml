@@ -25,3 +25,4 @@ jobs:
             docker compose up --build -d
             docker image prune -f
             echo "Deploy jarayoni muvaffaqiyatli yakunlandi!"
+
