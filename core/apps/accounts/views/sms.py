@@ -2,7 +2,6 @@ import typing
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import permissions, request as rest_request, throttling, views
-from rest_framework.response import Response
 
 from core import enums, utils, exceptions, services
 from core.http import serializers, views as http_views
@@ -54,11 +53,6 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
             return self.error(e)  # Api exception for APIException
 
 
-class ResetPasswordView(http_views.AbstractSendSms):
-    """Reset user password"""
-    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
-
-
 class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.UserService):
     """Reset confirm otp code"""
 
@@ -86,6 +80,11 @@ class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.
 class ResendView(http_views.AbstractSendSms):
     """Resend Otp Code"""
     serializer_class = serializers.ResendSerializer
+
+
+class ResetPasswordView(http_views.AbstractSendSms):
+    """Reset user password"""
+    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
 
 
 class MeView(views.APIView, http_views.ApiResponse):
