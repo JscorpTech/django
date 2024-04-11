@@ -1,4 +1,3 @@
-import importlib
 import os.path
 from pathlib import Path
 
@@ -14,7 +13,6 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
-
 
 INSTALLED_APPS = [
     #####################
@@ -99,40 +97,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #####################
-# My Settings
-#####################
-INSTALLED_APPS += [
-    "rest_framework",
-    "corsheaders",
-    "django_filters",
-    "rosetta",
-    "django_redis",
-    "rest_framework_simplejwt",
-    "drf_yasg",
-    "crispy_forms",
-    "import_export",
-    "django_ckeditor_5",
-    "polymorphic",
-
-    #####################
-    # My apps
-    #####################
-    "core.apps.home.apps.HomeConfig",
-    "core.http.HttpConfig",
-    "core.apps.accounts.apps.AccountsConfig",
-    "core.console.ConsoleConfig",
-]
-
-CONFIGS = [
-    "config.conf.jazzmin",
-    "config.conf.cache",
-    "config.conf.ckeditor",
-    "config.conf.jwt",
-    "config.conf.rest_framework",
-    "config.conf.logs",
-]
-
-#####################
 # Date formats
 #####################
 DATE_FORMAT = "d.m.y"
@@ -191,11 +155,6 @@ CRISPY_TEMPLATE_PACK = 'tailwind'
 ALLOWED_HOSTS += env("ALLOWED_HOSTS").split(",")
 CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split(",")
 
-#####################
-# Import another settings files
-#####################
-for config in CONFIGS:
-    module = importlib.import_module(config)
-    for name in dir(module):
-        if not name.startswith("__"):
-            globals().update({name: getattr(module, name)})
+from ..conf import *  # noqa
+
+INSTALLED_APPS += apps.INSTALLED_APPS # applarni registratsiya qilish uchun
