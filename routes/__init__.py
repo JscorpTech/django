@@ -1,13 +1,3 @@
-from django.conf import settings
+from . import local, production, common
 
-from routes.media import media_urls
-from .index import urlpatterns
-
-urlpatterns += media_urls
-
-if settings.DEBUG:
-    from .local import local_urls
-    from routes.swagger import swagger_urls
-
-    urlpatterns += swagger_urls
-    urlpatterns += local_urls
+urlpatterns = local.urlpatterns + production.urlpatterns + common.urlpatterns

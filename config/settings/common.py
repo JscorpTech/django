@@ -119,7 +119,7 @@ INSTALLED_APPS += [
     #####################
     "core.apps.home.apps.HomeConfig",
     "core.http.HttpConfig",
-    "core.apps.api.ApiConfig",
+    "core.apps.accounts.apps.AccountsConfig",
     "core.console.ConsoleConfig",
 ]
 
@@ -161,6 +161,7 @@ PAYCOM_SETTINGS = {
     },
     "TOKEN": "1111"
 }
+
 STATIC_ROOT = os.path.join(BASE_DIR, "resources/staticfiles")
 VITE_APP_DIR = os.path.join(BASE_DIR, "resources/static/vite")
 
