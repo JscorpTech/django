@@ -11,3 +11,4 @@ class {{name}}(BaseFaker):
             "desc": self.faker.text(),
             "image": self.faker.image_url()
         }
+x`

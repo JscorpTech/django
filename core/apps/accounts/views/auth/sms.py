@@ -2,6 +2,7 @@ import typing
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import permissions, request as rest_request, throttling, views
+from rest_framework.response import Response
 
 from core import enums, utils, exceptions, services
 from core.http import serializers, views as http_views
@@ -25,7 +26,6 @@ class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
             phone, data.get("first_name"),
             data.get("last_name"), data.get("password")
         )
-
         self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
         return self.success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
 
