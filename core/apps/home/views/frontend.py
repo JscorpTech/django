@@ -1,21 +1,9 @@
-#####################
-# Version v1
-#####################
-
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.generics import ListAPIView
 
 from core.http import views
-from core.http.models import Post, FrontendTranslation
-from core.http.serializers import PostSerializer, FrontendTransactionSerializer
-
-
-class PostListView(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+from core.http.models import FrontendTranslation
+from core.http.serializers import FrontendTransactionSerializer
 
 
 class FrontendTranslationView(ListAPIView, views.ApiResponse):
