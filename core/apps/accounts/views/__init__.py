@@ -1,2 +1,2 @@
-from . import auth  # noqa
-from .frontend import *  # noqa
+from .sms import *  # noqa
+
