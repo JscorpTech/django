@@ -16,10 +16,10 @@ deploy_django_app:
     - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
   script:
     - ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "
-        cd $DEPLOY_PATH
-        git pull origin main
-        docker compose up --build -d
-        docker image prune -f
+        cd $DEPLOY_PATH &&
+        git pull origin main &&
+        docker compose up --build -d &&
+        docker image prune -f &&
         echo 'Deploy jarayoni muvaffaqiyatli yakunlandi!'"
   tags:
     - docker
