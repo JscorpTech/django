@@ -46,4 +46,3 @@ telegram_notifications:
   only:
     - main
     - dev
-
