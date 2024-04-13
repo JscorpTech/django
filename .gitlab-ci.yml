@@ -1,0 +1,25 @@
+stages:
+  - deploy
+
+deploy_django_app:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    - main
+  before_script:
+    - apk add --no-cache openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
+  script:
+    - ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "
+        cd $DEPLOY_PATH
+        git pull origin main
+        docker compose up --build -d
+        docker image prune -f
+        echo 'Deploy jarayoni muvaffaqiyatli yakunlandi!'"
+  tags:
+    - docker
