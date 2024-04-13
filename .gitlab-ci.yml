@@ -13,7 +13,7 @@ deploy_django_app:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
-    - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
+
   script:
     - ssh $SSH_USER@$SSH_HOST -p $SSH_PORT "
         cd $DEPLOY_PATH
