@@ -25,7 +25,6 @@ class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
             phone, data.get("first_name"),
             data.get("last_name"), data.get("password")
         )
-
         self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
         return self.success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
 
@@ -52,11 +51,6 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
             return utils.ResponseException(e)  # Response exception for APIException
         except Exception as e:
             return self.error(e)  # Api exception for APIException
-
-
-class ResetPasswordView(http_views.AbstractSendSms):
-    """Reset user password"""
-    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
 
 
 class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.UserService):
@@ -86,6 +80,11 @@ class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.
 class ResendView(http_views.AbstractSendSms):
     """Resend Otp Code"""
     serializer_class = serializers.ResendSerializer
+
+
+class ResetPasswordView(http_views.AbstractSendSms):
+    """Reset user password"""
+    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
 
 
 class MeView(views.APIView, http_views.ApiResponse):

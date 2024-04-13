@@ -1,7 +1,14 @@
+from django.urls import include
 from django.urls import path
+from rest_framework import routers
 
 from core.apps.home import views
 
+router = routers.DefaultRouter()
+router.register("", views.PostListView, basename="posts")
+
 urlpatterns = [
+    path("messages/", views.FrontendTranslationView.as_view(), name="frontend-translation"),
+    path("posts/", include(router.urls), name="posts"),
     path('', views.HomeView.as_view(), name="home")
 ]
