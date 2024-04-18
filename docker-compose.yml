@@ -3,11 +3,11 @@ services:
   web:
     build: .
     restart: always
-    command: ${COMMAND:-python3 manage.py runserver 0.0.0.0:8000}
+    command: ${COMMAND:-poetry run python3 manage.py runserver 0.0.0.0:8000}
     volumes:
     - .:/code
     ports:
-    - 8001:8000
+    - 8000:8000
     depends_on:
     - db
     - redis
@@ -23,11 +23,12 @@ services:
   redis:
     restart: always
     image: redis
-  nginx:
-    build: ./nginx
+  ngrok:
+    image: ngrok/ngrok:latest
     ports:
-    - 81:80
-    depends_on:
-    - web
+    - ${NGROK_ADMIN_PORT}:4040
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    command: http http://web:8000 --domain=${NGROK_DOMAIN}
 volumes:
   pg_data: null
