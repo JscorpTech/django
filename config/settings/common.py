@@ -157,4 +157,4 @@ CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split(",")
 
 from ..conf import *  # noqa
 
-INSTALLED_APPS += apps.INSTALLED_APPS # applarni registratsiya qilish uchun
+INSTALLED_APPS += apps.INSTALLED_APPS  # applarni registratsiya qilish uchun
