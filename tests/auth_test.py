@@ -2,7 +2,7 @@ from django.template.defaulttags import url
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 
-from core.apps.api.v1.auth.views import RegisterView
+from core.apps.accounts.views.sms import RegisterView
 from core.http.database.factory import UserFactory
 
 
@@ -20,7 +20,8 @@ class RegisterViewTest(TestCase):
         request = self.factory.post(url("register"), data=data)
         response = self.view(request)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['message'], 'You have successfully registered.')
+        self.assertEqual(response.data['message'],
+                         'You have successfully registered.')
 
     def test_register_user_with_invalid_phone(self):
         data = {
