@@ -1,17 +1,16 @@
 import os
 
 from django.conf import settings
-from django.core.management import BaseCommand
+from django.core import management
 
 
-class Console(BaseCommand):
-
+class Console(management.BaseCommand):
     def get_stdout(self):
-        base_command = BaseCommand()
+        base_command = management.BaseCommand()
         return base_command.stdout
 
     def get_style(self):
-        base_command = BaseCommand()
+        base_command = management.BaseCommand()
         return base_command.style
 
     def success(self, message):
@@ -26,7 +25,7 @@ class Console(BaseCommand):
                 message)))
 
 
-class BaseMake(BaseCommand):
+class BaseMake(management.BaseCommand):
     def __init__(self, *args, **options):
         super().__init__(*args, **options)
         self.console = Console()
@@ -35,28 +34,21 @@ class BaseMake(BaseCommand):
         parser.add_argument('name')
 
     def handle(self, *args, **options):
-
         name = options.get("name")
-        stub = open(os.path.join(settings.BASE_DIR, f'stub/{self.path}.stub'),
-                    'r')
-        data = stub.read()
-        stub.close()
+        with open(os.path.join(settings.BASE_DIR, f'stub/{self.path}.stub'), 'r') as stub: # noqa
+            data = stub.read()
+            stub.close()
         stub = data.replace("{{name}}", name)
 
-        if os.path.exists(os.path.join(settings.BASE_DIR,
-                                       "core/http/{}/{}.py".format(self.path,
-                                                                   name.lower()))):
+        core_http_path = os.path.join(settings.BASE_DIR, "core/http")
+        if os.path.exists(os.path.join(core_http_path, f"{self.path}/{name.lower()}.py")): # noqa
             self.console.error(f"{self.name} already exists")
             return
 
-        if not os.path.exists(
-                os.path.join(settings.BASE_DIR, f"core/http/{self.path}")):
-            os.mkdir(os.path.join(settings.BASE_DIR, f"core/http/{self.path}"))
+        if not os.path.exists(os.path.join(core_http_path, self.path)):
+            os.makedirs(os.path.join(core_http_path, self.path))
 
-        with open(os.path.join(settings.BASE_DIR,
-                               "core/http/{}/{}.py".format(self.path,
-                                                           name.lower())),
-                  "w+") as file:
+        with open(os.path.join(core_http_path, f"{self.path}/{name.lower()}.py"), "w+") as file: # noqa
             file.write(stub)
-            file.close()
+
         self.console.success(f"{self.name} created")

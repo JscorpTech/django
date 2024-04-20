@@ -1,3 +1,5 @@
 class BaseService:
-    """ Test Service Base """
+    """
+    Test Service Base
+    """
     pass
