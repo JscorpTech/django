@@ -6,7 +6,7 @@ from rest_framework import throttling
 from core import enums
 from core import services
 from core.http import serializers
-from http.views import generics as http_views
+from core.http.views import generics as http_views
 
 
 class AbstractSendSms(views.APIView, http_views.ApiResponse):
