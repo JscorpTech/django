@@ -1,19 +1,19 @@
-#####################
-# Celery settings
-#####################
+"""
+Celery configurations
+"""
 
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import
+from __future__ import unicode_literals
 
 import os
-
-from celery import Celery
+import celery
 from django.conf import settings
 
 from common.env import env
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', env("DJANGO_SETTINGS_MODULE"))
 
-app = Celery('config')
+app = celery.Celery('config')
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 

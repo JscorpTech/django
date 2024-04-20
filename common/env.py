@@ -1,12 +1,11 @@
+"""
+Default value for environ variable
+"""
 import os
-
 import environ
 
 environ.Env.read_env(os.path.join('.env'))
 
-#####################
-# Env uchun default qiymatlarni shu yerda berish kerak
-#####################
 env = environ.Env(
     DEBUG=(bool, False),
     CACHE_TIME=(int, 180),
