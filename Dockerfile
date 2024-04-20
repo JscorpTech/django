@@ -8,5 +8,6 @@ WORKDIR /code
 
 COPY . /code/
 
+RUN pip install poetry
 
-RUN pip install -r requirements/local.txt
+RUN poetry install

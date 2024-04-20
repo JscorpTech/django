@@ -19,3 +19,4 @@ deploy_django_app:
         docker compose up --build -d &&
         docker image prune -f &&
         echo 'Deploy jarayoni muvaffaqiyatli yakunlandi!'"
+

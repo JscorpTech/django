@@ -1,30 +1,24 @@
-import os.path
-from pathlib import Path
-
+import os
+import pathlib
 from django.utils.translation import gettext_lazy as _
 
 from common.env import env
+from config.conf import *  # noqa
 
-BASE_DIR = Path(
-    __file__).resolve().parent.parent.parent  # har bir parent bitta papka
-# tepaga chiqadi
+BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = env("DJANGO_SECRET_KEY")
-DEBUG = env("DEBUG")
+SECRET_KEY = env.str("DJANGO_SECRET_KEY")
+DEBUG = env.str("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
-    #####################
-    # my install modules
-    #####################
+    # Design admin panel
     "jazzmin",
     "django_select2",
-
     "modeltranslation",
-    #####################
+
     # Default apps
-    #####################
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -33,17 +27,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+INSTALLED_APPS += apps.INSTALLED_APPS # noqa
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 
     "corsheaders.middleware.CorsMiddleware",  # Cors middleware
-    "django.middleware.locale.LocaleMiddleware",  # Locale middleware for api
+    "django.middleware.locale.LocaleMiddleware",  # Locale middleware
     "core.middlewares.cache_middleware.CacheMiddleware",  # Cache middle
 
-    *(['django.middleware.cache.UpdateCacheMiddleware'] if env("CACHE_ENABLED") else []),  # Update cache middle
+    *(['django.middleware.cache.UpdateCacheMiddleware']
+      if env.str("CACHE_ENABLED") else []),  # Update cache middle
     'django.middleware.common.CommonMiddleware',
-    *(['django.middleware.cache.FetchFromCacheMiddleware'] if env("CACHE_ENABLED") else []),  # Fetch from cache middle
+
+    *(['django.middleware.cache.FetchFromCacheMiddleware']
+      if env.str("CACHE_ENABLED") else []),  # Fetch from cache middle
 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -96,9 +95,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#####################
+
 # Date formats
-#####################
+##
 DATE_FORMAT = "d.m.y"
 TIME_FORMAT = 'H:i:s'
 DATE_INPUT_FORMATS = ['%d.%m.%Y', "%Y.%d.%m", "%Y.%d.%m"]
@@ -154,7 +153,3 @@ CRISPY_TEMPLATE_PACK = 'tailwind'
 
 ALLOWED_HOSTS += env("ALLOWED_HOSTS").split(",")
 CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split(",")
-
-from ..conf import *  # noqa
-
-INSTALLED_APPS += apps.INSTALLED_APPS # applarni registratsiya qilish uchun

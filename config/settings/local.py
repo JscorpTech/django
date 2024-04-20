@@ -1,14 +1,15 @@
-from .common import *
-from ..conf.rest_framework import REST_FRAMEWORK
+from common.env import env
+from config.conf import rest_framework
+from config.settings.common import * # noqa
 
 DATABASES = {
     'default': {
-        'ENGINE': env('DB_ENGINE'),
-        'NAME': env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT":env("DB_PORT"),
+        'ENGINE': env.str('DB_ENGINE'),
+        'NAME': env.str("DB_NAME"),
+        "USER": env.str("DB_USER"),
+        "PASSWORD": env.str("DB_PASSWORD"),
+        "HOST": env.str("DB_HOST"),
+        "PORT": env.str("DB_PORT"),
     }
 }
 
@@ -17,9 +18,7 @@ MIDDLEWARE += [
     "core.middlewares.ExceptionMiddleware"
 ]
 
-####################
-# DEBUG BAR
-####################
+# Debug toolbar middleware
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
     'debug_toolbar.panels.timer.TimerPanel',
@@ -42,14 +41,12 @@ INSTALLED_APPS += [
     "django_extensions"
 ]
 
-#####################
 # Allowed Hosts
-#####################
 ALLOWED_HOSTS += [
     "127.0.0.1",
     "192.168.100.26"
 ]
 
-REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
+rest_framework.REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
     'user': '10/min',
 }

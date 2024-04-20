@@ -1,15 +1,18 @@
-from django.template.defaulttags import url
-from django.test import TestCase
+"""
+Authorization Users Test Cases
+"""
+from django import test
+from django.template import defaultfilters
 from rest_framework.test import APIRequestFactory
 
-from core.apps.api.v1.auth.views import RegisterView
-from core.http.database.factory import UserFactory
+from core.http.database import factory
+from core.apps.accounts.views import sms
 
 
-class RegisterViewTest(TestCase):
+class RegisterViewTest(test.TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.view = RegisterView.as_view()
+        self.view = sms.RegisterView.as_view()
 
     def test_register_user(self):
         data = {
@@ -17,10 +20,13 @@ class RegisterViewTest(TestCase):
             "jshir": "1",
             'password': 'password'
         }
-        request = self.factory.post(url("register"), data=data)
+        request = self.factory.post(defaultfilters.url("register"), data=data)
         response = self.view(request)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['message'], 'You have successfully registered.')
+        self.assertEqual(
+            response.data['message'],
+            msg='You have successfully registered.'
+        )
 
     def test_register_user_with_invalid_phone(self):
         data = {
@@ -28,18 +34,18 @@ class RegisterViewTest(TestCase):
             "jshir": "1",
             'password': 'password'
         }
-        request = self.factory.post(url("register"), data=data)
+        request = self.factory.post(defaultfilters.url("register"), data=data)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['detail'], 'Invalid phone number.')
 
     def test_register_user_with_invalid_confirmation_code(self):
-        user = UserFactory()
+        user = factory.UserFactory()
         data = {
             'phone': user.handle()['phone'],
             'code': 'invalid_code'
         }
-        request = self.factory.post(url("register"), data=data)
+        request = self.factory.post(defaultfilters.url("register"), data=data)
         response = self.view(request)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['detail'], 'Invalid confirmation code.')

@@ -1,3 +1,4 @@
-
-
+"""
+Production urls
+"""
 urlpatterns = []
