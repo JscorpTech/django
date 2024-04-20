@@ -1,10 +1,9 @@
-from datetime import datetime, timezone, timedelta
-
 import math
+from datetime import datetime, timedelta
+
 from django.contrib.auth import models as auth_models
 from django.db import models
 
-from common.env import env
 from core.http import managers
 
 
@@ -22,8 +21,6 @@ class User(auth_models.AbstractUser):
 
     def __str__(self):
         return self.phone
-
-
 
 
 class SmsConfirm(models.Model):
