@@ -54,6 +54,8 @@ connect:
 pull:
 	git pull
 
+seed:
+	docker compose exec web poetry run python manage.py seed
 
 push:
 	git add . && git commit -m "$(comment)" && git push
