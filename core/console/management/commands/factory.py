@@ -1,12 +1,12 @@
+import typing
 import importlib
-from typing import Any
 
-from django.conf import settings
-from django.core.management import BaseCommand
 from tqdm import tqdm
+from django.conf import settings
+from django.core import management
 
 
-class Command(BaseCommand):
+class Command(management.BaseCommand):
     help = "factory database with"
 
     def print(self, message, is_type="success"):
@@ -16,7 +16,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(message))
 
     def handle(self, *args, **options):
-        FACTORYS: list[Any] | Any = settings.FACTORYS if hasattr(
+        FACTORYS: list[typing.Any] | typing.Any = settings.FACTORYS if hasattr(
             settings, "FACTORYS") else []
 
         if len(FACTORYS) == 0:

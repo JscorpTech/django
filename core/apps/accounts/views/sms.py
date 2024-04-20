@@ -1,16 +1,25 @@
+"""
+SMS configuration (eskiz.uz)
+"""
 import typing
 
 from django.utils.translation import gettext_lazy as _
-from rest_framework import permissions, request as rest_request, throttling, views
+from rest_framework import (
+    permissions, request as rest_request, throttling, views
+)
 
-from core import enums, utils, exceptions, services
-from core.http import serializers, views as http_views
+from core import enums
+from core import utils
+from core import services
+from core import exceptions
 from core.http.models import User
+from core.http import serializers, views as http_views
 
 
 class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
-    """Register new user"""
-
+    """
+    Register new user
+    """
     serializer_class = serializers.RegisterSerializer
     throttle_classes = [throttling.UserRateThrottle]
 
@@ -25,7 +34,9 @@ class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
             phone, data.get("first_name"),
             data.get("last_name"), data.get("password")
         )
-        self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
+
+        # Send confirmation code for sms eskiz.uz
+        self.send_confirmation(phone)
         return self.success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
 
 
@@ -45,17 +56,23 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
             # Check Sms confirmation otp code
             if services.SmsService.check_confirm(phone, code=code):
                 # Create user
-                token = self.validate_user(User.objects.filter(phone=phone).first())
-                return self.success(_(enums.Messages.OTP_CONFIRMED), token=token)
+                token = self.validate_user(
+                    User.objects.filter(phone=phone).first()
+                )
+                return self.success(
+                    _(enums.Messages.OTP_CONFIRMED),
+                    token=token
+                )
         except exceptions.SmsException as e:
-            return utils.ResponseException(e)  # Response exception for APIException
+            return utils.ResponseException(e)
         except Exception as e:
-            return self.error(e)  # Api exception for APIException
+            return self.error(e)
 
 
-class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.UserService):
-    """Reset confirm otp code"""
-
+class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.UserService): # noqa
+    """
+    Reset confirm otp code
+    """
     serializer_class = serializers.ResetConfirmationSerializer
 
     def post(self, request: rest_request.Request):
@@ -63,7 +80,7 @@ class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.
         ser.is_valid(raise_exception=True)
 
         data = ser.data
-        code, phone, password = data.get('code'), data.get('phone'), data.get('password')
+        code, phone, password = data.get('code'), data.get('phone'), data.get('password') # noqa
 
         try:
             res = services.SmsService.check_confirm(phone, code)
@@ -78,18 +95,23 @@ class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.
 
 
 class ResendView(http_views.AbstractSendSms):
-    """Resend Otp Code"""
+    """
+    Resend Otp Code
+    """
     serializer_class = serializers.ResendSerializer
 
 
 class ResetPasswordView(http_views.AbstractSendSms):
-    """Reset user password"""
-    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
+    """
+    Reset user password
+    """
+    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer # noqa
 
 
 class MeView(views.APIView, http_views.ApiResponse):
-    """Get user information"""
-
+    """
+    Get user information
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request: rest_request.Request):
