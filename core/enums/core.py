@@ -1,22 +1,22 @@
 class Codes:
-    # Ma'lumotlar Bazasi Xatoliklari
+    # Database errors
     DB_CONNECTION_ERROR = 1001
     DB_SQL_EXECUTION_ERROR = 1002
     DB_READ_ERROR = 1003
     DB_WRITE_ERROR = 1004
 
-    # Fayl Tizimi Xatoliklari
+    # Filesystem errors
     FILE_OPEN_ERROR = 2001
     FILE_WRITE_ERROR = 2002
     FILE_READ_ERROR = 2003
     FILE_DELETE_ERROR = 2004
 
-    # Tarmoq Xatoliklari
+    # Connection errors
     NETWORK_CONNECTION_ERROR = 3001
     NETWORK_HTTP_REQUEST_ERROR = 3002
     NETWORK_WEBSOCKET_ERROR = 3003
 
-    # Dasturiy Xatoliklar
+    # Programming errors
     INVALID_PARAMETER_VALUE = 4001
     REQUIRED_PARAMETER_MISSING = 4002
     CONSTRAINT_VIOLATION = 4003
@@ -27,7 +27,7 @@ class Codes:
     BOCKED_ERROR = 4007
     INVALID_OTP_ERROR = 4008
 
-    # Xavfsizlik Xatoliklari
+    # Security errors
     AUTHENTICATION_ERROR = 5001
     UNAUTHORIZED_ACCESS = 5002
     CSRF_DETECTED = 5003
