@@ -10,8 +10,8 @@ class Tags(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = _("Tags")
         verbose_name = _("Tag")
+        verbose_name_plural = _("Tags")
 
 
 class Comment(models.Model):
@@ -43,5 +43,5 @@ class FrontendTranslation(BaseComment):
         return self.key
 
     class Meta:
-        verbose_name_plural = _("Frontend Translations")
         verbose_name = _("Frontend Translation")
+        verbose_name_plural = _("Frontend Translations")

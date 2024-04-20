@@ -1,9 +1,12 @@
 from django.utils.translation import gettext as _
-from rest_framework import views, throttling, request
+from rest_framework import views
+from rest_framework import request
+from rest_framework import throttling
 
-from core import enums, services
+from core import enums
+from core import services
 from core.http import serializers
-from . import generics as http_views
+from core.http.views import generics as http_views
 
 
 class AbstractSendSms(views.APIView, http_views.ApiResponse):

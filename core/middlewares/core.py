@@ -1,6 +1,6 @@
-from django.http.response import JsonResponse
+from django.http import response
 
-from core.exceptions import BreakException
+from core import exceptions
 
 
 class ExceptionMiddleware:
@@ -20,7 +20,8 @@ class ExceptionMiddleware:
 
     def __call__(self, request):
         """
-        This method is called for each request. It retrieves the response from the next middleware in the pipeline,
+        This method is called for each request.
+        It retrieves the response from the next middleware in the pipeline,
         and handles any exceptions that occur.
 
         Args:
@@ -31,7 +32,7 @@ class ExceptionMiddleware:
         """
         try:
             response = self.get_response(request)
-        except BreakException as e:
+        except exceptions.BreakException as e:
             return self.process_exception(request, e)
         return response
 
@@ -46,7 +47,7 @@ class ExceptionMiddleware:
         Returns:
             A JSON response containing information about the exception.
         """
-        if isinstance(e, BreakException):
+        if isinstance(e, exceptions.BreakException):
             """
             If the exception is a BreakException, construct a JSON response containing the error message, data, and
             any additional arguments passed to the BreakException.
@@ -58,4 +59,4 @@ class ExceptionMiddleware:
                     e.args.__str__(),
                 ]
             }
-            return JsonResponse(error_data)
+            return response.JsonResponse(error_data)

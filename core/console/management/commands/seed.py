@@ -1,10 +1,10 @@
 import importlib
 
 from django.conf import settings
-from django.core.management import BaseCommand
+from django.core import management
 
 
-class Command(BaseCommand):
+class Command(management.BaseCommand):
     help = "seeder database with"
 
     def print(self, message, is_type="success"):

@@ -1,14 +1,17 @@
+"""
+Admin panel UI view
+"""
 from rest_framework import status
-from rest_framework.generics import ListAPIView
+from rest_framework import generics
 
 from core.http import views
-from core.http.models import FrontendTranslation
-from core.http.serializers import FrontendTransactionSerializer
+from core.http import models
+from core.http import serializers
 
 
-class FrontendTranslationView(ListAPIView, views.ApiResponse):
-    queryset = FrontendTranslation.objects.all()
-    serializer_class = FrontendTransactionSerializer
+class FrontendTranslationView(generics.ListAPIView, views.ApiResponse):
+    queryset = models.FrontendTranslation.objects.all()
+    serializer_class = serializers.FrontendTransactionSerializer
 
     def get(self, request, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)

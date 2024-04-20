@@ -1,22 +1,26 @@
-from core.http.models import User, Post
-from core.utils.factory import BaseFaker
+"""
+Create a new fake User/Post
+"""
+from core.http import models
+from core.utils import factory
 
 
-class UserFactory(BaseFaker):
-    model = User
+class UserFactory(factory.BaseFaker):
+    model = models.User
 
     def handle(self):
-        """Factory method"""
-
+        """
+        Factory method
+        """
         return {
-            "first_name": self.faker.first_name(),  # First name
-            "username": self.faker.user_name(),  # User name
-            "phone": self.faker.phone_number()  # phone
+            "first_name": self.faker.first_name(),
+            "username": self.faker.user_name(),
+            "phone": self.faker.phone_number()
         }
 
 
-class PostFactory(BaseFaker):
-    model = Post
+class PostFactory(factory.BaseFaker):
+    model = models.Post
 
     def handle(self):
         return {
