@@ -5,7 +5,7 @@ deploy_django_app:
   stage: deploy
   image: ubuntu:latest  # Ubuntu tasvirini ishlatish
   only:
-    - main
+    - deploy
   before_script:
     - apt-get update && apt-get install -y openssh-client  # Ubuntu/Debian uchun to'g'ri paket o'rnatish buyruqlari
     - eval $(ssh-agent -s)

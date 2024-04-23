@@ -38,17 +38,11 @@ class TagsAdmin(import_export.ImportExportModelAdmin):
     search_fields: list = ['name']
 
 
-class FrontendInline(admin.TabularInline):
-    model = models.FrontendTranslation.comments.through
-    fields = ['comment']
-    extra = 1
 
-
-class FrontendTranslationAdmin(modeltranslation.TabbedTranslationAdmin, import_export.ImportExportModelAdmin): # noqa
+class FrontendTranslationAdmin(import_export.ImportExportModelAdmin): # noqa
     fields: tuple = ("key", "value")
     required_languages: tuple = ('uz',)
     list_display = ["key", "value"]
-    inlines = [FrontendInline]
 
 
 class SmsConfirmAdmin(admin.ModelAdmin):

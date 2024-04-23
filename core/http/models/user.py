@@ -5,7 +5,7 @@ from datetime import timedelta
 from django.db import models
 from django.contrib.auth import models as auth_models
 
-from core.http import managers
+from core.http import managers, choices
 
 
 class User(auth_models.AbstractUser):
@@ -14,6 +14,8 @@ class User(auth_models.AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     validated_at = models.DateTimeField(null=True, blank=True)
+    role = models.CharField(max_length=255, choices=choices.RoleChoice, default=choices.RoleChoice.USER)
+
     USERNAME_FIELD = u"phone"
     objects = managers.UserManager()
 
