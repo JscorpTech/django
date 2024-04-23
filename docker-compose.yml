@@ -3,14 +3,14 @@ services:
   web:
     build: .
     restart: always
-    command: ${COMMAND:-poetry run python3 manage.py runserver 0.0.0.0:8000}
+    command: ${COMMAND:-python3 manage.py runserver 0.0.0.0:8000}
     volumes:
-      - .:/code
+    - .:/code
     ports:
-      - "8001:8000"
+    - 8081:8000
     depends_on:
-      - db
-      - redis
+    - db
+    - redis
   db:
     image: postgres:13
     restart: always
@@ -19,16 +19,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: '2309'
     volumes:
-      - pg_data:/var/lib/postgresql/data
+    - pg_data:/var/lib/postgresql/data
   redis:
     restart: always
     image: redis
-  ngrok:
-    image: ngrok/ngrok:latest
-    ports:
-      - ${NGROK_ADMIN_PORT}:4040
-    environment:
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-    command: http http://web:8000 --domain=${NGROK_DOMAIN}
 volumes:
   pg_data: null
