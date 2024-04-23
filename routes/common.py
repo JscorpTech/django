@@ -19,7 +19,7 @@ urlpatterns = [
 
     # Internal apps
     path("api/", include("core.apps.accounts.urls")),
-    path('', include('core.apps.home.urls')),
+    path('api/', include('core.apps.home.urls')),
 
     # Media and static files
     re_path(r"static/(?P<path>.*)", serve, {"document_root": settings.STATIC_ROOT}), # noqa
