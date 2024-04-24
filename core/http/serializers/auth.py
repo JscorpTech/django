@@ -55,7 +55,6 @@ class ResetPasswordSerializer(serializers.Serializer):
 class ResetConfirmationSerializer(serializers.Serializer):
     code = serializers.IntegerField(min_value=1000, max_value=9999)
     phone = serializers.CharField(max_length=255)
-    password = serializers.CharField(max_length=255)
 
     def validate_phone(self, value):
         user = models.User.objects.filter(phone=value)
