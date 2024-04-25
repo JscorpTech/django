@@ -3,10 +3,16 @@ shell ?= bash
 
 up:
 	docker compose up
+
 build:
 	docker compose build
+
 up-b:
 	docker compose up -b
+
+db:
+	docker compose exec db sh
+
 restart:
 	docker compose restart $(app)
 
@@ -18,6 +24,9 @@ makemigrations:
 
 up-d:
 	docker compose up -d
+
+logging:
+	docker compose logs -f web
 
 down:
 	docker compose down
@@ -45,6 +54,8 @@ connect:
 pull:
 	git pull
 
+seed:
+	docker compose exec web poetry run python manage.py seed
 
 push:
 	git add . && git commit -m "$(comment)" && git push

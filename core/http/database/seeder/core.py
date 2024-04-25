@@ -1,8 +1,10 @@
-from core.http.models import User
+"""
+Create a new user/superuser
+"""
+from core.http import models
 
 
 class UserSeeder:
-
     def run(self):
-        User.objects.create_user("998943990509", "2309")  # create a new user
-        User.objects.create_superuser('998888112309', '2309')  # create a new superuser
+        models.User.objects.create_user("998943990509", "2309")
+        models.User.objects.create_superuser('998888112309', '2309')

@@ -1,2 +1,1 @@
 from .sms import *  # noqa
-

@@ -1,11 +1,11 @@
-#####################
-# Base celery tasks
-#####################
+"""
+Base celery tasks
+"""
 from celery import shared_task
 from django.utils.translation import gettext as _
 
-from core.services import sms_service
 from core.utils import console
+from core.services import sms_service
 
 
 @shared_task
@@ -17,4 +17,4 @@ def SendConfirm(phone, code):
         console.Console().success(
             "Success: {phone}-{code}".format(phone=phone, code=code))
     except Exception as e:
-        console.Console().error("Error: {phone}-{code}\n\n{error}".format(phone=phone, code=code, error=e))
+        console.Console().error("Error: {phone}-{code}\n\n{error}".format(phone=phone, code=code, error=e)) # noqa

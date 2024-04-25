@@ -1,4 +1,6 @@
-from rest_framework import exceptions, serializers
+from rest_framework import exceptions
+from rest_framework import serializers
+
 
 from core import enums
 from core.utils import exception
@@ -10,4 +12,7 @@ class GenericSerializer(serializers.Serializer):
             return super().to_internal_value(data)
         except exceptions.ValidationError as e:
             key, value = next(iter(e.detail.items()))
-            exception.ResponseException(value[0], error_code=enums.Codes.INVALID_PARAMETER_VALUE)
+            exception.ResponseException(
+                value[0],
+                error_code=enums.Codes.INVALID_PARAMETER_VALUE
+            )

@@ -1,8 +1,13 @@
-from rest_framework.exceptions import APIException
+"""
+Raise exception
+"""
+from rest_framework import exceptions
 
 
 class SmsException(Exception):
-    """Sms exception"""
+    """
+    Sms exception
+    """
 
     def __init__(self, message, **kwargs):
         super().__init__(message)
@@ -10,7 +15,9 @@ class SmsException(Exception):
 
 
 class BreakException(Exception):
-    """Break exception"""
+    """
+    Break exception
+    """
 
     def __init__(self, *args, message: str = None, data=None):
         if data is None:
@@ -20,9 +27,10 @@ class BreakException(Exception):
         self.data = data
 
 
-class MyApiException(APIException):
-    """My API Exception for API exceptions status code edit"""
-
+class MyApiException(exceptions.APIException):
+    """
+    My API Exception for API exceptions status code edit
+    """
     status_code = 400
 
     def __init__(self, message, status_code):

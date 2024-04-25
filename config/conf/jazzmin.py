@@ -42,8 +42,12 @@ JAZZMIN_SETTINGS: dict[str | Any, str | None | Any] = {
         }]
     },
     "icons": {
-        "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user",
+        "http.Comment": "fas fa-comments",
+        "http.FrontendTranslation": "fas fa-globe",
+        "http.Post": "fas fa-bars",
+        "http.User": "fas fa-user",
+        "http.Tags": "fas fa-tag",
+        "http.SmsConfirm": "fas fa-comments",
         "auth.Group": "fas fa-users",
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
@@ -56,5 +60,6 @@ JAZZMIN_SETTINGS: dict[str | Any, str | None | Any] = {
     "changeform_format": "horizontal_tabs",
     "changeform_format_overrides": {"auth.user": "collapsible",
                                     "auth.group": "vertical_tabs"},
-    "language_chooser": True
+    "language_chooser": True,
+
 }

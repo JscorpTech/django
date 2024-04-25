@@ -1,4 +1,5 @@
 import typing
+import uuid
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import permissions, request as rest_request, throttling, views
@@ -6,6 +7,8 @@ from rest_framework import permissions, request as rest_request, throttling, vie
 from core import enums, utils, exceptions, services
 from core.http import serializers, views as http_views
 from core.http.models import User
+from core.apps.accounts import models, serializers as sms_serializers
+from core.utils import dd
 
 
 class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
@@ -13,6 +16,7 @@ class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
 
     serializer_class = serializers.RegisterSerializer
     throttle_classes = [throttling.UserRateThrottle]
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request: rest_request.Request):
         ser = self.serializer_class(data=request.data)
@@ -57,24 +61,50 @@ class ResetConfirmationCodeView(views.APIView, http_views.ApiResponse, services.
     """Reset confirm otp code"""
 
     serializer_class = serializers.ResetConfirmationSerializer
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request: rest_request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
 
         data = ser.data
-        code, phone, password = data.get('code'), data.get('phone'), data.get('password')
-
+        code, phone = data.get('code'), data.get('phone')
         try:
             res = services.SmsService.check_confirm(phone, code)
             if res:
-                self.change_password(phone, password)
-                return self.success(_(enums.Messages.CHANGED_PASSWORD))
+                token = models.ResetToken.objects.create(
+                    user=User.objects.filter(phone=phone).first(),
+                    token=str(uuid.uuid4())
+                )
+                return self.success(data={
+                    "token": token.token,
+                    "created_at": token.created_at,
+                    "updated_at": token.updated_at,
+                })
             return self.error(_(enums.Messages.INVALID_OTP))
         except exceptions.SmsException as e:
-            return self.error(e, error_code=enums.Codes.INVALID_OTP_ERROR)
+            return self.error(str(e), error_code=enums.Codes.INVALID_OTP_ERROR)
         except Exception as e:
-            return self.error(e)
+            return self.error(str(e))
+
+
+class ResetSetPasswordView(views.APIView, http_views.ApiResponse, services.UserService):
+    serializer_class = sms_serializers.SetPasswordSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        ser = self.serializer_class(data=request.data)
+        ser.is_valid(raise_exception=True)
+        data = ser.data
+        token = data.get("token")
+        password = data.get("password")
+        token = models.ResetToken.objects.filter(token=token)
+        if not token.exists():
+            return self.error(_("Invalid token"))
+        phone = token.first().user.phone
+        token.delete()
+        self.change_password(phone, password)
+        return self.success(_("password updated"))
 
 
 class ResendView(http_views.AbstractSendSms):
@@ -89,8 +119,6 @@ class ResetPasswordView(http_views.AbstractSendSms):
 
 class MeView(views.APIView, http_views.ApiResponse):
     """Get user information"""
-
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request: rest_request.Request):
         user = request.user

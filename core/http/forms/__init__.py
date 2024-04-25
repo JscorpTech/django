@@ -1,1 +1,1 @@
-from .another import * #noqa
+from .another import * # noqa
