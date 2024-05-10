@@ -2,13 +2,14 @@ import typing
 import uuid
 
 from django.utils.translation import gettext_lazy as _
+
 from rest_framework import permissions, request as rest_request, throttling, views
+from rest_framework import generics
 
 from core import enums, utils, exceptions, services
 from core.http import serializers, views as http_views
 from core.http.models import User
 from core.apps.accounts import models, serializers as sms_serializers
-from core.utils import dd
 
 
 class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
@@ -123,3 +124,12 @@ class MeView(views.APIView, http_views.ApiResponse):
     def get(self, request: rest_request.Request):
         user = request.user
         return self.success(data=serializers.UserSerializer(user).data)
+
+
+class MeUpdateView(generics.UpdateAPIView):
+    serializer_class = serializers.UserSerializer
+    pagination_class = (permissions.IsAuthenticated,)
+    
+    def get_object(self):
+        return self.request.user
+    
