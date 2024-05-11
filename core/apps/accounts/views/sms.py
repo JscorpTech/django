@@ -1,10 +1,13 @@
 import typing
 import uuid
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import permissions, request as rest_request, throttling, views
-from rest_framework import generics
+from rest_framework import generics, status
 
 from core import enums, utils, exceptions, services
 from core.http import serializers, views as http_views
@@ -39,6 +42,15 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
 
     serializer_class = serializers.ConfirmSerializer
 
+    @swagger_auto_schema(
+            request_body=serializer_class,
+            responses={
+                status.HTTP_200_OK: openapi.Response("Confirm successfully"),
+                status.HTTP_400_BAD_REQUEST: openapi.Response("Bad request")
+            },
+            operation_summary="Auth confirm.",
+            operation_description="Auth confirm user."
+    )   
     def post(self, request: rest_request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
@@ -120,7 +132,15 @@ class ResetPasswordView(http_views.AbstractSendSms):
 
 class MeView(views.APIView, http_views.ApiResponse):
     """Get user information"""
-
+    @swagger_auto_schema(
+            request_body=serializers.UserSerializer,
+            responses={
+                status.HTTP_200_OK: openapi.Response("user data is retrieved successfully"),
+                status.HTTP_400_BAD_REQUEST: openapi.Response("Bad request")
+            },
+            operation_summary="user information.",
+            operation_description="get user ifnormation."
+    )   
     def get(self, request: rest_request.Request):
         user = request.user
         return self.success(data=serializers.UserSerializer(user).data)
@@ -128,8 +148,8 @@ class MeView(views.APIView, http_views.ApiResponse):
 
 class MeUpdateView(generics.UpdateAPIView):
     serializer_class = serializers.UserSerializer
-    pagination_class = (permissions.IsAuthenticated,)
-    
+    permission_classes = (permissions.IsAuthenticated,)
+
     def get_object(self):
         return self.request.user
     

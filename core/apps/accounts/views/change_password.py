@@ -1,17 +1,31 @@
+from django.contrib.auth.hashers import make_password
+
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
 from rest_framework import status
-
-from django.contrib.auth.hashers import make_password
 
 from core.http import views as http_views
 from ..serializers import ChangePasswordSerializer
 
 
 class ChangePasswordView(APIView, http_views.ApiResponse):
+    """usaer password change view"""
+    serializer_class = ChangePasswordSerializer
     permission_classes = (IsAuthenticated,)
-
+    
+    @swagger_auto_schema(
+            request_body=serializer_class,
+            responses={
+                status.HTTP_200_OK: openapi.Response("Password changed successfully"),
+                status.HTTP_400_BAD_REQUEST: openapi.Response("Bad request")
+            },
+            operation_summary="Change user password.",
+            operation_description="Change password of the authenticated user."
+    )   
     def post(self, request, *args, **kwargs):
         user = self.request.user
         if user is None:
@@ -21,7 +35,7 @@ class ChangePasswordView(APIView, http_views.ApiResponse):
                     "message": "User not found.",
                 }
             )
-        serializer = ChangePasswordSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             if user.check_password(request.data['old_password']):
                 user.password = make_password(request.data['new_password'])

@@ -1,2 +1,2 @@
 from .sms import *  # noqa
-from .chamge_password import *  # noqa
+from .change_password import *  # noqa
