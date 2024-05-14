@@ -1,9 +1,7 @@
-from abc import ABC
+import abc
+import faker
 
-from faker import Faker
 
-
-class BaseFaker(ABC):
-
+class BaseFaker(abc.ABC):
     def __init__(self):
-        self.faker = Faker()
+        self.faker = faker.Faker()

@@ -2,8 +2,8 @@ import json
 
 from django import template
 from django.conf import settings
-from django.templatetags.static import static
-from django.utils.safestring import mark_safe
+from django.utils import safestring
+from django.templatetags import static
 
 from common.env import env
 
@@ -16,7 +16,7 @@ def getScript(url: object) -> str:
     if env("VITE_LIVE"):
         url = f"http://{env('VITE_HOST')}:{env('VITE_PORT')}/{url}"
     else:
-        url: str = static(f"vite/{url}")
+        url: str = static.static(f"vite/{url}")
 
     if ext == "css":
         script: str = "<link rel='stylesheet' type='text/css' href='{}'>" \
@@ -33,7 +33,7 @@ def vite_load(*args):
     try:
         fd = open(f"{settings.VITE_APP_DIR}/manifest.json", "r")
         manifest = json.load(fd)
-    except Exception as e:
+    except Exception:
         raise Exception(
             f"Vite manifest file not found or invalid. Maybe your"
             f" {settings.VITE_APP_DIR}/manifest.json file is empty?"
@@ -53,8 +53,8 @@ def vite_load(*args):
         )
         imports_files += f""" <script type="module" 
         src="http://{env('VITE_HOST')}:{env('VITE_PORT')}/@vite/client"></script> <script 
-        type="module" src="{static(
+        type="module" src="{static.static(
             "js/vite-refresh.js")}"></script>
                       """
 
-    return mark_safe(imports_files)
+    return safestring.mark_safe(imports_files)

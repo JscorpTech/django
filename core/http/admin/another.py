@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db import models as db_model
-from django_select2 import forms as django_select2
 from import_export import admin as import_export
+from django_select2 import forms as django_select2
 from modeltranslation import admin as modeltranslation
 
 from core.http import forms
@@ -19,7 +19,7 @@ class TagsInline(admin.TabularInline):
     extra = 1
 
 
-class PostAdmin(modeltranslation.TabbedTranslationAdmin, import_export.ImportExportModelAdmin):
+class PostAdmin(modeltranslation.TabbedTranslationAdmin, import_export.ImportExportModelAdmin): # noqa
     fields: tuple = ('title', "desc", "image", 'tags')
     search_fields: list = ['title', 'desc']
     list_filter = ['title']
@@ -38,17 +38,11 @@ class TagsAdmin(import_export.ImportExportModelAdmin):
     search_fields: list = ['name']
 
 
-class FrontendInline(admin.TabularInline):
-    model = models.FrontendTranslation.comments.through
-    fields = ['comment']
-    extra = 1
 
-
-class FrontendTranslationAdmin(modeltranslation.TabbedTranslationAdmin, import_export.ImportExportModelAdmin):
+class FrontendTranslationAdmin(import_export.ImportExportModelAdmin): # noqa
     fields: tuple = ("key", "value")
     required_languages: tuple = ('uz',)
     list_display = ["key", "value"]
-    inlines = [FrontendInline]
 
 
 class SmsConfirmAdmin(admin.ModelAdmin):

@@ -1,7 +1,10 @@
+"""
+Clear cache command
+"""
 from django.core.cache import cache
 from django.core.management import BaseCommand
 
-from core.utils.console import Console
+from core.utils import console
 
 
 class Command(BaseCommand):
@@ -9,4 +12,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         cache.clear()
-        Console.success("Cache cleared successfully")
+        console.Console.success("Cache cleared successfully")

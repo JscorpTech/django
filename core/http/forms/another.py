@@ -1,15 +1,15 @@
-#####################
-# Project base forms
-#####################
+"""
+Project base forms
+"""
 from django import forms
 from django_ckeditor_5 import widgets
 
-from core.http.models import Post
+from core.http import models
 
 
 class PostAdminForm(forms.ModelForm):
     class Meta:
-        model = Post
+        model = models.Post
         widgets = {
             'desc': widgets.CKEditor5Widget(),
         }

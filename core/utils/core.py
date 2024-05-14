@@ -1,3 +1,5 @@
 class Helper:
-    """Helper class to handle index"""
+    """
+    Helper class to handle index
+    """
     pass

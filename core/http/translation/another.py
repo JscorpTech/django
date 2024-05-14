@@ -1,13 +1,12 @@
-#####################
-# Django model translation Resources
-#####################
+"""
+Django model translation resources
+"""
+from modeltranslation import translator
 
-from modeltranslation.translator import TranslationOptions
 
-
-class PostTranslationOption(TranslationOptions):
+class PostTranslationOption(translator.TranslationOptions):
     fields = ("title", "desc",)
 
 
-class FrontendTranslationOption(TranslationOptions):
+class FrontendTranslationOption(translator.TranslationOptions):
     fields = ("value",)

@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-INSTALLED_APPS += apps.INSTALLED_APPS # noqa
+INSTALLED_APPS += apps.INSTALLED_APPS  # noqa
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -38,11 +38,11 @@ MIDDLEWARE = [
     "core.middlewares.cache_middleware.CacheMiddleware",  # Cache middle
 
     *(['django.middleware.cache.UpdateCacheMiddleware']
-      if env.str("CACHE_ENABLED") else []),  # Update cache middle
+      if env.bool("CACHE_ENABLED") else []),  # Update cache middle
     'django.middleware.common.CommonMiddleware',
 
     *(['django.middleware.cache.FetchFromCacheMiddleware']
-      if env.str("CACHE_ENABLED") else []),  # Fetch from cache middle
+      if env.bool("CACHE_ENABLED") else []),  # Fetch from cache middle
 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -94,7 +94,6 @@ USE_I18N = True
 USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 # Date formats
 ##

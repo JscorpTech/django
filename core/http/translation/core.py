@@ -1,11 +1,11 @@
-#####################
-# Register models
-#####################
-
+"""
+Register models
+"""
 from modeltranslation.translator import translator
 
-from core.http.models import Post, FrontendTranslation
-from . import another
+from core.http import models
+from core.http.translation import another
 
-translator.register(Post, another.PostTranslationOption)
-translator.register(FrontendTranslation, another.FrontendTranslationOption)
+
+translator.register(models.Post, another.PostTranslationOption)
+translator.register(models.FrontendTranslation, another.FrontendTranslationOption) # noqa
