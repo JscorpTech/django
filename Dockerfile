@@ -11,3 +11,5 @@ COPY . /code/
 RUN pip install poetry
 
 RUN poetry install
+
+CMD poetry run python3 manage.py runserver 0.0.0.0:8000
