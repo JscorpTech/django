@@ -5,12 +5,12 @@ services:
     restart: always
     command: ${COMMAND:-poetry run python3 manage.py runserver 0.0.0.0:8000}
     volumes:
-    - .:/code
+      - .:/code
     ports:
-    - 8081:8000
+      - ${PORT:-8001}:8000
     depends_on:
-    - db
-    - redis
+      - db
+      - redis
   db:
     image: postgres:13
     restart: always
@@ -18,8 +18,10 @@ services:
       POSTGRES_DB: django
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: '2309'
+    ports:
+      - 5433:5432
     volumes:
-    - pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
   redis:
     restart: always
     image: redis

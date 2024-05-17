@@ -1,5 +1,5 @@
 from django.utils.translation import gettext as _
-from rest_framework import views
+from rest_framework import views, permissions
 from rest_framework import request
 from rest_framework import throttling
 
@@ -12,6 +12,7 @@ from core.http.views import generics as http_views
 class AbstractSendSms(views.APIView, http_views.ApiResponse):
     serializer_class = serializers.ResendSerializer
     throttle_classes = [throttling.UserRateThrottle]
+    permission_classes = [permissions.AllowAny]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
