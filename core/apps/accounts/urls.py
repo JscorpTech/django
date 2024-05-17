@@ -21,4 +21,6 @@ urlpatterns = [
     # Reset password step 2
     path("auth/resend/", views.ResendView.as_view(), name="resend"),  # resend otp code # noqa
     path("auth/me/", views.MeView.as_view(), name="me"),  # get user information # noqa
+    path("auth/me/update/", views.MeUpdateView.as_view(), name="me-update"),  # user update information # noqa
+    path("auth/change/password/", views.ChangePasswordView.as_view(), name="change-password"),  # change user password # noqa
 ]
