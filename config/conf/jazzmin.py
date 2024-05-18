@@ -1,9 +1,9 @@
 from typing import Any
 
 JAZZMIN_SETTINGS: dict[str | Any, str | None | Any] = {
-    "site_title": "Jscorp",
-    "site_header": "Jscorp",
-    "site_brand": "Jscorp",
+    "site_title": "Django",
+    "site_header": "Django",
+    "site_brand": "Django",
     "site_logo": "/images/logo.png",
     "login_logo": None,
     "login_logo_dark": None,
