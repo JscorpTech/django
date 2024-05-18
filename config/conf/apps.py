@@ -8,11 +8,11 @@ INSTALLED_APPS = [
     "rosetta",
     "django_redis",
     "rest_framework_simplejwt",
-    "drf_yasg",
     "crispy_forms",
     "import_export",
     "django_ckeditor_5",
     "polymorphic",
+    "drf_spectacular",
 
     #####################
     # My apps
