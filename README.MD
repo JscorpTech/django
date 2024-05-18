@@ -6,6 +6,7 @@
     - [Cacheni tozalash](#clearcache)
     - [Factory](#factory)
     - [Generate Secret key](#secret)
+    - [Folders](#folders)
 
 
 ## <a name='Get Started'>Install</a>
@@ -75,7 +76,57 @@ python3 manage.py factory
 ```
 
 
+
 # <a name='secret'>Generate Secret key</a>
 ```bash
 python3 manage.py secret
 ```
+
+# <a name='folders'>Folders</a>
+ - common
+ - * env.py `Enviromendagi malumotlar uchun`
+ - config
+   - conf
+     - `Tashqi kutubxonalar sozlamalari uchun papka`
+   - settings
+      - production.py `Productionda ishlashi kerak bo'lgan settings fayli`
+      - local.py `Localda ishlashi kerak bo'lgan settings fayli`
+      - common.py `Umumiy sozlamalar`
+ - core
+   - apps`Shaxsiy applar`
+   - console `Consolni app`
+   - enums `Enums uchun papaka yani Choices model uchun`
+   - exceptions
+   - http `Base app barcha kerakli default functiyalar`
+   - middlewares
+   - services
+   - utils
+ - deployments `Deploy uchun example`
+ - docs `Documentatsiya fayillarini saqlash uchun papka`
+ - locale
+ - logs `Project loglari uchun papka`
+ - media `Media fayillar uchun papka`
+ - nginx `Docker + nginx uchun kerakli fayillar`
+ - requirements `Project requirements papkasi`
+ - resources `Frontend ko'dlari uchun papka css,js,html`
+ - routes `asosiy routing fayillari`
+ - scripts `Kerakli scriptlar`
+ - stubs `Factory va seeder uchun stub fayil yani shablon fayil`
+ - tests
+ - * .env
+ - * .env.example
+ - * .gitignore
+ - * .gitlab-cli.yml `Gitlab uchun ci/cd`
+ - * docker-compose.yml
+ - * Dockerfile
+ - * generate_secret.py `Django secret key generatsiya qilish`
+ - * install
+ - * Makefile
+ - * manage.py
+ - * packages.jscon
+ - * pyproject.toml
+ - * pytest.ini
+ - * tailwind.config.js
+ - * vite.config.js
+ - * ViteDockerfile
+
