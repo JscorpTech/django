@@ -5,6 +5,7 @@
     - [Seeder](#seeder)
     - [Cacheni tozalash](#clearcache)
     - [Factory](#factory)
+    - [Generate Secret key](#secret)
     - [Folders](#folders)
 
 
@@ -75,8 +76,13 @@ python3 manage.py factory
 ```
 
 
-# <a name='folders'>Folders</a>
 
+# <a name='secret'>Generate Secret key</a>
+```bash
+python3 manage.py secret
+```
+
+# <a name='folders'>Folders</a>
  - common
  - * env.py `Enviromendagi malumotlar uchun`
  - config
@@ -123,4 +129,4 @@ python3 manage.py factory
  - * tailwind.config.js
  - * vite.config.js
  - * ViteDockerfile
- 
+
