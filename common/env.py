@@ -1,10 +1,11 @@
 """
 Default value for environ variable
 """
+
 import os
 import environ
 
-environ.Env.read_env(os.path.join('.env'))
+environ.Env.read_env(os.path.join(".env"))
 
 env = environ.Env(
     DEBUG=(bool, False),
@@ -18,5 +19,5 @@ env = environ.Env(
     CACHE_ENABLED=(bool, False),
     VITE_PORT=(int, 5173),
     VITE_HOST=(str, "vite"),
-    NGROK_AUTHTOKEN=(str, "TOKEN")
+    NGROK_AUTHTOKEN=(str, "TOKEN"),
 )

@@ -1,6 +1,7 @@
 """
 Raise exception
 """
+
 from rest_framework import exceptions
 
 
@@ -31,6 +32,7 @@ class MyApiException(exceptions.APIException):
     """
     My API Exception for API exceptions status code edit
     """
+
     status_code = 400
 
     def __init__(self, message, status_code):

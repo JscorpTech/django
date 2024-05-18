@@ -41,7 +41,8 @@ class ChangePasswordView(APIView, http_views.ApiResponse):
                 user.password = make_password(request.data["new_password"])
                 user.save()
                 return http_views.ApiResponse().success(
-                    "password changed successfully", status_code=status.HTTP_200_OK
+                    "password changed successfully",
+                    status_code=status.HTTP_200_OK,
                 )
             return http_views.ApiResponse().error(
                 "wrong old password", status_code=status.HTTP_400_BAD_REQUEST

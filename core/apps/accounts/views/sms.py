@@ -4,8 +4,15 @@ import uuid
 
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import permissions, request as rest_request, throttling, views
-from rest_framework import generics
+from rest_framework import (
+    permissions,
+    request as rest_request,
+    throttling,
+    views,
+    generics,
+    viewsets,
+    response,
+)
 
 from core import enums, utils, exceptions, services
 from core.http import serializers, views as http_views
@@ -14,7 +21,9 @@ from core.apps.accounts import models, serializers as sms_serializers
 from drf_spectacular.utils import extend_schema
 
 
-class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
+class RegisterView(
+    views.APIView, services.UserService, http_views.ApiResponse
+):
     """Register new user"""
 
     serializer_class = serializers.RegisterSerializer
@@ -29,9 +38,14 @@ class RegisterView(views.APIView, services.UserService, http_views.ApiResponse):
 
         # Create pending user
         self.create_user(
-            phone, data.get("first_name"), data.get("last_name"), data.get("password")
+            phone,
+            data.get("first_name"),
+            data.get("last_name"),
+            data.get("password"),
         )
-        self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
+        self.send_confirmation(
+            phone
+        )  # Send confirmation code for sms eskiz.uz
         return self.success(_(enums.Messages.SEND_MESSAGE) % {"phone": phone})
 
 
@@ -56,10 +70,16 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
             # Check Sms confirmation otp code
             if services.SmsService.check_confirm(phone, code=code):
                 # Create user
-                token = self.validate_user(User.objects.filter(phone=phone).first())
-                return self.success(_(enums.Messages.OTP_CONFIRMED), token=token)
+                token = self.validate_user(
+                    User.objects.filter(phone=phone).first()
+                )
+                return self.success(
+                    _(enums.Messages.OTP_CONFIRMED), token=token
+                )
         except exceptions.SmsException as e:
-            return utils.ResponseException(e)  # Response exception for APIException
+            return utils.ResponseException(
+                e
+            )  # Response exception for APIException
         except Exception as e:
             return self.error(e)  # Api exception for APIException
 
@@ -99,7 +119,9 @@ class ResetConfirmationCodeView(
             return self.error(str(e))
 
 
-class ResetSetPasswordView(views.APIView, http_views.ApiResponse, services.UserService):
+class ResetSetPasswordView(
+    views.APIView, http_views.ApiResponse, services.UserService
+):
     serializer_class = sms_serializers.SetPasswordSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -132,22 +154,18 @@ class ResetPasswordView(http_views.AbstractSendSms):
     )
 
 
-class MeView(views.APIView, http_views.ApiResponse):
+class MeView(viewsets.ViewSet):
     """Get user information"""
 
-    @extend_schema(
-        request=serializers.UserSerializer,
-        summary="user information.",
-        description="get user ifnormation.",
-    )
+    serializer_class = serializers.UserSerializer
+
     def get(self, request: rest_request.Request):
         user = request.user
-        return self.success(data=serializers.UserSerializer(user).data)
+        return response.Response(serializers.UserSerializer(user).data)
 
 
 class MeUpdateView(generics.UpdateAPIView):
     serializer_class = serializers.UserSerializer
-    permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self):
         return self.request.user

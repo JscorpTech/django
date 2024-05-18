@@ -1,6 +1,7 @@
 """
 Exceptions test
 """
+
 import pytest
 import unittest
 from core import exceptions

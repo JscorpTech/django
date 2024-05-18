@@ -14,9 +14,13 @@ class User(auth_models.AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     validated_at = models.DateTimeField(null=True, blank=True)
-    role = models.CharField(max_length=255, choices=choices.RoleChoice, default=choices.RoleChoice.USER)
+    role = models.CharField(
+        max_length=255,
+        choices=choices.RoleChoice,
+        default=choices.RoleChoice.USER,
+    )
 
-    USERNAME_FIELD = u"phone"
+    USERNAME_FIELD = "phone"
     objects = managers.UserManager()
 
     def __str__(self):
@@ -43,27 +47,34 @@ class SmsConfirm(models.Model):
             self.try_count = 0
             self.resend_count = 0
             self.resend_unlock_time = datetime.now() + timedelta(
-                minutes=self.RESEND_BLOCK_MINUTES)
+                minutes=self.RESEND_BLOCK_MINUTES
+            )
         elif self.try_count >= self.TRY_COUNT:
             self.try_count = 0
             self.unlock_time = datetime.now() + timedelta(
-                minutes=self.TRY_BLOCK_MINUTES)
+                minutes=self.TRY_BLOCK_MINUTES
+            )
 
-        if self.resend_unlock_time is not None and \
-                self.resend_unlock_time.timestamp() \
-                < datetime.now().timestamp():
+        if (
+            self.resend_unlock_time is not None
+            and self.resend_unlock_time.timestamp()
+            < datetime.now().timestamp()
+        ):
             self.resend_unlock_time = None
 
-        if self.unlock_time is not None and self.unlock_time.timestamp() \
-                < datetime.now().timestamp():
+        if (
+            self.unlock_time is not None
+            and self.unlock_time.timestamp() < datetime.now().timestamp()
+        ):
             self.unlock_time = None
         self.save()
 
     def is_expired(self):
-        return self.expire_time.timestamp() < datetime.now().timestamp() if \
-            hasattr(
-                self.expire_time,
-                "timestamp") else None
+        return (
+            self.expire_time.timestamp() < datetime.now().timestamp()
+            if hasattr(self.expire_time, "timestamp")
+            else None
+        )
 
     def is_block(self):
         return self.unlock_time is not None
@@ -79,7 +90,7 @@ class SmsConfirm(models.Model):
         expire -= minutes * 60
         expire = math.floor(expire)
 
-        return '{:02d}:{:02d}'.format(minutes, expire)
+        return "{:02d}:{:02d}".format(minutes, expire)
 
     def __str__(self) -> str:
         return "{phone} | {code}".format(phone=self.phone, code=self.code)
