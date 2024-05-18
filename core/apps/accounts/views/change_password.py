@@ -16,16 +16,15 @@ class ChangePasswordView(APIView, http_views.ApiResponse):
     """usaer password change view"""
     serializer_class = ChangePasswordSerializer
     permission_classes = (IsAuthenticated,)
-    
+
     @swagger_auto_schema(
-            request_body=serializer_class,
-            responses={
-                status.HTTP_200_OK: openapi.Response("Password changed successfully"),
-                status.HTTP_400_BAD_REQUEST: openapi.Response("Bad request")
-            },
-            operation_summary="Change user password.",
-            operation_description="Change password of the authenticated user."
-    )   
+        request_body=serializer_class,
+        responses={
+            status.HTTP_200_OK: openapi.Response("Password changed successfully"),
+            status.HTTP_400_BAD_REQUEST: openapi.Response("Bad request")
+        },
+        operation_summary="Change user password.",
+        operation_description="Change password of the authenticated user.")
     def post(self, request, *args, **kwargs):
         user = self.request.user
         if user is None:
