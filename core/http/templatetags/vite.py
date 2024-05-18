@@ -51,10 +51,7 @@ def vite_load(*args):
                 getScript(file) for file in args
             ]
         )
-        imports_files += f""" <script type="module" 
-        src="http://{env('VITE_HOST')}:{env('VITE_PORT')}/@vite/client"></script> <script 
-        type="module" src="{static.static(
-            "js/vite-refresh.js")}"></script>
-                      """
+        imports_files += f""" <script type="module" src="http://{env('VITE_HOST')}:{env('VITE_PORT')}/@vite/client">
+        </script> <script type="module" src="{static.static("js/vite-refresh.js")}"></script>"""
 
     return safestring.mark_safe(imports_files)

@@ -41,7 +41,7 @@ msgid "Sizning Tasdiqlash ko'dingiz: %(code)s"
 msgstr ""
 
 #: resources/templates/user/home.html:18
-msgid "Jscorp/django"
+msgid "Django"
 msgstr ""
 
 #: resources/templates/user/home.html:19

@@ -49,8 +49,7 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
                 status.HTTP_400_BAD_REQUEST: openapi.Response("Bad request")
             },
             operation_summary="Auth confirm.",
-            operation_description="Auth confirm user."
-    )   
+            operation_description="Auth confirm user.")
     def post(self, request: rest_request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
@@ -139,8 +138,7 @@ class MeView(views.APIView, http_views.ApiResponse):
                 status.HTTP_400_BAD_REQUEST: openapi.Response("Bad request")
             },
             operation_summary="user information.",
-            operation_description="get user ifnormation."
-    )   
+            operation_description="get user ifnormation.")
     def get(self, request: rest_request.Request):
         user = request.user
         return self.success(data=serializers.UserSerializer(user).data)
@@ -152,4 +150,3 @@ class MeUpdateView(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user
-    
