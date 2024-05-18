@@ -1,8 +1,5 @@
-import uuid
-
 from django.db import models
 
-from config import settings
 from core.http.models import User
 
 

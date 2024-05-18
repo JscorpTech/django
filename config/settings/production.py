@@ -1,6 +1,7 @@
 from common.env import env
-from config.conf import rest_framework
 from config.settings.common import * # noqa
+from config.settings.common import MIDDLEWARE, ALLOWED_HOSTS, REST_FRAMEWORK
+
 
 DATABASES = {
     'default': {
@@ -20,6 +21,6 @@ ALLOWED_HOSTS += [
     "80.90.178.156"
 ]
 
-rest_framework.REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
+REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
     'user': '10/min',
 }
