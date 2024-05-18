@@ -5,6 +5,7 @@
     - [Seeder](#seeder)
     - [Cacheni tozalash](#clearcache)
     - [Factory](#factory)
+    - [Generate Secret key](#secret)
 
 
 ## <a name='Get Started'>Install</a>
@@ -71,4 +72,10 @@ pyhon3 manage.py makefactoy ${name}
 # Factorylarni ishga tushurish
 ```bash
 python3 manage.py factory
+```
+
+
+# <a name='secret'>Generate Secret key</a>
+```bash
+python3 manage.py secret
 ```
