@@ -4,17 +4,13 @@ from common.env import env
 
 
 class SendService:
-    GET = 'GET'
-    POST = 'POST'
-    PATCH = 'PATCH'
-    CONTACT = 'contact'
+    GET = "GET"
+    POST = "POST"
+    PATCH = "PATCH"
+    CONTACT = "contact"
 
     def __init__(
-        self,
-        api_url=None,
-        email=None,
-        password=None,
-        callback_url=None
+        self, api_url=None, email=None, password=None, callback_url=None
     ):
         self.api_url = api_url or env("SMS_API_URL")
         self.email = email or env("SMS_LOGIN")
@@ -23,8 +19,10 @@ class SendService:
         self.headers = {}
 
         self.methods = {
-            "auth_user": "auth/user", "auth_login": "auth/login",
-            "auth_refresh": "auth/refresh", "send_message": "message/sms/send"
+            "auth_user": "auth/user",
+            "auth_login": "auth/login",
+            "auth_refresh": "auth/refresh",
+            "send_message": "message/sms/send",
         }
 
     def request(self, api_path, data=None, method=None, headers=None):
@@ -35,10 +33,10 @@ class SendService:
                 method,
                 f"{self.api_url}/{api_path}",
                 data=data,
-                headers=headers
+                headers=headers,
             )
 
-            if api_path == self.methods['auth_refresh']:
+            if api_path == self.methods["auth_refresh"]:
                 if response.status_code == 200:
                     incoming_data["status"] = "success"
             else:
@@ -49,18 +47,14 @@ class SendService:
         return incoming_data
 
     def auth(self):
-        data = {
-            "email": self.email,
-            "password": self.password
-        }
+        data = {"email": self.email, "password": self.password}
 
         return self.request(
-            self.methods["auth_login"], data=data,
-            method=self.POST
+            self.methods["auth_login"], data=data, method=self.POST
         )
 
     def refresh_token(self):
-        token = self.auth()['data']['token']
+        token = self.auth()["data"]["token"]
         self.headers["Authorization"] = "Bearer " + token
 
         context = {
@@ -70,29 +64,27 @@ class SendService:
         }
 
         return self.request(
-            context['api_path'],
-            method=context['method'],
-            headers=context['headers']
+            context["api_path"],
+            method=context["method"],
+            headers=context["headers"],
         )
 
     def get_my_user_info(self):
-        token = self.auth()['data']['token']
+        token = self.auth()["data"]["token"]
         self.headers["Authorization"] = "Bearer " + token
 
         data = {
             "headers": self.headers,
             "method": self.GET,
-            "api_path": self.methods["auth_user"]
+            "api_path": self.methods["auth_user"],
         }
 
         return self.request(
-            data['api_path'],
-            method=data['method'],
-            headers=data['headers']
+            data["api_path"], method=data["method"], headers=data["headers"]
         )
 
     def add_sms_contact(self, first_name, phone_number, group):
-        token = self.auth()['data']['token']
+        token = self.auth()["data"]["token"]
         self.headers["Authorization"] = "Bearer " + token
 
         data = {
@@ -106,37 +98,37 @@ class SendService:
             "headers": self.headers,
             "method": self.POST,
             "api_path": self.CONTACT,
-            "data": data
+            "data": data,
         }
 
         return self.request(
-            context['api_path'],
-            data=context['data'],
-            method=context['method'],
-            headers=context['headers']
+            context["api_path"],
+            data=context["data"],
+            method=context["method"],
+            headers=context["headers"],
         )
 
     def send_sms(self, phone_number, message):
-        token = self.auth()['data']['token']
+        token = self.auth()["data"]["token"]
         self.headers["Authorization"] = "Bearer " + token
 
         data = {
             "from": 4546,
             "mobile_phone": phone_number,
             "callback_url": self.callback_url,
-            "message": message
+            "message": message,
         }
 
         context = {
             "headers": self.headers,
             "method": self.POST,
             "api_path": self.methods["send_message"],
-            "data": data
+            "data": data,
         }
 
         return self.request(
-            context['api_path'],
-            data=context['data'],
-            method=context['method'],
-            headers=context['headers']
+            context["api_path"],
+            data=context["data"],
+            method=context["method"],
+            headers=context["headers"],
         )

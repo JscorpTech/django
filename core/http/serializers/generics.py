@@ -13,6 +13,5 @@ class GenericSerializer(serializers.Serializer):
         except exceptions.ValidationError as e:
             key, value = next(iter(e.detail.items()))
             exception.ResponseException(
-                value[0],
-                error_code=enums.Codes.INVALID_PARAMETER_VALUE
+                value[0], error_code=enums.Codes.INVALID_PARAMETER_VALUE
             )

@@ -21,6 +21,6 @@ class AbstractSendSms(views.APIView, http_views.ApiResponse):
     def post(self, request: request.Request):
         ser = self.serializer_class(data=request.data)
         ser.is_valid(raise_exception=True)
-        phone = ser.data.get('phone')
+        phone = ser.data.get("phone")
         self.service.send_confirmation(phone)
-        return self.success(_(enums.Messages.SEND_MESSAGE) % {'phone': phone})
+        return self.success(_(enums.Messages.SEND_MESSAGE) % {"phone": phone})

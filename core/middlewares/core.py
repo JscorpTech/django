@@ -5,7 +5,8 @@ from core import exceptions
 
 class ExceptionMiddleware:
     """
-    This class is used to handle exceptions that occur during the request/response cycle.
+    This class is used to handle exceptions that occur during the request/\
+        response cycle.
     It is a middleware that is added to the Django middleware pipeline.
     """
 
@@ -49,14 +50,15 @@ class ExceptionMiddleware:
         """
         if isinstance(e, exceptions.BreakException):
             """
-            If the exception is a BreakException, construct a JSON response containing the error message, data, and
+            If the exception is a BreakException, construct a JSON response \
+                containing the error message, data, and
             any additional arguments passed to the BreakException.
             """
             error_data = {
-                'message': e.message,
+                "message": e.message,
                 "data": e.data,
                 "errors": [
                     e.args.__str__(),
-                ]
+                ],
             }
             return response.JsonResponse(error_data)

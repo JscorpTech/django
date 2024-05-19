@@ -5,6 +5,7 @@ class RoleChoice(models.TextChoices):
     """
     User Role Choice
     """
-    SUPERUSER = 'superuser'
-    ADMIN = 'admin'
-    USER = 'user'
+
+    SUPERUSER = "superuser"
+    ADMIN = "admin"
+    USER = "user"

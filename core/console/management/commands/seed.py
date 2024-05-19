@@ -19,7 +19,8 @@ class Command(management.BaseCommand):
         if len(SEEDERS) == 0:
             self.print(
                 "SEEDERS not defined:\n\nsettings file add SEEDERS variable",
-                "error")
+                "error",
+            )
             return
 
         for seeder in SEEDERS:

@@ -6,13 +6,11 @@ class CustomUserAdmin(admin.UserAdmin, import_export.ImportExportModelAdmin):
     list_display = (
         "first_name",
         "last_name",
-        'phone',
+        "phone",
     )
 
 
 class GroupAdmin(import_export.ImportExportModelAdmin):
-    list_display = ['name']
+    list_display = ["name"]
     search_fields = ["name"]
-    filter_horizontal = (
-        "permissions",
-    )
+    filter_horizontal = ("permissions",)
