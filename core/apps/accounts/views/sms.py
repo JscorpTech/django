@@ -12,18 +12,17 @@ from rest_framework import (
     generics,
     viewsets,
     response,
+    status,
 )
 
-from core import enums, utils, exceptions, services
+from core import enums, exceptions, services
 from core.http import serializers, views as http_views
 from core.http.models import User
 from core.apps.accounts import models, serializers as sms_serializers
 from drf_spectacular.utils import extend_schema
 
 
-class RegisterView(
-    views.APIView, services.UserService, http_views.ApiResponse
-):
+class RegisterView(views.APIView, services.UserService):
     """Register new user"""
 
     serializer_class = serializers.RegisterSerializer
@@ -35,7 +34,6 @@ class RegisterView(
         ser.is_valid(raise_exception=True)
         data = ser.data
         phone = data.get("phone")
-
         # Create pending user
         self.create_user(
             phone,
@@ -46,13 +44,17 @@ class RegisterView(
         self.send_confirmation(
             phone
         )  # Send confirmation code for sms eskiz.uz
-        return self.success(_(enums.Messages.SEND_MESSAGE) % {"phone": phone})
+        return response.Response(
+            {"detail": _(enums.Messages.SEND_MESSAGE) % {"phone": phone}},
+            status=status.HTTP_202_ACCEPTED,
+        )
 
 
-class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
+class ConfirmView(views.APIView, services.UserService):
     """Confirm otp code"""
 
     serializer_class = serializers.ConfirmSerializer
+    permission_classes = [permissions.AllowAny]
 
     @extend_schema(
         request=serializer_class,
@@ -73,20 +75,24 @@ class ConfirmView(views.APIView, services.UserService, http_views.ApiResponse):
                 token = self.validate_user(
                     User.objects.filter(phone=phone).first()
                 )
-                return self.success(
-                    _(enums.Messages.OTP_CONFIRMED), token=token
+                return response.Response(
+                    data={
+                        "detail": _(enums.Messages.OTP_CONFIRMED),
+                        "token": token,
+                    },
+                    status=status.HTTP_202_ACCEPTED,
                 )
         except exceptions.SmsException as e:
-            return utils.ResponseException(
-                e
+            return response.Response(
+                {"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST
             )  # Response exception for APIException
         except Exception as e:
-            return self.error(e)  # Api exception for APIException
+            return response.Response(
+                {"detail": e}, status=status.HTTP_400_BAD_REQUEST
+            )  # Api exception for APIException
 
 
-class ResetConfirmationCodeView(
-    views.APIView, http_views.ApiResponse, services.UserService
-):
+class ResetConfirmationCodeView(views.APIView, services.UserService):
     """Reset confirm otp code"""
 
     serializer_class = serializers.ResetConfirmationSerializer
@@ -105,23 +111,29 @@ class ResetConfirmationCodeView(
                     user=User.objects.filter(phone=phone).first(),
                     token=str(uuid.uuid4()),
                 )
-                return self.success(
+                return response.Response(
                     data={
                         "token": token.token,
                         "created_at": token.created_at,
                         "updated_at": token.updated_at,
-                    }
+                    },
+                    status=status.HTTP_200_OK,
                 )
-            return self.error(_(enums.Messages.INVALID_OTP))
+            return response.Response(
+                data={"detail": _(enums.Messages.INVALID_OTP)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         except exceptions.SmsException as e:
-            return self.error(str(e), error_code=enums.Codes.INVALID_OTP_ERROR)
+            return response.Response(
+                {"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST
+            )
         except Exception as e:
-            return self.error(str(e))
+            return response.Response(
+                {"detail": e}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
-class ResetSetPasswordView(
-    views.APIView, http_views.ApiResponse, services.UserService
-):
+class ResetSetPasswordView(views.APIView, services.UserService):
     serializer_class = sms_serializers.SetPasswordSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -133,11 +145,16 @@ class ResetSetPasswordView(
         password = data.get("password")
         token = models.ResetToken.objects.filter(token=token)
         if not token.exists():
-            return self.error(_("Invalid token"))
+            return response.Response(
+                {"detail": _("Invalid token")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         phone = token.first().user.phone
         token.delete()
         self.change_password(phone, password)
-        return self.success(_("password updated"))
+        return response.Response(
+            {"detail": _("password updated")}, status=status.HTTP_200_OK
+        )
 
 
 class ResendView(http_views.AbstractSendSms):
