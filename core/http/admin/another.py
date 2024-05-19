@@ -10,7 +10,7 @@ from core.http import models
 
 class PostInline(admin.TabularInline):
     model = models.Post.comments.through
-    fields = ['comment']
+    fields = ["comment"]
     extra = 1
 
 
@@ -19,11 +19,14 @@ class TagsInline(admin.TabularInline):
     extra = 1
 
 
-class PostAdmin(modeltranslation.TabbedTranslationAdmin, import_export.ImportExportModelAdmin): # noqa
-    fields: tuple = ('title', "desc", "image", 'tags')
-    search_fields: list = ['title', 'desc']
-    list_filter = ['title']
-    required_languages: tuple = ('uz',)
+class PostAdmin(
+    modeltranslation.TabbedTranslationAdmin,
+    import_export.ImportExportModelAdmin,
+):  # noqa
+    fields: tuple = ("title", "desc", "image", "tags")
+    search_fields: list = ["title", "desc"]
+    list_filter = ["title"]
+    required_languages: tuple = ("uz",)
     form = forms.PostAdminForm
     inlines = [PostInline]
     formfield_overrides = {
@@ -34,14 +37,13 @@ class PostAdmin(modeltranslation.TabbedTranslationAdmin, import_export.ImportExp
 
 
 class TagsAdmin(import_export.ImportExportModelAdmin):
-    fields: tuple = ('name',)
-    search_fields: list = ['name']
+    fields: tuple = ("name",)
+    search_fields: list = ["name"]
 
 
-
-class FrontendTranslationAdmin(import_export.ImportExportModelAdmin): # noqa
+class FrontendTranslationAdmin(import_export.ImportExportModelAdmin):  # noqa
     fields: tuple = ("key", "value")
-    required_languages: tuple = ('uz',)
+    required_languages: tuple = ("uz",)
     list_display = ["key", "value"]
 
 

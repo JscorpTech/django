@@ -14,19 +14,26 @@ JAZZMIN_SETTINGS: dict[str | Any, str | None | Any] = {
     "search_model": ["auth.User"],
     "user_avatar": None,
     "topmenu_links": [
-        {"name": "Home", "url": "admin:index",
-         "permissions": ["auth.view_user"]},
-        {"name": "Support",
-         "url": "https://github.com/farridav/django-jazzmin/issues",
-         "new_window": True},
+        {
+            "name": "Home",
+            "url": "admin:index",
+            "permissions": ["auth.view_user"],
+        },
+        {
+            "name": "Support",
+            "url": "https://github.com/farridav/django-jazzmin/issues",
+            "new_window": True,
+        },
         {"model": "auth.User"},
         {"app": "books"},
     ],
     "usermenu_links": [
-        {"name": "Support",
-         "url": "https://github.com/farridav/django-jazzmin/issues",
-         "new_window": True},
-        {"model": "auth.user"}
+        {
+            "name": "Support",
+            "url": "https://github.com/farridav/django-jazzmin/issues",
+            "new_window": True,
+        },
+        {"model": "auth.user"},
     ],
     "show_sidebar": True,
     "navigation_expanded": True,
@@ -34,12 +41,14 @@ JAZZMIN_SETTINGS: dict[str | Any, str | None | Any] = {
     "hide_models": [],
     "order_with_respect_to": ["auth", "books", "books.author", "books.book"],
     "custom_links": {
-        "books": [{
-            "name": "Make Messages",
-            "url": "make_messages",
-            "icon": "fas fa-comments",
-            "permissions": ["books.view_book"]
-        }]
+        "books": [
+            {
+                "name": "Make Messages",
+                "url": "make_messages",
+                "icon": "fas fa-comments",
+                "permissions": ["books.view_book"],
+            }
+        ]
     },
     "icons": {
         "http.Comment": "fas fa-comments",
@@ -58,8 +67,9 @@ JAZZMIN_SETTINGS: dict[str | Any, str | None | Any] = {
     "use_google_fonts_cdn": True,
     "show_ui_builder": False,
     "changeform_format": "horizontal_tabs",
-    "changeform_format_overrides": {"auth.user": "collapsible",
-                                    "auth.group": "vertical_tabs"},
+    "changeform_format_overrides": {
+        "auth.user": "collapsible",
+        "auth.group": "vertical_tabs",
+    },
     "language_chooser": True,
-
 }

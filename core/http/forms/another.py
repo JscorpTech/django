@@ -1,6 +1,7 @@
 """
 Project base forms
 """
+
 from django import forms
 from django_ckeditor_5 import widgets
 
@@ -11,6 +12,6 @@ class PostAdminForm(forms.ModelForm):
     class Meta:
         model = models.Post
         widgets = {
-            'desc': widgets.CKEditor5Widget(),
+            "desc": widgets.CKEditor5Widget(),
         }
-        fields = '__all__'
+        fields = "__all__"

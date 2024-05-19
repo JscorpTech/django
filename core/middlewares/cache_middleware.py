@@ -4,8 +4,10 @@ class CacheMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        vary_headers = set(response.get('Vary', '').replace(' ', '').split(','))
-        vary_headers.update(['Accept-Language'])
+        vary_headers = set(
+            response.get("Vary", "").replace(" ", "").split(",")
+        )
+        vary_headers.update(["Accept-Language"])
         # Authorization
-        response['Vary'] = ', '.join(vary_headers)
+        response["Vary"] = ", ".join(vary_headers)
         return response
