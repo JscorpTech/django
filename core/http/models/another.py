@@ -28,7 +28,7 @@ class BaseComment(polymorphic.PolymorphicModel):
 class Post(BaseComment):
     title = models.CharField(max_length=255)
     desc = models.TextField()
-    image = models.ImageField(upload_to='posts/', blank=True)
+    image = models.ImageField(upload_to="posts/", blank=True)
     tags = models.ManyToManyField(Tags)
 
     def __str__(self):

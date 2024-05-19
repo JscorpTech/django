@@ -1,6 +1,7 @@
 """
 Admin panel UI view
 """
+
 from rest_framework import status
 from rest_framework import generics
 

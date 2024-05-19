@@ -1,6 +1,7 @@
 """
 Home app urls
 """
+
 from django.urls import path
 from django.urls import include
 
@@ -12,7 +13,11 @@ router = routers.DefaultRouter()
 router.register("", views.PostListView, basename="posts")
 
 urlpatterns = [
-    path("messages/", views.FrontendTranslationView.as_view(), name="frontend-translation"), # noqa
+    path(
+        "messages/",
+        views.FrontendTranslationView.as_view(),
+        name="frontend-translation",
+    ),  # noqa
     path("posts/", include(router.urls), name="posts"),
-    path('', views.HomeView.as_view(), name="home")
+    path("", views.HomeView.as_view(), name="home"),
 ]

@@ -3,10 +3,10 @@ from rest_framework import permissions
 
 class HasRole(permissions.BasePermission):
     """
-        DRF Has role permission class
-        example:
-            class TestView(views.ListApiView):
-                permission_classes = (HasRole(choices.RoleChoice.ADMIN),)
+    DRF Has role permission class
+    example:
+        class TestView(views.ListApiView):
+            permission_classes = (HasRole(choices.RoleChoice.ADMIN),)
     """
 
     def __init__(self, roles: list) -> None:

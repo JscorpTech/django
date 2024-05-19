@@ -1,6 +1,7 @@
 """
 Clear cache command
 """
+
 from django.core.cache import cache
 from django.core.management import BaseCommand
 

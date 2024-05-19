@@ -11,10 +11,10 @@ from django.conf import settings
 
 from common.env import env
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', env("DJANGO_SETTINGS_MODULE"))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", env("DJANGO_SETTINGS_MODULE"))
 
-app = celery.Celery('config')
+app = celery.Celery("config")
 
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object("django.conf:settings", namespace="CELERY")
 
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

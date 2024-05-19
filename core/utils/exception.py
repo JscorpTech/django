@@ -24,6 +24,6 @@ class ResponseException:
             "message": message,
             "data": data,
             "error_code": error_code,
-            **kwargs
+            **kwargs,
         }
         raise exceptions.MyApiException(response, status_code)

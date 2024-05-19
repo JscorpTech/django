@@ -1,6 +1,7 @@
 """
 Create a new fake User/Post
 """
+
 from core.http import models
 from core.utils import factory
 
@@ -15,7 +16,7 @@ class UserFactory(factory.BaseFaker):
         return {
             "first_name": self.faker.first_name(),
             "username": self.faker.user_name(),
-            "phone": self.faker.phone_number()
+            "phone": self.faker.phone_number(),
         }
 
 
@@ -26,5 +27,5 @@ class PostFactory(factory.BaseFaker):
         return {
             "title": self.faker.name(),
             "desc": self.faker.text(),
-            "image": self.faker.image_url()
+            "image": self.faker.image_url(),
         }
