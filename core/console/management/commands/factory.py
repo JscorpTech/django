@@ -16,13 +16,15 @@ class Command(management.BaseCommand):
             self.stdout.write(self.style.ERROR(message))
 
     def handle(self, *args, **options):
-        FACTORYS: list[typing.Any] | typing.Any = settings.FACTORYS if hasattr(
-            settings, "FACTORYS") else []
+        FACTORYS: list[typing.Any] | typing.Any = (
+            settings.FACTORYS if hasattr(settings, "FACTORYS") else []
+        )
 
         if len(FACTORYS) == 0:
             self.print(
                 "FACTORYS not defined:\n\nsettings file add FACTORYS variable",
-                "error")
+                "error",
+            )
             return
 
         for factory in FACTORYS:

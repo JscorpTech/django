@@ -19,24 +19,29 @@ class UserService(base_service.BaseService, sms.SmsService):
         refresh = tokens.RefreshToken.for_user(user)
 
         return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
         }
 
     def create_user(self, phone, first_name, last_name, password):
-        models.User.objects.update_or_create(phone=phone, defaults={
-            "phone": phone,
-            "first_name": first_name,
-            "last_name": last_name,
-            "password": hashers.make_password(password)
-        })
+        models.User.objects.update_or_create(
+            phone=phone,
+            defaults={
+                "phone": phone,
+                "first_name": first_name,
+                "last_name": last_name,
+                "password": hashers.make_password(password),
+            },
+        )
 
     def send_confirmation(self, phone) -> bool:
         try:
             self.send_confirm(phone)
             return True
         except exceptions.SmsException as e:
-            exception.ResponseException(e, data={"expired": e.kwargs.get("expired")}) # noqa
+            exception.ResponseException(
+                e, data={"expired": e.kwargs.get("expired")}
+            )  # noqa
         except Exception as e:
             exception.ResponseException(e)
 

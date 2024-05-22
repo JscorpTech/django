@@ -14,5 +14,5 @@ class ResetToken(models.Model):
         return self.token
 
     class Meta:
-        verbose_name = 'Reset Token'
-        verbose_name_plural = 'Reset Tokens'
+        verbose_name = "Reset Token"
+        verbose_name_plural = "Reset Tokens"

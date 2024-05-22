@@ -5,6 +5,9 @@ description = ""
 authors = ["A'zamov Samandar <azamov.samandar.programmer@gmail.com>"]
 readme = "README.md"
 
+[tool.black]
+line-length = 79
+
 [tool.poetry.dependencies]
 python = "^3.11"
 cookiecutter = "2.5.0"

@@ -13,7 +13,6 @@ INSTALLED_APPS = [
     "django_ckeditor_5",
     "polymorphic",
     "drf_spectacular",
-
     #####################
     # My apps
     #####################
