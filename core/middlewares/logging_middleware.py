@@ -4,7 +4,7 @@ class LoggingMiddleware:
 
     def __call__(self, request):
         print(
-            f"Request: {request.method} {request.path} from {request.META['REMOTE_ADDR']}"
+            f"""Request: {request.method} {request.path} from {request.META['REMOTE_ADDR']}"""
         )
 
         response = self.get_response(request)
