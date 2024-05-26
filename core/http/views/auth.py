@@ -1,10 +1,9 @@
-from django.utils.translation import gettext as _
-from rest_framework import views, permissions
-from rest_framework import request
-from rest_framework import throttling
+from typing import Type
 
-from core import enums
-from core import services
+from django.utils.translation import gettext as _
+from rest_framework import views, permissions, request, throttling
+
+from core import services, enums
 from core.http import serializers
 from core.http.views import generics as http_views
 
@@ -18,8 +17,8 @@ class AbstractSendSms(views.APIView, http_views.ApiResponse):
         super().__init__(*args, **kwargs)
         self.service = services.UserService()
 
-    def post(self, request: request.Request):
-        ser = self.serializer_class(data=request.data)
+    def post(self, rq: Type[request.Request]):
+        ser = self.serializer_class(data=rq.data)
         ser.is_valid(raise_exception=True)
         phone = ser.data.get("phone")
         self.service.send_confirmation(phone)
