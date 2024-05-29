@@ -2,8 +2,7 @@
 Admin panel UI view
 """
 
-from rest_framework import status
-from rest_framework import generics
+from rest_framework import generics, status, permissions
 
 from core.http import views
 from core.http import models
@@ -13,6 +12,7 @@ from core.http import serializers
 class FrontendTranslationView(generics.ListAPIView, views.ApiResponse):
     queryset = models.FrontendTranslation.objects.all()
     serializer_class = serializers.FrontendTransactionSerializer
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
