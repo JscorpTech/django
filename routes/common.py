@@ -26,8 +26,8 @@ urlpatterns = [
     ),  # noqa
     path("i18n/", include("django.conf.urls.i18n")),
     # Internal apps
-    path("api/", include("core.apps.accounts.urls")),
-    path("api/", include("core.apps.home.urls")),
+    path("", include("core.apps.accounts.urls")),
+    path("", include("core.apps.home.urls")),
     # Media and static files
     re_path(
         r"static/(?P<path>.*)", serve, {"document_root": settings.STATIC_ROOT}
@@ -35,14 +35,14 @@ urlpatterns = [
     re_path(
         r"media/(?P<path>.*)", serve, {"document_root": settings.MEDIA_ROOT}
     ),  # noqa
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
-        "api/schema/swagger-ui/",
+        "swagger/",
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
     path(
-        "api/schema/redoc/",
+        "redoc/",
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
