@@ -14,9 +14,17 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     # Design admin panel
-    "jazzmin",
     "django_select2",
     "modeltranslation",
+    # Django unfold
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    # "unfold.contrib.inlines",
+    "unfold.contrib.import_export",
+    "unfold.contrib.guardian",
+    "unfold.contrib.simple_history",
+    # End Django unfold
     # Default apps
     "django.contrib.admin",
     "django.contrib.auth",
