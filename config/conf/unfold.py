@@ -7,18 +7,18 @@ UNFOLD = {
     "SITE_TITLE": None,
     "SITE_HEADER": None,
     "SITE_URL": "/",
-    "SITE_ICON": {
-        # "light": lambda request: static("icon-light.svg"),  # light mode
-        # "dark": lambda request: static("icon-dark.svg"),  # dark mode
-    },
-    "SITE_LOGO": {
-        # "light": lambda request: static("logo-light.svg"),  # light mode
-        # "dark": lambda request: static("logo-dark.svg"),  # dark mode
-    },
+    # "SITE_ICON": {
+    # "light": lambda request: static("icon-light.svg"),  # light mode
+    # "dark": lambda request: static("icon-dark.svg"),  # dark mode
+    # },
+    # "SITE_LOGO": {
+    # "light": lambda request: static("logo-light.svg"),  # light mode
+    # "dark": lambda request: static("logo-dark.svg"),  # dark mode
+    # },
     "SITE_SYMBOL": "speed",  # symbol from icon set
     "SHOW_HISTORY": True,  # show/hide "History" button, default: True
     "SHOW_VIEW_ON_SITE": True,
-    "THEME": "dark",
+    # "THEME": "dark",
     "LOGIN": {
         # "image": lambda request: static("sample/login-bg.jpg"),
         "redirect_after": lambda request: reverse_lazy(
@@ -33,17 +33,17 @@ UNFOLD = {
     # ],
     "COLORS": {
         "primary": {
-            "50": "250 245 255",
-            "100": "243 232 255",
-            "200": "233 213 255",
-            "300": "216 180 254",
-            "400": "192 132 252",
-            "500": "168 85 247",
-            "600": "147 51 234",
-            "700": "126 34 206",
-            "800": "107 33 168",
-            "900": "88 28 135",
-            "950": "59 7 100",
+            "50": "220 255 230",
+            "100": "190 255 200",
+            "200": "160 255 170",
+            "300": "130 255 140",
+            "400": "100 255 110",
+            "500": "70 255 80",
+            "600": "50 225 70",
+            "700": "40 195 60",
+            "800": "30 165 50",
+            "900": "20 135 40",
+            "950": "10 105 30",
         },
     },
     "EXTENSIONS": {
@@ -56,7 +56,7 @@ UNFOLD = {
         },
     },
     "SIDEBAR": {
-        "show_search": False,  # Search in applications and models names
+        "show_search": True,  # Search in applications and models names
         "show_all_applications": True,
         "navigation": navigation.PAGES,
     },
