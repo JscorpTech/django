@@ -6,7 +6,7 @@ from core.http import serializers
 
 class PostListView(viewsets.ModelViewSet):
     queryset = models.Post.objects.all()
-    permissions = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
     serializer_class = serializers.PostSerializer
 
     def dispatch(self, request, *args, **kwargs):
