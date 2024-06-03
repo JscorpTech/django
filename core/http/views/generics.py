@@ -5,6 +5,9 @@ from core import exceptions as ex
 
 
 class ApiResponse:
+
+    def __init__(): ...
+
     def response(
         self,
         success=True,
@@ -46,7 +49,7 @@ class ApiResponse:
 
 
 class ListApiView(generics.ListAPIView, ApiResponse):
-    def list(self, request, *args, **kwargs):
+    def list(self):
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
