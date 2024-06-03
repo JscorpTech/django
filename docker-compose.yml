@@ -3,7 +3,7 @@ services:
   web:
     build: .
     restart: always
-    command: ${COMMAND:-poetry run python3 manage.py runserver 0.0.0.0:8000}
+    command: ${COMMAND:-sh ./scripts/entrypoint.sh}
     volumes:
       - .:/code
     ports:
