@@ -25,3 +25,4 @@ def SendConfirm(phone, code):
                 phone=phone, code=code, error=e
             )
         )  # noqa
+        raise Exception("Sms yuborishda xatolik yuzaga keldi")
