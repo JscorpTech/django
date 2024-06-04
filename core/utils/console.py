@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.conf import settings
@@ -14,9 +15,11 @@ class Console(management.BaseCommand):
         return base_command.style
 
     def success(self, message):
+        logging.debug(message)
         self.get_stdout().write(self.get_style().SUCCESS(message))
 
     def error(self, message):
+        logging.error(message)
         self.get_stdout().write(self.get_style().ERROR(message))
 
     def log(self, message):
