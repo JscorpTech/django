@@ -1,6 +1,6 @@
 # from django.templatetags.static import static
 # from django.utils.translation import gettext_lazy as _
-from django.urls import reverse_lazy
+# from django.urls import reverse_lazy
 from . import navigation
 
 UNFOLD = {
@@ -19,12 +19,6 @@ UNFOLD = {
     "SHOW_HISTORY": True,  # show/hide "History" button, default: True
     "SHOW_VIEW_ON_SITE": True,
     # "THEME": "dark",
-    "LOGIN": {
-        # "image": lambda request: static("sample/login-bg.jpg"),
-        "redirect_after": lambda request: reverse_lazy(
-            "admin:APP_MODEL_changelist"
-        ),
-    },
     # "STYLES": [
     # lambda request: static("css/style.css"),
     # ],
