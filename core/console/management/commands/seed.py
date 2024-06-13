@@ -14,16 +14,16 @@ class Command(management.BaseCommand):
             self.stdout.write(self.style.ERROR(message))
 
     def handle(self, *args, **options):
-        SEEDERS = settings.SEEDERS if hasattr(settings, "SEEDERS") else []
+        seeders = settings.SEEDERS if hasattr(settings, "SEEDERS") else []
 
-        if len(SEEDERS) == 0:
+        if len(seeders) == 0:
             self.print(
                 "SEEDERS not defined:\n\nsettings file add SEEDERS variable",
                 "error",
             )
             return
 
-        for seeder in SEEDERS:
+        for seeder in seeders:
             class_name = str(seeder).split(".")[-1]
             module_path = ".".join(str(seeder).split(".")[:-1])
             module = importlib.import_module(module_path)
