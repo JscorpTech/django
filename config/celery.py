@@ -7,7 +7,6 @@ from __future__ import unicode_literals
 
 import os
 import celery
-from django.conf import settings
 
 from common.env import env
 
@@ -17,4 +16,4 @@ app = celery.Celery("config")
 
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+app.autodiscover_tasks()

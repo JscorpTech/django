@@ -6,6 +6,9 @@ from django.core import management
 
 
 class Console(management.BaseCommand):
+    """
+    Console logging class
+    """
     def get_stdout(self):
         base_command = management.BaseCommand()
         return base_command.stdout
@@ -25,8 +28,8 @@ class Console(management.BaseCommand):
     def log(self, message):
         self.get_stdout().write(
             self.get_style().ERROR(
-                "\n====================\n{}\n====================\n".format(
-                    message
+                "\n{line}\n{message}\n{line}\n".format(
+                    message=message, line="*" * len(message)
                 )
             )
         )
