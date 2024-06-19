@@ -9,6 +9,7 @@ class Console(management.BaseCommand):
     """
     Console logging class
     """
+
     def get_stdout(self):
         base_command = management.BaseCommand()
         return base_command.stdout
