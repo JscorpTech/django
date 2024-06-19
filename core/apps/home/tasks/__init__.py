@@ -1,1 +1,1 @@
-from .demo import * # noqa
+from .demo import *  # noqa

@@ -42,9 +42,7 @@ class TagsAdmin(ExportActionModelAdmin, ModelAdmin):
     search_fields: list = ["name"]
 
 
-class FrontendTranslationAdmin(
-    ModelAdmin, ExportActionModelAdmin
-):  # noqa
+class FrontendTranslationAdmin(ModelAdmin, ExportActionModelAdmin):  # noqa
     fields: tuple = ("key", "value")
     required_languages: tuple = ("uz",)
     list_display = ["key", "value"]
