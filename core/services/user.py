@@ -14,7 +14,6 @@ from core.services import base_service
 
 
 class UserService(base_service.BaseService, sms.SmsService):
-
     def get_token(self, user):
         refresh = tokens.RefreshToken.for_user(user)
 

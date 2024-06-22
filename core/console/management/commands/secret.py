@@ -4,7 +4,6 @@ from rich import print
 
 
 class Command(BaseCommand):
-
     def handle(self, *args: Any, **options: Any) -> str | None:
         """
         Handle command
