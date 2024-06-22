@@ -166,9 +166,9 @@ class ResendView(http_views.AbstractSendSms):
 class ResetPasswordView(http_views.AbstractSendSms):
     """Reset user password"""
 
-    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = (
+    serializer_class: typing.Type[
         serializers.ResetPasswordSerializer
-    )
+    ] = serializers.ResetPasswordSerializer
 
 
 class MeView(viewsets.ViewSet):

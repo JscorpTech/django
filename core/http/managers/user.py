@@ -2,7 +2,6 @@ from django.contrib.auth import base_user
 
 
 class UserManager(base_user.BaseUserManager):
-
     def create_user(self, phone, password=None, **extra_fields):
         if not phone:
             raise ValueError("The phone number must be set")

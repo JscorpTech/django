@@ -5,8 +5,8 @@ from core import exceptions as ex
 
 
 class ApiResponse:
-
-    def __init__(): ...
+    def __init__():
+        ...
 
     def response(
         self,
@@ -14,7 +14,7 @@ class ApiResponse:
         message="",
         data=None,
         status_code=status.HTTP_200_OK,
-        **kwargs
+        **kwargs,
     ):
         if data is None:
             data = {}
@@ -39,7 +39,7 @@ class ApiResponse:
         error_code=0,
         status_code=status.HTTP_400_BAD_REQUEST,
         exception=None,
-        **kwargs
+        **kwargs,
     ):
         if isinstance(exception, ex.BreakException):
             raise exception
