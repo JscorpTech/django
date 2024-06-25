@@ -6,7 +6,7 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import URLRouter
 from core.apps.home.websocket.routing import urlpatterns
 
-from common.env import env
+from config.env import env
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", env("DJANGO_SETTINGS_MODULE"))
 

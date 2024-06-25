@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils import safestring
 from django.templatetags import static
 
-from common.env import env
+from config.env import env
 
 register = template.Library()
 
