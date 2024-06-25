@@ -13,7 +13,7 @@ DEBUG = env.str("DEBUG")
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-    "daphne",
+    # "daphne",
     # Design admin panel
     "django_select2",
     "modeltranslation",
