@@ -5,8 +5,7 @@ from core import exceptions as ex
 
 
 class ApiResponse:
-    def __init__():
-        ...
+    def __init__(): ...
 
     def response(
         self,
