@@ -2,7 +2,7 @@ import os
 import pathlib
 from django.utils.translation import gettext_lazy as _
 
-from common.env import env
+from config.env import env
 from config.conf import *  # noqa
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent

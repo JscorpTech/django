@@ -1,6 +1,6 @@
 import requests
 
-from common.env import env
+from config.env import env
 
 
 class SendService:
