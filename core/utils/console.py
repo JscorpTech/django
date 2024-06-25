@@ -30,7 +30,7 @@ class Console(management.BaseCommand):
         self.get_stdout().write(
             self.get_style().ERROR(
                 "\n{line}\n{message}\n{line}\n".format(
-                    message=message, line="*" * len(message)
+                    message=message, line="=" * len(message)
                 )
             )
         )
