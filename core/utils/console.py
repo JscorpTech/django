@@ -38,6 +38,8 @@ class Console(management.BaseCommand):
 
 
 class BaseMake(management.BaseCommand):
+    path: str
+
     def __init__(self, *args, **options):
         super().__init__(*args, **options)
         self.console = Console()
