@@ -1,11 +1,10 @@
-from unfold.admin import ModelAdmin, TabularInline
-from unfold.contrib.import_export.admin import ExportActionModelAdmin
 from django.db import models as db_model
 from django_select2 import forms as django_select2
 from modeltranslation import admin as modeltranslation
+from unfold.admin import ModelAdmin, TabularInline
+from unfold.contrib.import_export.admin import ExportActionModelAdmin
 
-from core.http import forms
-from core.http import models
+from core.http import forms, models
 
 
 class PostInline(TabularInline):

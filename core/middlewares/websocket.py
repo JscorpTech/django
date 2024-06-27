@@ -7,9 +7,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.db import close_old_connections
+from jwt import DecodeError, ExpiredSignatureError, InvalidSignatureError
 from jwt import decode as jwt_decode
-from jwt import InvalidSignatureError, ExpiredSignatureError, DecodeError
-
 
 User = get_user_model()
 

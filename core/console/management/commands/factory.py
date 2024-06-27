@@ -1,9 +1,9 @@
-import typing
 import importlib
+import typing
 
-from tqdm import tqdm
 from django.conf import settings
 from django.core import management
+from tqdm import tqdm
 
 
 class Command(management.BaseCommand):
@@ -54,6 +54,6 @@ class Command(management.BaseCommand):
                     except Exception as e:
                         self.print(e, "error")
             except Exception as e:
-                self.print("ERROR: {} {}".format(class_name, e), "error")
+                self.print(f"ERROR: {class_name} {e}", "error")
                 return
-            self.print("SUCCESS: {}".format(class_name))
+            self.print(f"SUCCESS: {class_name}")

@@ -2,8 +2,10 @@
 Exceptions test
 """
 
-import pytest
 import unittest
+
+import pytest
+
 from core import exceptions
 
 

@@ -3,6 +3,7 @@ Default value for environ variable
 """
 
 import os
+
 import environ
 
 environ.Env.read_env(os.path.join(".env"))

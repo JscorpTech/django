@@ -1,19 +1,21 @@
 import os
 import pathlib
+from typing import List, Union
+
 from django.utils.translation import gettext_lazy as _
 
-from config.env import env
 from config.conf import *  # noqa
+from config.env import env
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 DEBUG = env.str("DEBUG")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS: Union[List[str]] = ["*"]
 
 INSTALLED_APPS = [
-    # "daphne",
+    "daphne",
     # Design admin panel
     "django_select2",
     "modeltranslation",
@@ -78,8 +80,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
-# ASGI_APPLICATION = "config.asgi.application"
+# WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
     {

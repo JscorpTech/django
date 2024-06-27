@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Any, Union
 
 from django.conf import settings
 from django.core import management
@@ -46,12 +47,14 @@ class BaseMake(management.BaseCommand):
 
     def handle(self, *args, **options):
         name = options.get("name")
-        with open(
-            os.path.join(settings.BASE_DIR, f"stub/{self.path}.stub"), "r"
-        ) as stub:  # noqa
-            data = stub.read()
-            stub.close()
-        stub = data.replace("{{name}}", name)
+        if name is None:
+            name = ""
+
+        stub = open(os.path.join(settings.BASE_DIR, f"stub/{self.path}.stub"))
+        data: Union[Any] = stub.read()
+        stub.close()
+
+        stub = data.replace("{{name}}", name or "")
 
         core_http_path = os.path.join(settings.BASE_DIR, "core/http")
         if os.path.exists(
@@ -63,10 +66,11 @@ class BaseMake(management.BaseCommand):
         if not os.path.exists(os.path.join(core_http_path, self.path)):
             os.makedirs(os.path.join(core_http_path, self.path))
 
-        with open(
+        file = open(
             os.path.join(core_http_path, f"{self.path}/{name.lower()}.py"),
             "w+",
-        ) as file:  # noqa
-            file.write(stub)
+        )
+        file.write(stub)  # type: ignore
+        file.close()
 
         self.console.success(f"{self.name} created")
