@@ -1,11 +1,10 @@
 import math
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 
-from django.db import models
 from django.contrib.auth import models as auth_models
+from django.db import models
 
-from core.http import managers, choices
+from core.http import choices, managers
 
 
 class User(auth_models.AbstractUser):
@@ -90,7 +89,7 @@ class SmsConfirm(models.Model):
         expire -= minutes * 60
         expire = math.floor(expire)
 
-        return "{:02d}:{:02d}".format(minutes, expire)
+        return f"{minutes:02d}:{expire:02d}"
 
     def __str__(self) -> str:
-        return "{phone} | {code}".format(phone=self.phone, code=self.code)
+        return f"{self.phone} | {self.code}"

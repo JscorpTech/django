@@ -2,13 +2,11 @@
 Celery configurations
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
 import os
+
 import celery
 
-from common.env import env
+from config.env import env
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", env("DJANGO_SETTINGS_MODULE"))
 

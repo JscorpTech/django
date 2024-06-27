@@ -35,6 +35,6 @@ class Command(management.BaseCommand):
             try:
                 my_class.run()
             except Exception as e:
-                self.print("ERROR: {} {}".format(class_name, e), "error")
+                self.print(f"ERROR: {class_name} {e}", "error")
                 return
-            self.print("SUCCESS: {}".format(class_name))
+            self.print(f"SUCCESS: {class_name}")

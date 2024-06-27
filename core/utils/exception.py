@@ -4,7 +4,6 @@ from core import exceptions
 
 
 class ResponseException:
-
     def __init__(
         self,
         message="",
@@ -12,7 +11,7 @@ class ResponseException:
         error_code=0,
         status_code=status.HTTP_400_BAD_REQUEST,
         exception=None,
-        **kwargs
+        **kwargs,
     ):
         if isinstance(exception, exceptions.BreakException):
             raise exception

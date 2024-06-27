@@ -3,7 +3,7 @@
 import os
 import sys
 
-from common.env import env
+from config.env import env
 
 
 def main():

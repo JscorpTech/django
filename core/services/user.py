@@ -4,17 +4,13 @@ from datetime import datetime
 from django.contrib.auth import hashers
 from rest_framework_simplejwt import tokens
 
-
 from core import exceptions
 from core.http import models
+from core.services import base_service, sms
 from core.utils import exception
-
-from core.services import sms
-from core.services import base_service
 
 
 class UserService(base_service.BaseService, sms.SmsService):
-
     def get_token(self, user):
         refresh = tokens.RefreshToken.for_user(user)
 
@@ -42,8 +38,10 @@ class UserService(base_service.BaseService, sms.SmsService):
             exception.ResponseException(
                 e, data={"expired": e.kwargs.get("expired")}
             )  # noqa
+            return False
         except Exception as e:
             exception.ResponseException(e)
+            return False
 
     def validate_user(self, user: typing.Union[models.User]) -> dict:
         """

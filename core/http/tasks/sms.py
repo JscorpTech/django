@@ -5,8 +5,8 @@ Base celery tasks
 from celery import shared_task
 from django.utils.translation import gettext as _
 
-from core.utils import console
 from core.services import sms_service
+from core.utils import console
 
 
 @shared_task
@@ -16,9 +16,7 @@ def SendConfirm(phone, code):
         service.send_sms(
             phone, _("Sizning Tasdiqlash ko'dingiz: %(code)s") % {"code": code}
         )
-        console.Console().success(
-            "Success: {phone}-{code}".format(phone=phone, code=code)
-        )
+        console.Console().success(f"Success: {phone}-{code}")
     except Exception as e:
         console.Console().error(
             "Error: {phone}-{code}\n\n{error}".format(

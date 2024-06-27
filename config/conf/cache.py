@@ -1,4 +1,4 @@
-from common.env import env
+from config.env import env
 
 CACHES = {
     "default": {

@@ -1,4 +1,6 @@
-REST_FRAMEWORK = {
+from typing import Any, Union
+
+REST_FRAMEWORK: Union[Any] = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),

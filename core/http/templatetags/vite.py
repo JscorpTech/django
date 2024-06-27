@@ -2,10 +2,10 @@ import json
 
 from django import template
 from django.conf import settings
-from django.utils import safestring
 from django.templatetags import static
+from django.utils import safestring
 
-from common.env import env
+from config.env import env
 
 register = template.Library()
 
@@ -16,14 +16,12 @@ def getScript(url: object) -> str:
     if env("VITE_LIVE"):
         url = f"http://{env('VITE_HOST')}:{env('VITE_PORT')}/{url}"
     else:
-        url: str = static.static(f"vite/{url}")
+        url = static.static(f"vite/{url}")
 
     if ext == "css":
-        script: str = (
-            "<link rel='stylesheet' type='text/css' href='{}'>".format(url)
-        )
+        script = f"<link rel='stylesheet' type='text/css' href='{url}'>"
     else:
-        script: str = (
+        script = (
             "<script type='module' type='text/javascript' src='{"
             "}'></script>"
         ).format(url)
@@ -33,7 +31,7 @@ def getScript(url: object) -> str:
 @register.simple_tag
 def vite_load(*args):
     try:
-        fd = open(f"{settings.VITE_APP_DIR}/manifest.json", "r")
+        fd = open(f"{settings.VITE_APP_DIR}/manifest.json")
         manifest = json.load(fd)
     except Exception:
         raise Exception(

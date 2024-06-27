@@ -1,9 +1,9 @@
-from common.env import env
+from config.env import env
 from config.settings.common import *  # noqa
 from config.settings.common import (
-    MIDDLEWARE,
     ALLOWED_HOSTS,
     INSTALLED_APPS,
+    MIDDLEWARE,
     REST_FRAMEWORK,
 )
 

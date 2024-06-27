@@ -1,10 +1,10 @@
 from django.contrib.auth import admin
-from unfold.contrib.import_export.admin import ExportActionModelAdmin
 from unfold.admin import ModelAdmin
+from unfold.contrib.import_export.admin import ExportActionModelAdmin
 from unfold.forms import (
+    AdminPasswordChangeForm,
     UserChangeForm,
     UserCreationForm,
-    AdminPasswordChangeForm,
 )
 
 
