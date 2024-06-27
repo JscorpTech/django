@@ -42,7 +42,7 @@ shell:
 	docker compose exec  $(app) $(shell)
 
 test:
-	docker compose exec web poetry run python manage.py test
+	docker compose exec web poetry run pytest
 
 chown:
 	sudo chown -R user:user ./*
