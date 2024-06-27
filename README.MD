@@ -3,11 +3,13 @@
  - [Custom commands](#commands)
     - [App yaratish](#makeapp)
     - [Websocket ishga tushurish](#websocket)
+    - [pre-commit]("#pre-commit")
     - [Seeder](#seeder)
     - [Cacheni tozalash](#clearcache)
     - [Factory](#factory)
     - [Generate Secret key](#secret)
     - [Folders](#folders)
+
 
 
 ## <a name='Get Started'>Install</a>
@@ -46,12 +48,18 @@ python3 manage.py migrate
 python3 manage.py makeapp ${name}
  ```
 
-## <a name='websocket'>Custom commands</a>
+## <a name='websocket'>Websocket</a>
 # Websocket
  - Websocket ishlashi uchun project asgi yordamida ishga tushurish kerak
  - INSTALL_APPS ga daphne qo'shing
  - WSGI_APPLICATION o'chiring
  - ASGI_APPLICATION qo'shing config.asgi.application
+
+## <a name='pre-commit'>pre-commit</a>
+# pre-commit
+  - pip install pre-commit
+  - pre-commit install --install-hooks
+  - pre-commit run --all-files
 
 ## <a name='seeder'>Seeder</a>
  - Bazaga aniq belgilangan malumotlarni kiritib beradi masalan user 
