@@ -1,25 +1,18 @@
 import typing
 import uuid
 
-
 from django.utils.translation import gettext_lazy as _
-
-from rest_framework import (
-    permissions,
-    request as rest_request,
-    throttling,
-    views,
-    generics,
-    viewsets,
-    response,
-    status,
-)
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, permissions
+from rest_framework import request as rest_request
+from rest_framework import response, status, throttling, views, viewsets
 
 from core import enums, exceptions, services
-from core.http import serializers, views as http_views
+from core.apps.accounts import models
+from core.apps.accounts import serializers as sms_serializers
+from core.http import serializers
+from core.http import views as http_views
 from core.http.models import User
-from core.apps.accounts import models, serializers as sms_serializers
-from drf_spectacular.utils import extend_schema
 
 
 class RegisterView(views.APIView, services.UserService):

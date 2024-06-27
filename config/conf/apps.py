@@ -20,4 +20,5 @@ INSTALLED_APPS = [
     "core.http.HttpConfig",
     "core.apps.accounts.apps.AccountsConfig",
     "core.console.ConsoleConfig",
+    "core.apps.websocket.apps.WebsocketConfig",
 ]

@@ -1,7 +1,5 @@
-from rest_framework import exceptions
-from rest_framework import serializers
-
 from django.utils.translation import gettext as _
+from rest_framework import exceptions, serializers
 
 from core.http import models
 

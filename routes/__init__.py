@@ -1,3 +1,3 @@
-from . import local, production, common
+from . import common, local, production
 
 urlpatterns = local.urlpatterns + production.urlpatterns + common.urlpatterns

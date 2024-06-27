@@ -1,6 +1,6 @@
 from django.db import models
-from polymorphic import models as polymorphic
 from django.utils.translation import gettext as _
+from polymorphic import models as polymorphic
 
 
 class Tags(models.Model):

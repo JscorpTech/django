@@ -2,6 +2,8 @@
 Raise exception
 """
 
+from typing import Optional
+
 from rest_framework import exceptions
 
 
@@ -20,7 +22,7 @@ class BreakException(Exception):
     Break exception
     """
 
-    def __init__(self, *args, message: str = None, data=None):
+    def __init__(self, *args, message: Optional[str] = None, data=None):
         if data is None:
             data = []
         self.args = args

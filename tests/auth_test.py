@@ -6,8 +6,8 @@ from django import test
 from django.template import defaultfilters
 from rest_framework.test import APIRequestFactory
 
-from core.http.database import factory
 from core.apps.accounts.views import sms
+from core.http.database import factory
 
 
 class RegisterViewTest(test.TestCase):

@@ -2,11 +2,9 @@
 Admin panel UI view
 """
 
-from rest_framework import generics, status, permissions
+from rest_framework import generics, permissions, status
 
-from core.http import views
-from core.http import models
-from core.http import serializers
+from core.http import models, serializers, views
 
 
 class FrontendTranslationView(generics.ListAPIView, views.ApiResponse):

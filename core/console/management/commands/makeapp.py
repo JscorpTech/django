@@ -9,12 +9,12 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    help = (
-        "Creates a new Django app inside the apps folder and sets the name in apps.py"
-    )
+    help = "Creates a new Django app inside the apps folder and sets the name in apps.py"
 
     def add_arguments(self, parser):
-        parser.add_argument("app_name", type=str, help="The name of the app to create")
+        parser.add_argument(
+            "app_name", type=str, help="The name of the app to create"
+        )
 
     def handle(self, *args, **options):
         app_name = options["app_name"]
@@ -22,19 +22,20 @@ class Command(BaseCommand):
 
         os.makedirs(app_directory, exist_ok=True)
 
-        init_file_path = os.path.join("core", "apps", '__init__.py')
+        init_file_path = os.path.join("core", "apps", "__init__.py")
 
         if not os.path.exists(init_file_path):
-            open(init_file_path, 'w').close()
+            open(init_file_path, "w").close()
 
         call_command("startapp", app_name, app_directory)
 
         apps_file_path = os.path.join(app_directory, "apps.py")
-        with open(apps_file_path, "r") as file:
+        with open(apps_file_path) as file:
             filedata = file.read()
 
-        filedata = filedata.replace(f'name = "{app_name}"',
-                                    f'name = "core.apps.{app_name}"')
+        filedata = filedata.replace(
+            f'name = "{app_name}"', f'name = "core.apps.{app_name}"'
+        )
 
         with open(apps_file_path, "w") as file:
             file.write(filedata)
@@ -48,10 +49,20 @@ class Command(BaseCommand):
 
         def create_package(package_name):
             os.makedirs(package_name, exist_ok=True)
-            with open(os.path.join(package_name, '__init__.py'), 'w') as init_file:
+            with open(os.path.join(package_name, "__init__.py"), "w"):
                 pass
 
-        for package_name in ["models", "views", "admin", "serializers", "tests"]:
+        for package_name in [
+            "models",
+            "views",
+            "admin",
+            "serializers",
+            "tests",
+        ]:
             create_package(os.path.join(app_directory, package_name))
 
-        self.stdout.write(self.style.SUCCESS(f"App {app_name} created successfully in core/apps/!"))
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"App {app_name} created successfully in core/apps/!"
+            )
+        )

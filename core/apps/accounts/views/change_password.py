@@ -1,17 +1,12 @@
 from django.contrib.auth.hashers import make_password
-
-
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status, response
-
 from django.utils.translation import gettext as _
-from drf_spectacular.utils import (
-    extend_schema,
-    OpenApiResponse,
-)
+from drf_spectacular.utils import OpenApiResponse, extend_schema
+from rest_framework import response, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 from core.http import views as http_views
+
 from ..serializers import ChangePasswordSerializer
 
 

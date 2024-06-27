@@ -8,6 +8,10 @@ readme = "README.md"
 [tool.black]
 line-length = 79
 
+[tool.isort]
+profile = "black"
+line_length = 79
+
 [tool.poetry.dependencies]
 python = "^3.11"
 crispy-tailwind = "1.0.1"
@@ -49,6 +53,8 @@ channels = "^4.1.0"
 channels-redis = "^4.2.0"
 daphne = "^4.1.2"
 celery = "^5.4.0"
+isort = "^5.13.2"
+django-stubs = "^5.0.2"
 
 
 [build-system]

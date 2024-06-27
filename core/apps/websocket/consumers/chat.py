@@ -1,5 +1,7 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+
+from channels.generic.websocket import AsyncWebsocketConsumer
+
 from core.utils.console import Console
 
 
