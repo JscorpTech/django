@@ -60,6 +60,7 @@ python3 manage.py makeapp ${name}
   - pip install pre-commit
   - pre-commit install --install-hooks
   - pre-commit run --all-files
+  - pre-commit disable: pre-commit uninstallg
 
 ## <a name='seeder'>Seeder</a>
  - Bazaga aniq belgilangan malumotlarni kiritib beradi masalan user 
