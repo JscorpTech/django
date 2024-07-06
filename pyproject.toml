@@ -12,6 +12,18 @@ line-length = 79
 profile = "black"
 line_length = 79
 
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.local"
+python_files = "tests.py test_*.py *_tests.py"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::ResourceWarning",
+    "ignore::Warning" # This line will ignore all warnings
+]
+addopts = "--cov=config --cov-report=term"
+
+
 [tool.poetry.dependencies]
 python = "^3.11"
 crispy-tailwind = "1.0.1"
@@ -38,7 +50,6 @@ markuppy = "1.14"
 odfpy = "1.4.1"
 openpyxl = "3.1.2"
 psycopg2-binary = "2.9.9"
-pytest = "8.0.0"
 shellingham = "1.5.4"
 tqdm = "4.66.2"
 twine = "4.0.2"
@@ -57,6 +68,9 @@ isort = "^5.13.2"
 django-stubs = "^5.0.2"
 mypy = "^1.10.1"
 djangorestframework-stubs = "^3.15.0"
+pytest-django = "^4.8.0"
+coverage = "^7.5.4"
+pytest-cov = "^5.0.0"
 
 
 [build-system]
