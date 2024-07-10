@@ -21,7 +21,6 @@ filterwarnings = [
     "ignore::ResourceWarning",
     "ignore::Warning" # This line will ignore all warnings
 ]
-addopts = "--cov=config --cov-report=term"
 
 
 [tool.poetry.dependencies]
