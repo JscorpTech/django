@@ -26,9 +26,7 @@ class ChangePasswordViewTest(TestCase):
             "old_password": self.password,
             "new_password": "newpassword",
         }
-        response = self.client.post(
-            self.path, data=data, format="json"
-        )
+        response = self.client.post(self.path, data=data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data["detail"], "password changed successfully"
@@ -40,9 +38,7 @@ class ChangePasswordViewTest(TestCase):
             "old_password": "wrongpassword",
             "new_password": "newpassword",
         }
-        response = self.client.post(
-            self.path, data=data, format="json"
-        )
+        response = self.client.post(self.path, data=data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["detail"], "invalida password")
 
@@ -63,7 +59,5 @@ class ChangePasswordViewTest(TestCase):
 
     def test_change_password_view_permissions(self):
         self.client.force_authenticate(user=None)
-        response = self.client.post(
-            self.path, data={}, format="json"
-        )
+        response = self.client.post(self.path, data={}, format="json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

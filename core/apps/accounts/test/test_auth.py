@@ -34,7 +34,7 @@ class SmsViewTest(TestCase):
             phone=self.phone,
             first_name="John",
             last_name="Doe",
-            password=self.password
+            password=self.password,
         )
         SmsConfirm.objects.create(phone=self.phone, code=self.code)
 
@@ -50,7 +50,8 @@ class SmsViewTest(TestCase):
             response = self.client.post(reverse("register"), data=data)
             self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
             self.assertEqual(
-                response.data["detail"], Messages.SEND_MESSAGE % {"phone": data["phone"]}
+                response.data["detail"],
+                Messages.SEND_MESSAGE % {"phone": data["phone"]},
             )
 
     def test_confirm_view(self):
@@ -88,14 +89,9 @@ class SmsViewTest(TestCase):
 
     def test_reset_set_password_view(self):
         """Test reset set password view."""
-        token = ResetToken.objects.create(
-            user=self.user,
-            token=self.token
-        )
+        token = ResetToken.objects.create(user=self.user, token=self.token)
         data = {"token": token.token, "password": "new_password"}
-        response = self.client.post(
-            reverse("set-password"), data=data
-        )
+        response = self.client.post(reverse("set-password"), data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_reset_set_password_view_invalid_token(self):
@@ -105,9 +101,7 @@ class SmsViewTest(TestCase):
         with patch.object(
             User.objects, "filter", return_value=User.objects.none()
         ):
-            response = self.client.post(
-                reverse("set-password"), data=data
-            )
+            response = self.client.post(reverse("set-password"), data=data)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(response.data["detail"], "Invalid token")
 
@@ -120,9 +114,7 @@ class SmsViewTest(TestCase):
     def test_reset_password_view(self):
         """Test reset password view."""
         data = {"phone": self.phone}
-        response = self.client.post(
-            reverse("reset-password"), data=data
-        )
+        response = self.client.post(reverse("reset-password"), data=data)
         logging.error(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
