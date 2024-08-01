@@ -68,7 +68,7 @@ class SmsViewTest(TestCase):
         """Test confirm view."""
         data = {"phone": self.phone, "code": "1112"}
         response = self.client.post(reverse("confirm"), data=data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_reset_confirmation_code_view(self):
         """Test reset confirmation code view."""
@@ -102,7 +102,7 @@ class SmsViewTest(TestCase):
             User.objects, "filter", return_value=User.objects.none()
         ):
             response = self.client.post(reverse("set-password"), data=data)
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
             self.assertEqual(response.data["detail"], "Invalid token")
 
     def test_resend_view(self):
