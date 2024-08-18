@@ -1,6 +1,5 @@
 from django.contrib.auth import admin
 from unfold.admin import ModelAdmin
-from unfold.contrib.import_export.admin import ExportActionModelAdmin
 from unfold.forms import (
     AdminPasswordChangeForm,
     UserChangeForm,
@@ -8,7 +7,7 @@ from unfold.forms import (
 )
 
 
-class CustomUserAdmin(admin.UserAdmin, ExportActionModelAdmin, ModelAdmin):
+class CustomUserAdmin(admin.UserAdmin, ModelAdmin):
     change_password_form = AdminPasswordChangeForm
     add_form = UserCreationForm
     form = UserChangeForm
@@ -19,7 +18,7 @@ class CustomUserAdmin(admin.UserAdmin, ExportActionModelAdmin, ModelAdmin):
     )
 
 
-class GroupAdmin(ExportActionModelAdmin, ModelAdmin):
+class GroupAdmin(ModelAdmin):
     list_display = ["name"]
     search_fields = ["name"]
     filter_horizontal = ("permissions",)
