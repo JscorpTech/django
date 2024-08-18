@@ -1,7 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext as _
 from drf_spectacular.utils import OpenApiResponse, extend_schema
-from rest_framework import response, status
+from rest_framework import response, status, exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -34,7 +34,6 @@ class ChangePasswordView(APIView, http_views.ApiResponse):
                 data={"detail": "password changed successfully"},
                 status=status.HTTP_200_OK,
             )
-        return response.Response(
-            status=status.HTTP_400_BAD_REQUEST,
-            data={"detail": _("invalida password")},
+        raise exceptions.PermissionDenied(
+            _("invalida password"),
         )

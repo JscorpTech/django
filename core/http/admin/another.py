@@ -2,7 +2,6 @@ from django.db import models as db_model
 from django_select2 import forms as django_select2
 from modeltranslation import admin as modeltranslation
 from unfold.admin import ModelAdmin, TabularInline
-from unfold.contrib.import_export.admin import ExportActionModelAdmin
 
 from core.http import forms, models
 
@@ -20,7 +19,6 @@ class TagsInline(TabularInline):
 
 class PostAdmin(
     modeltranslation.TabbedTranslationAdmin,
-    ExportActionModelAdmin,
     ModelAdmin,
 ):  # noqa
     fields: tuple = ("title", "desc", "image", "tags")
@@ -36,12 +34,12 @@ class PostAdmin(
     }
 
 
-class TagsAdmin(ExportActionModelAdmin, ModelAdmin):
+class TagsAdmin(ModelAdmin):
     fields: tuple = ("name",)
     search_fields: list = ["name"]
 
 
-class FrontendTranslationAdmin(ModelAdmin, ExportActionModelAdmin):  # noqa
+class FrontendTranslationAdmin(ModelAdmin):  # noqa
     fields: tuple = ("key", "value")
     required_languages: tuple = ("uz",)
     list_display = ["key", "value"]
@@ -52,6 +50,6 @@ class SmsConfirmAdmin(ModelAdmin):
     search_fields = ["phone", "code"]
 
 
-class CommentAdmin(ExportActionModelAdmin, ModelAdmin):
+class CommentAdmin(ModelAdmin):
     list_display = ["text"]
     search_fields = ["text"]

@@ -4,6 +4,7 @@ import uuid
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, permissions
+from rest_framework.exceptions import PermissionDenied
 from rest_framework import request as rest_request
 from rest_framework import response, status, throttling, views, viewsets
 
@@ -76,13 +77,9 @@ class ConfirmView(views.APIView, services.UserService):
                     status=status.HTTP_202_ACCEPTED,
                 )
         except exceptions.SmsException as e:
-            return response.Response(
-                {"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST
-            )  # Response exception for APIException
+            raise PermissionDenied(e)  # Response exception for APIException
         except Exception as e:
-            return response.Response(
-                {"detail": e}, status=status.HTTP_400_BAD_REQUEST
-            )  # Api exception for APIException
+            raise PermissionDenied(e)  # Api exception for APIException
 
 
 class ResetConfirmationCodeView(views.APIView, services.UserService):
@@ -112,18 +109,11 @@ class ResetConfirmationCodeView(views.APIView, services.UserService):
                     },
                     status=status.HTTP_200_OK,
                 )
-            return response.Response(
-                data={"detail": _(enums.Messages.INVALID_OTP)},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            raise PermissionDenied(_(enums.Messages.INVALID_OTP))
         except exceptions.SmsException as e:
-            return response.Response(
-                {"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST
-            )
+            raise PermissionDenied(str(e))
         except Exception as e:
-            return response.Response(
-                {"detail": e}, status=status.HTTP_400_BAD_REQUEST
-            )
+            raise PermissionDenied(str(e))
 
 
 class ResetSetPasswordView(views.APIView, services.UserService):
@@ -138,10 +128,7 @@ class ResetSetPasswordView(views.APIView, services.UserService):
         password = data.get("password")
         token = models.ResetToken.objects.filter(token=token)
         if not token.exists():
-            return response.Response(
-                {"detail": _("Invalid token")},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            raise PermissionDenied(_("Invalid token"))
         phone = token.first().user.phone
         token.delete()
         self.change_password(phone, password)
