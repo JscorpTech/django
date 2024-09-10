@@ -1,5 +1,6 @@
 from django.contrib.auth import admin
 from unfold.admin import ModelAdmin
+from django.contrib.auth.admin import UserAdmin
 from unfold.forms import (
     AdminPasswordChangeForm,
     UserChangeForm,
@@ -16,6 +17,7 @@ class CustomUserAdmin(admin.UserAdmin, ModelAdmin):
         "last_name",
         "phone",
     )
+    fieldsets = ((None, {"fields": ("phone",)}),) + UserAdmin.fieldsets
 
 
 class GroupAdmin(ModelAdmin):

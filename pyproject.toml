@@ -25,6 +25,7 @@ filterwarnings = [
 
 [tool.poetry.dependencies]
 python = "^3.11"
+django = "5.0.8"
 crispy-tailwind = "1.0.1"
 django-ckeditor = "6.7.1"
 django-ckeditor-5 = "0.2.11"
