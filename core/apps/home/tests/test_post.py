@@ -29,7 +29,7 @@ class Test(TestCase):
         self.assertEqual(response.status_code, 200)
         logging.info(response.json())
         try:
-            PostsListModel(response.json())
+            PostsListModel(response.json().get("results"))
         except Exception:
             self.fail("Response is not PostsListModel")
 

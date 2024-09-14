@@ -109,6 +109,7 @@ class SmsViewTest(TestCase):
         """Test resend view."""
         data = {"phone": self.phone}
         response = self.client.post(reverse("resend"), data=data)
+        logging.error(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_reset_password_view(self):
