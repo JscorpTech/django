@@ -19,8 +19,8 @@
     "celery_port": "5555",
     "phone": "998888112309",
     "password": "2309",
-    "csrf_trusted_origins":"",
-    "allowed_hosts": "",
+    "csrf_trusted_origins":"no",
+    "allowed_hosts": "no",
     "auto_deploy_branch": "deploy",
     "max_line_length": "120",
     "version": "0.1.0"
