@@ -13,9 +13,10 @@
 
 
 ## <a name='Get Started'>Install</a>
-# .env faylidan nuxsa olish
+# Get Started
 ```bash
-cp .env.example .env
+pip install cookiecutter
+cookiecutter git@gitlab.com:JscorpTech/django.git
 ```
 
 # docker image build qilish
