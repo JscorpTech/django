@@ -1,8 +1,14 @@
 
 
-def main():
-    print("Pre hook")
+class Hook:
+
+    def __init__(self) -> None:
+        ...
+
+    def run(self):
+        ...
 
 
 if __name__ == "__main__":
-    main()
+    Hook().run()
+

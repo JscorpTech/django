@@ -1,5 +1,5 @@
 stages:
-  - deploy
+  - {{cookiecutter.auto_deploy_branch}}
 
 deploy_django_app:
   stage: deploy
