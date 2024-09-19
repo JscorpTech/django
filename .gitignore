@@ -1,4 +1,5 @@
 node_modules
+django_blueprint/
 
 # OS ignores
 *.DS_Store
