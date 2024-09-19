@@ -1,0 +1,9 @@
+{% raw %}
+from core.http.models import User
+
+
+class {{name}}:
+    def run(self):
+        pass
+
+{% endraw %}
