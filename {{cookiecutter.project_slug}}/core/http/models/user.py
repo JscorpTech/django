@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth import models as auth_models
 from django.db import models
+from .base import AbstractBaseModel
 
 from core.http import choices, managers
 
@@ -26,7 +27,7 @@ class User(auth_models.AbstractUser):
         return self.phone
 
 
-class SmsConfirm(models.Model):
+class SmsConfirm(AbstractBaseModel):
     SMS_EXPIRY_SECONDS = 120
     RESEND_BLOCK_MINUTES = 10
     TRY_BLOCK_MINUTES = 2

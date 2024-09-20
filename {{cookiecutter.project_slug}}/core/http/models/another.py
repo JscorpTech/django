@@ -1,9 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext as _
 from polymorphic import models as polymorphic
+from .base import AbstractBaseModel
 
 
-class Tags(models.Model):
+class Tags(AbstractBaseModel):
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -14,7 +15,7 @@ class Tags(models.Model):
         verbose_name_plural = _("Tags")
 
 
-class Comment(models.Model):
+class Comment(AbstractBaseModel):
     text = models.CharField(max_length=255)
 
     def __str__(self) -> str:
@@ -35,7 +36,7 @@ class Post(BaseComment):
         return self.title
 
 
-class FrontendTranslation(models.Model):
+class FrontendTranslation(AbstractBaseModel):
     key = models.CharField(max_length=255, unique=True)
     value = models.TextField()
 

@@ -5,14 +5,15 @@ Base celery tasks
 from celery import shared_task
 from django.utils.translation import gettext as _
 
-from core.services import sms_service
 from core.utils import console
+from importlib import import_module
+from config.env import env
 
 
 @shared_task
 def SendConfirm(phone, code):
     try:
-        service: sms_service.SendService = sms_service.SendService()
+        service = getattr(import_module(env.str("OTP_MODULE")), env.str("OTP_SERVICE"))()
         service.send_sms(
             phone, _("Sizning Tasdiqlash ko'dingiz: %(code)s") % {"code": code}
         )
