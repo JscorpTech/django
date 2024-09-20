@@ -13,7 +13,7 @@
         "drf_spectacular",
         "core.apps.home.apps.HomeConfig",
         "core.http.HttpConfig",
-        "core.apps.accounts.apps.AccountsConfig",
+        "core.apps.accounts.apps.AccountsConfig",           
         "core.console.ConsoleConfig",
         "core.apps.websocket.apps.WebsocketConfig"
     ]
