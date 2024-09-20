@@ -3,7 +3,7 @@ import pathlib
 from typing import List, Union
 
 from django.utils.translation import gettext_lazy as _
-
+from core.utils import Config
 from config.conf import *  # noqa
 from config.env import env
 
@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-INSTALLED_APPS += apps.INSTALLED_APPS  # noqa
+INSTALLED_APPS += Config().config.get("apps") # noqa
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

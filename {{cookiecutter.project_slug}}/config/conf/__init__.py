@@ -1,4 +1,3 @@
-from . import apps  # noqa
 from .cache import *  # noqa
 from .ckeditor import *  # noqa
 from .cron import *  # noqa

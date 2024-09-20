@@ -6,6 +6,7 @@ import os
 
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
+from core.utils import Config
 
 
 class Command(BaseCommand):
@@ -66,3 +67,5 @@ class Command(BaseCommand):
                 f"App {app_name} created successfully in core/apps/!"
             )
         )
+
+        Config().register_app(app_name)
