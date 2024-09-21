@@ -15,7 +15,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_phone(self, value):
         user = models.User.objects.filter(phone=value, validated_at__isnull=False)
         if user.exists():
-            return exceptions.ValidationError(
+            raise exceptions.ValidationError(
                 _("Phone number already registered."), code="unique"
             )
         return value
