@@ -52,7 +52,7 @@ class BaseMake(management.BaseCommand):
         if name is None:
             name = ""
 
-        stub = open(os.path.join(settings.BASE_DIR, f"stub/{self.path}.stub"))
+        stub = open(os.path.join(settings.BASE_DIR, f"resources/stub/{self.path}.stub"))
         data: Union[Any] = stub.read()
         stub.close()
         {% raw %}

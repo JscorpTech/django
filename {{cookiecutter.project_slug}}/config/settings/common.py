@@ -139,14 +139,14 @@ LANGUAGES = (
     ("en", _("English")),
     ("uz", _("Uzbek")),
 )
-LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
+LOCALE_PATHS = [os.path.join(BASE_DIR, "resources/locale")]
 
 MODELTRANSLATION_LANGUAGES = ("uz", "ru", "en")
 MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"
 LANGUAGE_CODE = "uz"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # Media files
-MEDIA_URL = "/media/"
+MEDIA_URL = "/resources/media/"
 
 AUTH_USER_MODEL = "http.User"
 
