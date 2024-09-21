@@ -1,12 +1,8 @@
-
-
 class Hook:
 
-    def __init__(self) -> None:
-        ...
+    def __init__(self) -> None: ...
 
-    def run(self):
-        ...
+    def run(self): ...
 
 
 if __name__ == "__main__":

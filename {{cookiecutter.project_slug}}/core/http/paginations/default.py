@@ -23,9 +23,7 @@ class CustomPagination(PageNumberPagination):
             }
         )
 
-    def get_paginated_response_schema(
-        self, schema: dict[str, Any]
-    ) -> dict[str, Any]:
+    def get_paginated_response_schema(self, schema: dict[str, Any]) -> dict[str, Any]:
         return {
             "type": "object",
             "required": [

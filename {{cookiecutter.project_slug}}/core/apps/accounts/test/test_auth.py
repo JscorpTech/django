@@ -73,18 +73,14 @@ class SmsViewTest(TestCase):
     def test_reset_confirmation_code_view(self):
         """Test reset confirmation code view."""
         data = {"phone": self.phone, "code": self.code}
-        response = self.client.post(
-            reverse("reset-confirmation-code"), data=data
-        )
+        response = self.client.post(reverse("reset-confirmation-code"), data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("token", response.data)
 
     def test_reset_confirmation_code_view_invalid_code(self):
         """Test reset confirmation code view with invalid code."""
         data = {"phone": self.phone, "code": "123456"}
-        response = self.client.post(
-            reverse("reset-confirmation-code"), data=data
-        )
+        response = self.client.post(reverse("reset-confirmation-code"), data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_reset_set_password_view(self):
@@ -98,9 +94,7 @@ class SmsViewTest(TestCase):
         """Test reset set password view with invalid token."""
         token = "test_token"
         data = {"token": token, "password": "new_password"}
-        with patch.object(
-            User.objects, "filter", return_value=User.objects.none()
-        ):
+        with patch.object(User.objects, "filter", return_value=User.objects.none()):
             response = self.client.post(reverse("set-password"), data=data)
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
             self.assertEqual(response.data["detail"], "Invalid token")

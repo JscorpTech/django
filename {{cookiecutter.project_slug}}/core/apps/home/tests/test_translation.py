@@ -18,9 +18,7 @@ class Test(TestCase):
 
     def setUp(self) -> None:
         self.clien = APIClient()
-        self.post = FrontendTranslation.objects.create(
-            key="key", value="value"
-        )
+        self.post = FrontendTranslation.objects.create(key="key", value="value")
 
     def test_get_posts(self) -> None:
         response = self.clien.get(reverse("frontend-translation"))

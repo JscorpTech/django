@@ -9,9 +9,7 @@ class SendService:
     PATCH = "PATCH"
     CONTACT = "contact"
 
-    def __init__(
-        self, api_url=None, email=None, password=None, callback_url=None
-    ):
+    def __init__(self, api_url=None, email=None, password=None, callback_url=None):
         self.api_url = api_url or env("SMS_API_URL")
         self.email = email or env("SMS_LOGIN")
         self.password = password or env("SMS_PASSWORD")
@@ -49,9 +47,7 @@ class SendService:
     def auth(self):
         data = {"email": self.email, "password": self.password}
 
-        return self.request(
-            self.methods["auth_login"], data=data, method=self.POST
-        )
+        return self.request(self.methods["auth_login"], data=data, method=self.POST)
 
     def refresh_token(self):
         token = self.auth()["data"]["token"]

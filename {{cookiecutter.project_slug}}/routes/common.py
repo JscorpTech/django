@@ -25,12 +25,8 @@ urlpatterns = [
         include("django_ckeditor_5.urls"),
         name="ck_editor_5_upload_file",
     ),
-    re_path(
-        r"static/(?P<path>.*)", serve, {"document_root": settings.STATIC_ROOT}
-    ),
-    re_path(
-        r"media/(?P<path>.*)", serve, {"document_root": settings.MEDIA_ROOT}
-    ),
+    re_path(r"static/(?P<path>.*)", serve, {"document_root": settings.STATIC_ROOT}),
+    re_path(r"media/(?P<path>.*)", serve, {"document_root": settings.MEDIA_ROOT}),
     path(
         "swagger/",
         SpectacularSwaggerView.as_view(url_name="schema"),

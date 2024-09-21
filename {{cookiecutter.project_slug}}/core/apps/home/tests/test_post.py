@@ -20,9 +20,7 @@ class Test(TestCase):
 
     def setUp(self) -> None:
         self.clien = APIClient()
-        self.post = Post.objects.create(
-            title="title", desc="desc", image="image.jpg"
-        )
+        self.post = Post.objects.create(title="title", desc="desc", image="image.jpg")
 
     def test_get_posts(self) -> None:
         response = self.clien.get(reverse("posts-list"))

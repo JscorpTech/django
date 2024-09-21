@@ -40,9 +40,7 @@ PAGES = [
             {
                 "title": _("Frontend Translation"),
                 "icon": "translate",
-                "link": reverse_lazy(
-                    "admin:http_frontendtranslation_changelist"
-                ),
+                "link": reverse_lazy("admin:http_frontendtranslation_changelist"),
             },
         ],
     },

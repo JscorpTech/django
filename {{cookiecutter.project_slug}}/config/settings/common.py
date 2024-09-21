@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-INSTALLED_APPS += Config().config.get("apps") # noqa
+INSTALLED_APPS += Config().config.get("apps")  # noqa
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -88,16 +88,13 @@ AUTH_PASSWORD_VALIDATORS = [
         ".UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation"
-        ".MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation" ".MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation"
-        ".CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation" ".CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation"
-        ".NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation" ".NumericPasswordValidator",
     },
 ]
 

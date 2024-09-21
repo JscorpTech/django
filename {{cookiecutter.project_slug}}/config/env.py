@@ -23,5 +23,5 @@ env = environ.Env(
     NGROK_AUTHTOKEN=(str, "TOKEN"),
     BOT_TOKEN=(str, "TOKEN"),
     OTP_MODULE="core.services.otp",
-    OTP_SERVICE="EskizService"
+    OTP_SERVICE="EskizService",
 )

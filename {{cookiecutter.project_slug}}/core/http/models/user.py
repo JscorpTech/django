@@ -57,8 +57,7 @@ class SmsConfirm(AbstractBaseModel):
 
         if (
             self.resend_unlock_time is not None
-            and self.resend_unlock_time.timestamp()
-            < datetime.now().timestamp()
+            and self.resend_unlock_time.timestamp() < datetime.now().timestamp()
         ):
             self.resend_unlock_time = None
 

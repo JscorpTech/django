@@ -35,9 +35,7 @@ class RegisterView(views.APIView, services.UserService):
             data.get("last_name"),
             data.get("password"),
         )
-        self.send_confirmation(
-            phone
-        )  # Send confirmation code for sms eskiz.uz
+        self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
         return response.Response(
             {"detail": _(enums.Messages.SEND_MESSAGE) % {"phone": phone}},
             status=status.HTTP_202_ACCEPTED,
@@ -66,9 +64,7 @@ class ConfirmView(views.APIView, services.UserService):
             # Check Sms confirmation otp code
             if services.SmsService.check_confirm(phone, code=code):
                 # Create user
-                token = self.validate_user(
-                    User.objects.filter(phone=phone).first()
-                )
+                token = self.validate_user(User.objects.filter(phone=phone).first())
                 return response.Response(
                     data={
                         "detail": _(enums.Messages.OTP_CONFIRMED),

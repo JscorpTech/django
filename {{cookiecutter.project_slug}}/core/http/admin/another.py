@@ -28,9 +28,7 @@ class PostAdmin(
     form = forms.PostAdminForm
     inlines = [PostInline]
     formfield_overrides = {
-        db_model.ManyToManyField: {
-            "widget": django_select2.Select2MultipleWidget
-        }
+        db_model.ManyToManyField: {"widget": django_select2.Select2MultipleWidget}
     }
 
 

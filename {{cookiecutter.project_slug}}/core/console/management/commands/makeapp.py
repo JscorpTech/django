@@ -10,12 +10,12 @@ from core.utils import Config
 
 
 class Command(BaseCommand):
-    help = "Creates a new Django app inside the apps folder and sets the name in apps.py"
+    help = (
+        "Creates a new Django app inside the apps folder and sets the name in apps.py"
+    )
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "app_name", type=str, help="The name of the app to create"
-        )
+        parser.add_argument("app_name", type=str, help="The name of the app to create")
 
     def handle(self, *args, **options):
         app_name = options["app_name"]
@@ -63,9 +63,7 @@ class Command(BaseCommand):
             create_package(os.path.join(app_directory, package_name))
 
         self.stdout.write(
-            self.style.SUCCESS(
-                f"App {app_name} created successfully in core/apps/!"
-            )
+            self.style.SUCCESS(f"App {app_name} created successfully in core/apps/!")
         )
 
         Config().register_app(app_name)
