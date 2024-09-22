@@ -101,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
 TIME_ZONE = "Asia/Tashkent"
 USE_I18N = True
 USE_TZ = True
-STATIC_URL = "static/"
+STATIC_URL = "resource/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Date formats
@@ -110,10 +110,6 @@ DATE_FORMAT = "d.m.y"
 TIME_FORMAT = "H:i:s"
 DATE_INPUT_FORMATS = ["%d.%m.%Y", "%Y.%d.%m", "%Y.%d.%m"]
 
-FACTORYS = [
-    ("core.http.database.factory.PostFactory", 100000),
-    # ("core.http.database.factory.UserFactory", 1),
-]
 
 SEEDERS = ["core.http.database.seeder.UserSeeder"]
 
@@ -145,7 +141,7 @@ MODELTRANSLATION_LANGUAGES = ("uz", "ru", "en")
 MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"
 LANGUAGE_CODE = "uz"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, "resources/media")  # Media files
 MEDIA_URL = "/resources/media/"
 
 AUTH_USER_MODEL = "http.User"

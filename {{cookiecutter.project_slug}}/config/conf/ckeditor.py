@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-STATIC_URL = "/static/"
-MEDIA_URL = "/media/"
+STATIC_URL = "/resources/static/"
+MEDIA_URL = "/resources/media/"
 MEDIA_ROOT = os.path.join(Path().parent.parent, "media")
 
 customColorPalette = [
