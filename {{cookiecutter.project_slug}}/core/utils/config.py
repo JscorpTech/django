@@ -7,7 +7,7 @@ import importlib
 
 
 class Config:
-    config = {}
+    config: dict = {}
 
     def __init__(self) -> None:
         self.config_file = os.path.join("config.json")
@@ -15,17 +15,17 @@ class Config:
             self.config = json.load(file)
 
     def register_app(self, app_name, class_name=None):
-        app = "core.apps.{}.apps".format(app_name)
+        app = f"core.apps.{app_name}.apps"
 
         if class_name is None:
             class_name = list(
                 filter(
-                    lambda x: x.lower() == "{}config".format(app_name),
+                    lambda x: x.lower() == f"{app_name}config",
                     dir(importlib.import_module(app)),
                 )
             )[0]
 
-        class_name = "{}.{}".format(app, class_name)
+        class_name = f"{app}.{class_name}"
         config = Config()
         config.config.setdefault("apps", []).append(class_name)
         config.write()

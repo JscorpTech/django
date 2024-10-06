@@ -1,6 +1,6 @@
 import os
 import pathlib
-from typing import List, Union
+from typing import List, Union, Iterable
 
 from django.utils.translation import gettext_lazy as _
 from core.utils import Config
@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-INSTALLED_APPS += Config().config.get("apps")  # noqa
+apps: Iterable[str] = Config().config.get("apps") or []
+
+INSTALLED_APPS += [app for app in apps if isinstance(app, str)]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -88,13 +90,16 @@ AUTH_PASSWORD_VALIDATORS = [
         ".UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation" ".MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation"
+        ".MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation" ".CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation"
+        ".CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation" ".NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation"
+        ".NumericPasswordValidator",
     },
 ]
 
