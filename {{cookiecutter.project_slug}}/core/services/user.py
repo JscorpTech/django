@@ -47,7 +47,8 @@ class UserService(sms.SmsService):
         """
         Create user if user not found
         """
-        user.validated_at = datetime.now()
+        if user.validated_at is None:
+            user.validated_at = datetime.now()
         user.save()
         token = self.get_token(user)
         return token

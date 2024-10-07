@@ -116,7 +116,7 @@ TIME_FORMAT = "H:i:s"
 DATE_INPUT_FORMATS = ["%d.%m.%Y", "%Y.%d.%m", "%Y.%d.%m"]
 
 
-SEEDERS = ["core.http.database.seeder.UserSeeder"]
+SEEDERS = ["core.http.seeder.UserSeeder"]
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "resources/static"),
