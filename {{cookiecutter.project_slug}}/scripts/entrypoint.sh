@@ -2,7 +2,7 @@
 poetry run python3 manage.py migrate --noinput
 poetry run python3 manage.py collectstatic --noinput
 
-{% if cookiecutter.websocket == 'y' %}
+{% if cookiecutter.runner == 'asgi' %}
 poetry run daphne -p 8000 -b 0.0.0.0 config.asgi:application
 {% else %}
 poetry run python3 manage.py runserver 0.0.0.0:8000

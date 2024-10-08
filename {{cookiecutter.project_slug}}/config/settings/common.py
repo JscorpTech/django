@@ -36,18 +36,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-]
+] + APPS
 
 apps: Iterable[str] = Config().config.get("modules") or []
 
-MODULES = [f"core.apps.{app}" for app in apps if isinstance(app, str)]
-INSTALLED_APPS += APPS
+MODULES = [app for app in apps if isinstance(app, str)]
 
 for module_path in MODULES:
     INSTALLED_APPS.append("{}.apps.ModuleConfig".format(module_path))
-    module = importlib.import_module(module_path)
-    module_dict = module.__dict__
-    globals().update({k: v for k, v in module_dict.items() if not k.startswith('__')})
+    config_path = "{}.config".format(module_path)
+    if os.path.exists("{}.py".format(config_path.replace(".", "/"))):
+        module = importlib.import_module(config_path)
+        module_dict = module.__dict__
+        globals().update({k: v for k, v in module_dict.items() if not k.startswith('__')})
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -90,8 +91,11 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = "config.wsgi.application"
+{% if cookiecutter.runner == 'asgi' %}
 ASGI_APPLICATION = "config.asgi.application"
+{% else %}
+WSGI_APPLICATION = "config.wsgi.application"
+{% endif %}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
