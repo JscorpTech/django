@@ -24,3 +24,8 @@ class GroupAdmin(ModelAdmin):
     list_display = ["name"]
     search_fields = ["name"]
     filter_horizontal = ("permissions",)
+
+
+class SmsConfirmAdmin(ModelAdmin):
+    list_display = ["phone", "code", "resend_count", "try_count"]
+    search_fields = ["phone", "code"]
