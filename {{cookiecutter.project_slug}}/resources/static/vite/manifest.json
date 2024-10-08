@@ -1,0 +1,17 @@
+{
+    "resources/static/css/app.css": {
+      "file": "assets/appCss-w40geAFS.js",
+      "src": "resources/static/css/app.css",
+      "isEntry": true
+    },
+    "resources/static/css/output.css": {
+      "file": "assets/outCss-r8J2MRAR.css",
+      "src": "resources/static/css/output.css",
+      "isEntry": true
+    },
+    "resources/static/js/app.js": {
+      "file": "assets/appJs-YH6iAcjX.js",
+      "src": "resources/static/js/app.js",
+      "isEntry": true
+    }
+  }
