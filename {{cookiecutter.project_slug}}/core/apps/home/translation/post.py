@@ -1,8 +1,5 @@
-"""
-Django model translation resources
-"""
-
 from modeltranslation import translator
+from ..models import Post
 
 
 class PostTranslationOption(translator.TranslationOptions):
@@ -12,5 +9,4 @@ class PostTranslationOption(translator.TranslationOptions):
     )
 
 
-class FrontendTranslationOption(translator.TranslationOptions):
-    fields = ("value",)
+translator.register(Post, PostTranslationOption)

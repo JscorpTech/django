@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",  # Cors middleware
     "django.middleware.locale.LocaleMiddleware",  # Locale middleware
-    "core.middlewares.CacheMiddleware",  # Cache middle
+    "core.http.middlewares.CacheMiddleware",  # Cache middle
     *(
         ["django.middleware.cache.UpdateCacheMiddleware"]
         if env.bool("CACHE_ENABLED")

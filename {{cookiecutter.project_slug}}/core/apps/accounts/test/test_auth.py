@@ -6,7 +6,6 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.apps.accounts.models import User, ResetToken
-from core.enums import Messages
 from core.services import SmsService
 from pydantic import BaseModel
 import logging
@@ -51,7 +50,7 @@ class SmsViewTest(TestCase):
             self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
             self.assertEqual(
                 response.data["detail"],
-                Messages.SEND_MESSAGE % {"phone": data["phone"]},
+                "Sms %(phone)s raqamiga yuborildi" % {"phone": data["phone"]},
             )
 
     def test_confirm_view(self):

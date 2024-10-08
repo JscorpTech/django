@@ -1,6 +1,6 @@
 from rest_framework import permissions, viewsets
 
-from core.http import models, serializers
+from .. import models, serializers
 
 
 class PostListView(viewsets.ModelViewSet):

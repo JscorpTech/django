@@ -3,7 +3,7 @@ from typing import Type
 from django.utils.translation import gettext as _
 from rest_framework import permissions, request, throttling, views
 
-from core import enums, services
+from core import services
 from core.http import serializers
 from core.http.views import generics as http_views
 
@@ -22,4 +22,4 @@ class AbstractSendSms(views.APIView, http_views.ApiResponse):
         ser.is_valid(raise_exception=True)
         phone = ser.data.get("phone")
         self.service.send_confirmation(phone)
-        return self.success(_(enums.Messages.SEND_MESSAGE) % {"phone": phone})
+        return self.success(_("Sms %(phone)s raqamiga yuborildi") % {"phone": phone})

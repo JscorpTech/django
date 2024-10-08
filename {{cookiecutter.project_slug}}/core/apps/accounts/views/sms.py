@@ -8,7 +8,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework import request as rest_request
 from rest_framework import response, status, throttling, views, viewsets
 
-from core import enums, exceptions, services
+from core import exceptions, services
 from core.apps.accounts import models
 from core.apps.accounts import serializers as sms_serializers
 from core.http import serializers
@@ -37,7 +37,7 @@ class RegisterView(views.APIView, services.UserService):
         )
         self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
         return response.Response(
-            {"detail": _(enums.Messages.SEND_MESSAGE) % {"phone": phone}},
+            {"detail": _("Sms %(phone)s raqamiga yuborildi") % {"phone": phone}},
             status=status.HTTP_202_ACCEPTED,
         )
 
@@ -67,7 +67,7 @@ class ConfirmView(views.APIView, services.UserService):
                 token = self.validate_user(User.objects.filter(phone=phone).first())
                 return response.Response(
                     data={
-                        "detail": _(enums.Messages.OTP_CONFIRMED),
+                        "detail": _("Tasdiqlash ko'di qabul qilindi"),
                         "token": token,
                     },
                     status=status.HTTP_202_ACCEPTED,
@@ -105,7 +105,7 @@ class ResetConfirmationCodeView(views.APIView, services.UserService):
                     },
                     status=status.HTTP_200_OK,
                 )
-            raise PermissionDenied(_(enums.Messages.INVALID_OTP))
+            raise PermissionDenied(_("Tasdiqlash ko'di xato"))
         except exceptions.SmsException as e:
             raise PermissionDenied(str(e))
         except Exception as e:

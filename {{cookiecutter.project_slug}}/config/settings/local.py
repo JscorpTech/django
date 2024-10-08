@@ -20,7 +20,7 @@ DATABASES = {
 
 MIDDLEWARE += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "core.middlewares.ExceptionMiddleware",
+    "core.http.middlewares.ExceptionMiddleware",
 ]
 
 # Debug toolbar middleware
