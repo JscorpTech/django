@@ -19,7 +19,6 @@ urlpatterns = [
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("i18n/", include("django.conf.urls.i18n")),
     path("", include("core.apps.accounts.urls")),
-    path("", include("core.apps.home.urls")),
     path(
         "ckeditor5/",
         include("django_ckeditor_5.urls"),

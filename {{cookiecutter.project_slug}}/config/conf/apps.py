@@ -10,7 +10,6 @@ APPS = [
     "django_ckeditor_5",
     "polymorphic",
     "drf_spectacular",
-    "core.apps.home.apps.HomeConfig",
     "core.http.HttpConfig",
     "core.apps.accounts.apps.AccountsConfig",
     "core.console.ConsoleConfig",
