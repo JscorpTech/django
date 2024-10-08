@@ -104,7 +104,9 @@ def install_module(
             prg.update(
                 task,
                 completed=True,
-                description="[bold green]Modul o'rnatish yakunlandi: {}[/bold green]".format(BASE_DIR),
+                description="[bold green]Modul o'rnatish yakunlandi: {}[/bold green]".format(
+                    BASE_DIR
+                ),
             )
 
 

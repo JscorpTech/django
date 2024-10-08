@@ -1,4 +1,3 @@
-
 APPS = [
     "rest_framework",
     "corsheaders",

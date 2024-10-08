@@ -7,6 +7,7 @@ asgi_application = get_asgi_application()
 from channels.routing import ProtocolTypeRouter, URLRouter  # noqa
 
 from config.env import env  # noqa
+
 # from core.apps.websocket.urls import websocket_urlpatterns  # noqa
 # from core.apps.websocket.middlewares import JWTAuthMiddlewareStack  # noqa
 

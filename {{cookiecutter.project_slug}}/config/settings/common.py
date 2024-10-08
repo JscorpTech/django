@@ -18,18 +18,13 @@ ALLOWED_HOSTS: Union[List[str]] = ["*"]
 
 INSTALLED_APPS = [
     "daphne",
-    # Design admin panel
     "django_select2",
     "modeltranslation",
-    # Django unfold
     "unfold",
     "unfold.contrib.filters",
     "unfold.contrib.forms",
-    # "unfold.contrib.inlines",
     "unfold.contrib.guardian",
     "unfold.contrib.simple_history",
-    # End Django unfold
-    # Default apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -90,30 +85,23 @@ TEMPLATES = [
         },
     },
 ]
-
+# fmt: off
 {% if cookiecutter.runner == 'asgi' %}
 ASGI_APPLICATION = "config.asgi.application"
 {% else %}
 WSGI_APPLICATION = "config.wsgi.application"
 {% endif %}
+# fmt: on
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation"
-        ".UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation"
-        ".MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation"
-        ".CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation"
-        ".NumericPasswordValidator",
-    },
+        "NAME": "django.contrib.auth.password_validation.{}".format(validator)
+    } for validator in [
+        "UserAttributeSimilarityValidator",
+        "MinimumLengthValidator",
+        "CommonPasswordValidator",
+        "NumericPasswordValidator"
+    ]
 ]
 
 TIME_ZONE = "Asia/Tashkent"
@@ -136,14 +124,6 @@ STATICFILES_DIRS = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-PAYCOM_SETTINGS = {
-    "KASSA_ID": "1111",
-    "ACCOUNTS": {
-        "KEY": "1234",
-    },
-    "TOKEN": "1111",
-}
 
 STATIC_ROOT = os.path.join(BASE_DIR, "resources/staticfiles")
 VITE_APP_DIR = os.path.join(BASE_DIR, "resources/static/vite")
