@@ -27,7 +27,7 @@ class Config:
 
         class_name = f"{app}.{class_name}"
         config = Config()
-        config.config.setdefault("apps", []).append(class_name)
+        config.config.setdefault("modules", []).append(class_name)
         config.write()
         Console().log(class_name)
 

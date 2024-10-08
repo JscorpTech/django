@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from core.utils import Config
 from config.conf import *  # noqa
 from config.env import env
+from config.conf.apps import APPS
+import importlib
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 
@@ -36,9 +38,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-apps: Iterable[str] = Config().config.get("apps") or []
+apps: Iterable[str] = Config().config.get("modules") or []
 
-INSTALLED_APPS += [app for app in apps if isinstance(app, str)]
+MODULES = [f"core.apps.{app}" for app in apps if isinstance(app, str)]
+INSTALLED_APPS += APPS
+
+for module_path in MODULES:
+    INSTALLED_APPS.append("{}.apps.ModuleConfig".format(module_path))
+    module = importlib.import_module(module_path)
+    module_dict = module.__dict__
+    globals().update({k: v for k, v in module_dict.items() if not k.startswith('__')})
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
