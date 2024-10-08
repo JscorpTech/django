@@ -17,7 +17,9 @@ DEBUG = env.str("DEBUG")
 ALLOWED_HOSTS: Union[List[str]] = ["*"]
 
 INSTALLED_APPS = [
+    {% if cookiecutter.runner == 'asgi' %}
     "daphne",
+    {% endif %}
     "django_select2",
     "modeltranslation",
     "unfold",
