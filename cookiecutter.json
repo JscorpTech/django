@@ -8,7 +8,7 @@
     "otp_module": "core.services.otp",
     "otp_service": "EskizService",
     "debug": ["yes","no"],
-    "runner": ["asgi","wsgi"],
+    "runner": ["wsgi","asgi"],
     "celery": ["no","yes"],
     "cache": ["no","yes"],
     "csrf_trusted_origins": "no",
