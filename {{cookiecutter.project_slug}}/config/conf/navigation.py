@@ -27,21 +27,5 @@ PAGES = [
                 "link": reverse_lazy("admin:auth_group_changelist"),
             },
         ],
-    },
-    {
-        "title": _("Pages"),
-        "seperator": True,
-        "items": [
-            {
-                "title": _("Posts"),
-                "icon": "post",
-                "link": reverse_lazy("admin:http_post_changelist"),
-            },
-            {
-                "title": _("Frontend Translation"),
-                "icon": "translate",
-                "link": reverse_lazy("admin:http_frontendtranslation_changelist"),
-            },
-        ],
-    },
+    }
 ]
