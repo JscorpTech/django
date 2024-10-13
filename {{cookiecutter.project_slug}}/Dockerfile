@@ -10,8 +10,6 @@ WORKDIR /code
 
 COPY . /code/
 
-RUN pip install poetry
-
-RUN poetry install
+RUN pip install -r requirements.txt
 
 CMD sh ./scripts/entrypoint.sh

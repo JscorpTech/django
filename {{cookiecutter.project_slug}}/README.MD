@@ -13,9 +13,9 @@
 
 
 ## <a name='Get Started'>Install</a>
-# .env faylidan nuxsa olish
+# Loyiha yaratish
 ```bash
-cp .env.example .env
+jst create
 ```
 
 # docker image build qilish
