@@ -6,6 +6,7 @@ APPS = [
     "django_redis",
     "rest_framework_simplejwt",
     "crispy_forms",
+    "crispy_tailwind",
     "import_export",
     "django_ckeditor_5",
     "polymorphic",
