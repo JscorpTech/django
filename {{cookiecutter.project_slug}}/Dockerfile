@@ -1,10 +1,4 @@
-FROM python:3.12-slim
-
-
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-RUN apt update && apt upgrade -y && apt install git -y
+FROM jscorptech/django:v0.1
 
 WORKDIR /code
 
@@ -12,4 +6,4 @@ COPY . /code/
 
 RUN pip install -r requirements.txt
 
-CMD sh ./scripts/entrypoint.sh
+CMD ["sh", "./scripts/entrypoint.sh"]
