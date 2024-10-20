@@ -2,11 +2,7 @@
 python3 manage.py migrate --noinput
 python3 manage.py collectstatic --noinput
 
-{% if cookiecutter.runner == 'asgi' %}
-daphne -p 8000 -b 0.0.0.0 config.asgi:application
-{% else %}
-python3 manage.py runserver 0.0.0.0:8000
-{% endif %}
+uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --reload
 
 {% if cookiecutter.celery == 'y' %}
 & celery -A config worker --loglevel=info &
