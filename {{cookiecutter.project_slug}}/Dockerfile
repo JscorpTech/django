@@ -1,8 +1,8 @@
-FROM jscorptech/django:v0.1
+FROM jscorptech/django:v0.2
 
 WORKDIR /code
 
-COPY . /code/
+COPY requirements.txt /code/requirements.txt
 
 RUN pip install -r requirements.txt
 
