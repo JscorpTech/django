@@ -1,2 +1,2 @@
 # JST-DJANGO
-[Docs]("https://docs.jscorp.uz")
+[Docs](https://docs.jscorp.uz)
