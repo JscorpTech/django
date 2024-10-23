@@ -17,9 +17,6 @@ DEBUG = env.str("DEBUG")
 ALLOWED_HOSTS: Union[List[str]] = ["*"]
 
 INSTALLED_APPS = [
-    {% if cookiecutter.runner == 'asgi' %}
-    "daphne",
-    {% endif %}
     "django_select2",
     "modeltranslation",
     "unfold",
@@ -70,7 +67,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "routes"
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -151,7 +148,6 @@ CELERY_RESULT_BACKEND = env("RABBITMQ_RESULT_BACKEND")
 
 CRISPY_TEMPLATE_PACK = "tailwind"
 CRISPY_ALLOWED_TEMPLATE_PACKS = ["tailwind"]
-
 
 ALLOWED_HOSTS += env("ALLOWED_HOSTS").split(",")
 CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split(",")

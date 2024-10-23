@@ -127,7 +127,6 @@ python3 manage.py secret
  - requirements `Project requirements papkasi`
  - resources `Frontend ko'dlari uchun papka css,js,html`
  - routes `asosiy routing fayillari`
- - scripts `Kerakli scriptlar`
  - stubs `Factory va seeder uchun stub fayil yani shablon fayil`
  - tests
  - * .env

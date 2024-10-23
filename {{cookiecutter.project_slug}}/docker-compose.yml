@@ -3,7 +3,7 @@ services:
   web:
     build: .
     restart: always
-    command: ${COMMAND:-sh ./scripts/entrypoint.sh}
+    command: ${COMMAND:-sh ./entrypoint.sh}
     volumes:
       - .:/code
     ports:
