@@ -22,7 +22,8 @@ def getScript(url: object) -> str:
         script = f"<link rel='stylesheet' type='text/css' href='{url}'>"
     else:
         script = (
-            "<script type='module' type='text/javascript' src='{" "}'></script>"
+            "<script type='module' type='text/javascript' src='{"
+            "}'></script>"
         ).format(url)
     return script
 
@@ -38,7 +39,9 @@ def vite_load(*args):
             f" {settings.VITE_APP_DIR}/manifest.json file is empty?"
         )
     if not env("VITE_LIVE"):
-        imports_files = "".join([getScript(file["file"]) for file in manifest.values()])
+        imports_files = "".join(
+            [getScript(file["file"]) for file in manifest.values()]
+        )
 
     else:
         imports_files = "".join([getScript(file) for file in args])
