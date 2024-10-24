@@ -1,9 +1,0 @@
-diff --git a/{{cookiecutter.project_slug}}/Dockerfile b/{{cookiecutter.project_slug}}/Dockerfile
-index 28bd9a7..5da07de 100644
---- a/{{cookiecutter.project_slug}}/Dockerfile
-+++ b/{{cookiecutter.project_slug}}/Dockerfile
-@@ -7,4 +7,3 @@ COPY requirements.txt /code/requirements.txt
- RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
- 
- CMD ["sh", "./entrypoint.sh"]
--
