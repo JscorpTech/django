@@ -2,7 +2,7 @@ FROM jscorptech/django:v0.3
 
 WORKDIR /code
 
-COPY . /code/
+COPY requirements.txt /code/requirements.txt
 
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
