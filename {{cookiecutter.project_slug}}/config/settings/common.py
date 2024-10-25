@@ -3,8 +3,8 @@ import pathlib
 from typing import List, Union, Iterable
 
 from django.utils.translation import gettext_lazy as _
-from core.utils import Config
 from config.conf import *  # noqa
+from config.conf.modules import MODULES
 from config.env import env
 from config.conf.apps import APPS
 import importlib
@@ -32,9 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ] + APPS
 
-apps: Iterable[str] = Config().config.get("modules") or []
-
-MODULES = [app for app in apps if isinstance(app, str)]
+MODULES = [app for app in MODULES if isinstance(app, str)]
 
 for module_path in MODULES:
     INSTALLED_APPS.append("{}.apps.ModuleConfig".format(module_path))
