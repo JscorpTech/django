@@ -1,14 +1,17 @@
-from django.contrib.auth import admin
 from unfold.admin import ModelAdmin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth import admin
 from django.utils.translation import gettext_lazy as _
-from unfold.forms import AdminPasswordChangeForm
+from unfold.forms import (
+    AdminPasswordChangeForm,
+    UserChangeForm,
+    # UserCreationForm,
+)
 
 
 class CustomUserAdmin(admin.UserAdmin, ModelAdmin):
     change_password_form = AdminPasswordChangeForm
     # add_form = UserCreationForm
-    # form = UserChangeForm
+    form = UserChangeForm
     list_display = (
         "first_name",
         "last_name",
