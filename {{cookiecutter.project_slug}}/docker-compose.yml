@@ -1,0 +1,39 @@
+version: '3.11'
+services:
+  web:
+    build: .
+    restart: always
+    command: ${COMMAND:-sh ./entrypoint.sh}
+    volumes:
+      - .:/code
+    ports:
+      - ${PORT:-8001}:8000
+      - ${CELERY_FLOWER:-5555}:5555
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: django
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: '2309'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  redis:
+    restart: always
+    image: redis
+  rabbitmq:
+    restart: always
+    image: rabbitmq:3-management
+    ports:
+      - ${RABBITMQ_PORT:-15672}:15672
+    environment:
+      - RABBITMQ_DEFAULT_PASS=2309
+      - RABBITMQ_DEFAULT_VHOST=vhost
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+volumes:
+  pg_data: null
+  rabbitmq: null

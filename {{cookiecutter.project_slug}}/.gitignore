@@ -1,6 +1,5 @@
 node_modules
-django_blueprint/
-git.diff
+
 # OS ignores
 *.DS_Store
 
