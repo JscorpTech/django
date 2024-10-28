@@ -1,0 +1,45 @@
+{% extends 'unfold/layouts/base_simple.html' %}
+
+{% load cache i18n unfold static %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block title %}
+    {% if subtitle %}
+        {{ subtitle }} |
+    {% endif %}
+
+    {{ title }} | {{ site_title|default:_('Django site admin') }}
+{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">
+            {{ site_header|default:_('Django administration') }}
+        </a>
+    </h1>
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "/css/output.css" %}">
+    {{ block.super }}
+    <div x-data="data">
+        {% component 'unfold/components/container.html' %}
+            <div class="flex justify-end mb-5 gap-x-3"></div>
+            {% component 'unfold/components/flex.html' with class='grid grid-cols-1 sm:grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-4' %}
+                {% for card in cards %}
+                    {% component 'unfold/components/card.html' with class='w-full cursor-pointer' %}
+                        <h1 class="inline-block font-semibold leading-normal px-2 py-1 rounded text-xxs uppercase whitespace-nowrap text-{{ card.color }}-700 bg-{{ card.color }}-500/20  dark:bg-{{ card.color }}-500/20 dark:text-{{ card.color }}-400">{{ card.title }}</h1>
+                        <h1 class="mt-3 font-[600] text-[20px] ml-1">{{ card.value }}</h1>
+                    {% endcomponent %}
+                {% endfor %}
+            {% endcomponent %}
+        {% endcomponent %}
+    </div>
+{% endblock content %}
+
+
+
+
+
+
