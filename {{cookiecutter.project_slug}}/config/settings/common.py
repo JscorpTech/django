@@ -1,6 +1,6 @@
 import os
 import pathlib
-from typing import List, Union, Iterable
+from typing import List, Union
 
 from django.utils.translation import gettext_lazy as _
 from config.conf import *  # noqa
@@ -12,7 +12,7 @@ import importlib
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = env.str("DJANGO_SECRET_KEY")
-DEBUG = env.str("DEBUG")
+DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS: Union[List[str]] = ["*"]
 
