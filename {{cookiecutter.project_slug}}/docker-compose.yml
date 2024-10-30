@@ -4,6 +4,7 @@ services:
     build: .
     restart: always
     command: ${COMMAND:-sh ./entrypoint.sh}
+    container_name: {{cookiecutter.project_slug}}
     volumes:
       - .:/code
     ports:
