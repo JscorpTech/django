@@ -4,6 +4,7 @@
 from . import navigation
 
 UNFOLD = {
+    "DASHBOARD_CALLBACK": "core.http.views.dashboard_callback",
     "SITE_TITLE": None,
     "SITE_HEADER": None,
     "SITE_URL": "/",
