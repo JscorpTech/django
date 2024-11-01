@@ -6,8 +6,11 @@ class Storage:
 
     storages = ["AWS", "MINIO", "FILE", "STATIC"]
 
-    def __init__(self, storage: Union[str]) -> None:
+    def __init__(
+        self, storage: Union[str], storage_type: Union[str] = "default"
+    ) -> None:
         self.storage = storage
+        self.sorage_type = storage_type
         if storage not in self.storages:
             raise ValueError(f"Invalid storage type: {storage}")
 
@@ -23,6 +26,9 @@ class Storage:
     def get_options(self) -> Optional[str]:
         match self.storage:
             case "AWS" | "MINIO":
-                return {"bucket_name": env.str("STORAGE_BUCKET_MEDIA")}
+                if self.sorage_type == "default":
+                    return {"bucket_name": env.str("STORAGE_BUCKET_MEDIA")}
+                elif self.sorage_type == "static":
+                    return {"bucket_name": env.str("STORAGE_BUCKET_STATIC")}
             case _:
                 return {}

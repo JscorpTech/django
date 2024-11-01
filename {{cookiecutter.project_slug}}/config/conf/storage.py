@@ -6,8 +6,8 @@ AWS_SECRET_ACCESS_KEY = env.str("STORAGE_KEY")
 AWS_S3_ENDPOINT_URL = env.str("STORAGE_URL")
 
 
-default_storage = Storage(env.str("STORAGE_DEFAULT"))
-static_storage = Storage(env.str("STORAGE_STATIC"))
+default_storage = Storage(env.str("STORAGE_DEFAULT"), "default")
+static_storage = Storage(env.str("STORAGE_STATIC"), "static")
 
 STORAGES = {
     "default": {
