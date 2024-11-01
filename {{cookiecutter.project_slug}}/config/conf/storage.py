@@ -10,11 +10,11 @@ storage = Storage()
 
 STORAGES = {
     "default": {
-        "BACKEND": storage.get("default"),
+        "BACKEND": storage.get_backend(env.str("STORAGE_MEDIA")),
         "OPTIONS": {"bucket_name": env.str("STORAGE_BUCKET_MEDIA")},
     },
     "staticfiles": {
-        "BACKEND": storage.get("static"),
+        "BACKEND": storage.get_backend(env.str("STORAGE_STATIC")),
         "OPTIONS": {"bucket_name": env.str("STORAGE_BUCKET_STATIC")},
     },
 }
