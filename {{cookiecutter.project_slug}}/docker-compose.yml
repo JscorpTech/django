@@ -8,7 +8,6 @@ services:
       - .:/code
     ports:
       - ${PORT:-8001}:8000
-      - ${CELERY_FLOWER:-5555}:5555
     depends_on:
       - db
       - redis
@@ -27,8 +26,6 @@ services:
   rabbitmq:
     restart: always
     image: rabbitmq:3-management
-    ports:
-      - ${RABBITMQ_PORT:-15672}:15672
     environment:
       - RABBITMQ_DEFAULT_PASS=2309
       - RABBITMQ_DEFAULT_VHOST=vhost
