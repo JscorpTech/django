@@ -6,15 +6,16 @@ AWS_SECRET_ACCESS_KEY = env.str("STORAGE_KEY")
 AWS_S3_ENDPOINT_URL = env.str("STORAGE_URL")
 
 
-storage = Storage()
+default_storage = Storage(env.str("STORAGE_DEFAULT"), "default")
+static_storage = Storage(env.str("STORAGE_STATIC"), "static")
 
 STORAGES = {
     "default": {
-        "BACKEND": storage.get_backend(env.str("STORAGE_MEDIA")),
-        "OPTIONS": {"bucket_name": env.str("STORAGE_BUCKET_MEDIA")},
+        "BACKEND": default_storage.get_backend(),
+        "OPTIONS": default_storage.get_options(),
     },
     "staticfiles": {
-        "BACKEND": storage.get_backend(env.str("STORAGE_STATIC")),
-        "OPTIONS": {"bucket_name": env.str("STORAGE_BUCKET_STATIC")},
+        "BACKEND": static_storage.get_backend(),
+        "OPTIONS": static_storage.get_options(),
     },
 }
