@@ -5,22 +5,15 @@
         "config.settings.local",
         "config.settings.production"
     ],
-    "otp_module": "core.services.otp",
-    "otp_service": "EskizService",
     "debug": ["yes","no"],
     "runner": ["wsgi","asgi"],
     "celery": ["no","yes"],
     "cache": ["no","yes"],
-    "csrf_trusted_origins": "no",
-    "allowed_hosts": "no",
     "script": "entrypoint.sh",
     "key": "key",
-    "rabbitmq_port": "15672",
     "port": "8081",
-    "celery_port": "5555",
     "phone": "998888112309",
     "password": "2309",
-    "auto_deploy_branch": "deploy",
     "max_line_length": "120",
     "version": "0.1.0"
 }
