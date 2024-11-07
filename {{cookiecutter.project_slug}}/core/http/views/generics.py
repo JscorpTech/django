@@ -1,6 +1,6 @@
 from rest_framework import generics, response, status
 
-from core import exceptions as ex
+from core.http import exceptions as ex
 
 
 class ApiResponse:

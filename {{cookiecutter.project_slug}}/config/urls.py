@@ -39,7 +39,6 @@ urlpatterns += [
 # Swagger urls
 ################
 urlpatterns += [
-    path("debug", include("debug_toolbar.urls")),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "swagger/",
