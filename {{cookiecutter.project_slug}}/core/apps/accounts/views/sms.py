@@ -8,10 +8,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework import request as rest_request
 from rest_framework import response, status, throttling, views, viewsets
 
-from core import exceptions, services
+from core import services
 from core.apps.accounts import models
 from core.apps.accounts import serializers as sms_serializers
-from core.http import serializers
+from core.http import serializers, exceptions
 from core.http import views as http_views
 from core.http.models import User
 

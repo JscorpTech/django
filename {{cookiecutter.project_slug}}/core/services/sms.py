@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
-from core import exceptions
-from core.http import models, tasks
+from core.http import models, tasks, exceptions
 
 
 class SmsService:

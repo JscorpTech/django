@@ -1,6 +1,6 @@
 from django.http import response
 
-from core import exceptions
+from core.http import exceptions
 
 
 class ExceptionMiddleware:

@@ -4,8 +4,7 @@ from datetime import datetime
 from django.contrib.auth import hashers
 from rest_framework_simplejwt import tokens
 
-from core import exceptions
-from core.http import models
+from core.http import models, exceptions
 from core.services import sms
 from core.utils import exception
 
