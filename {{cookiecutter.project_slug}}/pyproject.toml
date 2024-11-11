@@ -14,3 +14,8 @@ filterwarnings = [
     "ignore::ResourceWarning",
     "ignore::Warning" # This line will ignore all warnings
 ]
+
+
+[tool.flake8]
+max-line-length = {{cookiecutter.max_line_length}}
+ignore = ["E701", "E704", "W503"]
