@@ -1,4 +1,8 @@
-FROM jscorptech/django:v0.4
+FROM python:3.13-alpine
+
+ENV PYTHONPYCACHEPREFIX=/dev/null
+
+RUN apk update && apk add git gettext
 
 WORKDIR /code
 
