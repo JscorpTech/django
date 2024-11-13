@@ -11,9 +11,9 @@ LOGGING = {
     },
     'handlers': {
         'daily_rotating_file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'resources/logs/django.log',  # Fayl nomi (kunlik fayllar uchun avtomatik yoziladi)
+            'filename': 'logs/django_log',  # Fayl nomi (kunlik fayllar uchun avtomatik yoziladi)
             'when': 'midnight',  # Har kecha log fayli yangilanadi
             'backupCount': 30,  # 30 kunlik loglar saqlanadi, 1 oydan keyin eski fayllar o'chiriladi
             'formatter': 'verbose',
@@ -22,9 +22,8 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['daily_rotating_file'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True,
         },
     },
 }
-

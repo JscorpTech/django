@@ -5,6 +5,7 @@
         "config.settings.local",
         "config.settings.production"
     ],
+    "debug": ["yes","no"],
     "runner": ["wsgi","asgi"],
     "celery": ["no","yes"],
     "cache": ["no","yes"],
