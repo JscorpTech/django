@@ -1,3 +1,5 @@
+channels
+uvicorn
 backports.tarfile
 celery
 django-ckeditor-5
