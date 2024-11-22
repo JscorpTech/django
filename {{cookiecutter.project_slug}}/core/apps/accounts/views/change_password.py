@@ -5,12 +5,10 @@ from rest_framework import response, status, exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from core.http import views as http_views
-
 from ..serializers import ChangePasswordSerializer
 
 
-class ChangePasswordView(APIView, http_views.ApiResponse):
+class ChangePasswordView(APIView):
     """usaer password change view"""
 
     serializer_class = ChangePasswordSerializer

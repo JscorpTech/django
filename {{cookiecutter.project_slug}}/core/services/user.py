@@ -1,12 +1,13 @@
 import typing
 from datetime import datetime
+from django.utils.translation import gettext as _
 
 from django.contrib.auth import hashers
 from rest_framework_simplejwt import tokens
+from rest_framework.exceptions import PermissionDenied
 
 from core.http import models, exceptions
 from core.services import sms
-from core.utils import exception
 
 
 class UserService(sms.SmsService):
@@ -34,13 +35,9 @@ class UserService(sms.SmsService):
             self.send_confirm(phone)
             return True
         except exceptions.SmsException as e:
-            exception.ResponseException(
-                e, data={"expired": e.kwargs.get("expired")}
-            )  # noqa
-            return False
-        except Exception as e:
-            exception.ResponseException(e)
-            return False
+            raise PermissionDenied(_("Qayta sms yuborish uchun kuting: {}").format(e.kwargs.get("expired")))
+        except Exception:
+            raise PermissionDenied(_("Serverda xatolik yuz berdi"))
 
     def validate_user(self, user: typing.Union[models.User]) -> dict:
         """

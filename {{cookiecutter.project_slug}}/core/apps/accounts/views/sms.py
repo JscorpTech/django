@@ -91,21 +91,19 @@ class ResetConfirmationCodeView(views.APIView, services.UserService):
         data = ser.data
         code, phone = data.get("code"), data.get("phone")
         try:
-            res = services.SmsService.check_confirm(phone, code)
-            if res:
-                token = models.ResetToken.objects.create(
-                    user=User.objects.filter(phone=phone).first(),
-                    token=str(uuid.uuid4()),
-                )
-                return response.Response(
-                    data={
-                        "token": token.token,
-                        "created_at": token.created_at,
-                        "updated_at": token.updated_at,
-                    },
-                    status=status.HTTP_200_OK,
-                )
-            raise PermissionDenied(_("Tasdiqlash ko'di xato"))
+            services.SmsService.check_confirm(phone, code)
+            token = models.ResetToken.objects.create(
+                user=User.objects.filter(phone=phone).first(),
+                token=str(uuid.uuid4()),
+            )
+            return response.Response(
+                data={
+                    "token": token.token,
+                    "created_at": token.created_at,
+                    "updated_at": token.updated_at,
+                },
+                status=status.HTTP_200_OK,
+            )
         except exceptions.SmsException as e:
             raise PermissionDenied(str(e))
         except Exception as e:
