@@ -1,4 +1,4 @@
-FROM jscorptech/django:v0.4
+FROM jscorptech/django:v0.5
 
 WORKDIR /code
 
