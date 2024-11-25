@@ -28,7 +28,7 @@ urlpatterns += [
     path("rosetta/", include("rosetta.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
-    path("ckeditor5/",include("django_ckeditor_5.urls"),name="ck_editor_5_upload_file",),
+    path("ckeditor5/", include("django_ckeditor_5.urls"), name="ck_editor_5_upload_file"),
 ]
 
 ################

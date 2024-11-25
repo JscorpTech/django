@@ -29,7 +29,6 @@ DATABASES = {
 }
 
 INSTALLED_APPS = [
-    "django_select2",
     "modeltranslation",
     "unfold",
     "unfold.contrib.filters",
