@@ -2,11 +2,11 @@
 Admin panel register
 """
 
+from core.http import models
+from core.http.admin import user
 from django.contrib import admin
 from django.contrib.auth import models as db_models
 
-from core.http import models
-from core.http.admin import user
 from .user import SmsConfirmAdmin
 
 admin.site.unregister(db_models.Group)

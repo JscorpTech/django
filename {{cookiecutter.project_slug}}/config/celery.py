@@ -5,7 +5,6 @@ Celery configurations
 import os
 
 import celery
-
 from config.env import env
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", env("DJANGO_SETTINGS_MODULE"))

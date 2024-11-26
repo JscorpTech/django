@@ -1,11 +1,11 @@
 import math
 from datetime import datetime, timedelta
 
+from core.http import choices, managers
 from django.contrib.auth import models as auth_models
 from django.db import models
-from .base import AbstractBaseModel
 
-from core.http import choices, managers
+from .base import AbstractBaseModel
 
 
 class User(auth_models.AbstractUser):
@@ -46,25 +46,15 @@ class SmsConfirm(AbstractBaseModel):
         if self.resend_count >= self.RESEND_COUNT:
             self.try_count = 0
             self.resend_count = 0
-            self.resend_unlock_time = datetime.now() + timedelta(
-                minutes=self.RESEND_BLOCK_MINUTES
-            )
+            self.resend_unlock_time = datetime.now() + timedelta(minutes=self.RESEND_BLOCK_MINUTES)
         elif self.try_count >= self.TRY_COUNT:
             self.try_count = 0
-            self.unlock_time = datetime.now() + timedelta(
-                minutes=self.TRY_BLOCK_MINUTES
-            )
+            self.unlock_time = datetime.now() + timedelta(minutes=self.TRY_BLOCK_MINUTES)
 
-        if (
-            self.resend_unlock_time is not None
-            and self.resend_unlock_time.timestamp() < datetime.now().timestamp()
-        ):
+        if self.resend_unlock_time is not None and self.resend_unlock_time.timestamp() < datetime.now().timestamp():
             self.resend_unlock_time = None
 
-        if (
-            self.unlock_time is not None
-            and self.unlock_time.timestamp() < datetime.now().timestamp()
-        ):
+        if self.unlock_time is not None and self.unlock_time.timestamp() < datetime.now().timestamp():
             self.unlock_time = None
         self.save()
 

@@ -1,4 +1,5 @@
 from typing import Optional, Union
+
 from config.env import env
 
 
@@ -6,9 +7,7 @@ class Storage:
 
     storages = ["AWS", "MINIO", "FILE", "STATIC"]
 
-    def __init__(
-        self, storage: Union[str], storage_type: Union[str] = "default"
-    ) -> None:
+    def __init__(self, storage: Union[str], storage_type: Union[str] = "default") -> None:
         self.storage = storage
         self.sorage_type = storage_type
         if storage not in self.storages:

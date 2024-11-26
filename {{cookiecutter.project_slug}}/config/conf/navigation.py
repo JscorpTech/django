@@ -27,5 +27,5 @@ PAGES = [
                 "link": reverse_lazy("admin:auth_group_changelist"),
             },
         ],
-    }
+    },
 ]

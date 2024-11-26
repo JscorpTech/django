@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from core.http import models, tasks, exceptions
+from core.http import exceptions, models, tasks
 
 
 class SmsService:
@@ -9,26 +9,20 @@ class SmsService:
         # TODO: Deploy this change when deploying -> code = random.randint(1000, 9999) # noqa
         code = 1111
 
-        sms_confirm, status = models.SmsConfirm.objects.get_or_create(
-            phone=phone, defaults={"code": code}
-        )
+        sms_confirm, status = models.SmsConfirm.objects.get_or_create(phone=phone, defaults={"code": code})
 
         sms_confirm.sync_limits()
 
         if sms_confirm.resend_unlock_time is not None:
             expired = sms_confirm.interval(sms_confirm.resend_unlock_time)
-            exception = exceptions.SmsException(
-                f"Resend blocked, try again in {expired}", expired=expired
-            )
+            exception = exceptions.SmsException(f"Resend blocked, try again in {expired}", expired=expired)
             raise exception
 
         sms_confirm.code = code
         sms_confirm.try_count = 0
         sms_confirm.resend_count += 1
         sms_confirm.phone = phone
-        sms_confirm.expired_time = datetime.now() + timedelta(
-            seconds=models.SmsConfirm.SMS_EXPIRY_SECONDS
-        )  # noqa
+        sms_confirm.expired_time = datetime.now() + timedelta(seconds=models.SmsConfirm.SMS_EXPIRY_SECONDS)  # noqa
         sms_confirm.resend_unlock_time = datetime.now() + timedelta(
             seconds=models.SmsConfirm.SMS_EXPIRY_SECONDS
         )  # noqa

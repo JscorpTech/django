@@ -1,19 +1,18 @@
 import typing
 import uuid
 
-from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
-from rest_framework import generics, permissions
-from rest_framework.exceptions import PermissionDenied
-from rest_framework import request as rest_request
-from rest_framework import response, status, throttling, views, viewsets
-
 from core import services
 from core.apps.accounts import models
 from core.apps.accounts import serializers as sms_serializers
-from core.http import serializers, exceptions
+from core.http import exceptions, serializers
 from core.http import views as http_views
 from core.http.models import User
+from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, permissions
+from rest_framework import request as rest_request
+from rest_framework import response, status, throttling, views, viewsets
+from rest_framework.exceptions import PermissionDenied
 
 
 class RegisterView(views.APIView, services.UserService):
@@ -33,7 +32,7 @@ class RegisterView(views.APIView, services.UserService):
             phone,
             data.get("first_name"),
             data.get("last_name"),
-            data.get("password"),
+            data.get("password")
         )
         self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
         return response.Response(
@@ -126,9 +125,7 @@ class ResetSetPasswordView(views.APIView, services.UserService):
         phone = token.first().user.phone
         token.delete()
         self.change_password(phone, password)
-        return response.Response(
-            {"detail": _("password updated")}, status=status.HTTP_200_OK
-        )
+        return response.Response({"detail": _("password updated")}, status=status.HTTP_200_OK)
 
 
 class ResendView(http_views.AbstractSendSms):
@@ -140,9 +137,7 @@ class ResendView(http_views.AbstractSendSms):
 class ResetPasswordView(http_views.AbstractSendSms):
     """Reset user password"""
 
-    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = (
-        serializers.ResetPasswordSerializer
-    )
+    serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
 
 
 class MeView(viewsets.ViewSet):

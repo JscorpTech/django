@@ -1,9 +1,5 @@
 from config.settings.common import *  # noqa
-from config.settings.common import (
-    ALLOWED_HOSTS,
-    INSTALLED_APPS,
-    REST_FRAMEWORK,
-)
+from config.settings.common import ALLOWED_HOSTS, INSTALLED_APPS, REST_FRAMEWORK
 
 INSTALLED_APPS += ["django_extensions"]
 

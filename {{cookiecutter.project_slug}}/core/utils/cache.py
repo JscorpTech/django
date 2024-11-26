@@ -1,8 +1,7 @@
 import hashlib
 
-from django.core.cache import cache
-
 from config.env import env
+from django.core.cache import cache
 
 
 class Cache:

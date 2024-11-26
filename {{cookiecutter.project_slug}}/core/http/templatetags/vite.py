@@ -1,11 +1,11 @@
 import json
 
-from django import template
+from config.env import env
 from django.conf import settings
 from django.templatetags import static
 from django.utils import safestring
 
-from config.env import env
+from django import template
 
 register = template.Library()
 
@@ -21,10 +21,7 @@ def getScript(url: object) -> str:
     if ext == "css":
         script = f"<link rel='stylesheet' type='text/css' href='{url}'>"
     else:
-        script = (
-            "<script type='module' type='text/javascript' src='{"
-            "}'></script>"
-        ).format(url)
+        script = ("<script type='module' type='text/javascript' src='{" "}'></script>").format(url)
     return script
 
 
@@ -39,9 +36,7 @@ def vite_load(*args):
             f" {settings.VITE_APP_DIR}/manifest.json file is empty?"
         )
     if not env("VITE_LIVE"):
-        imports_files = "".join(
-            [getScript(file["file"]) for file in manifest.values()]
-        )
+        imports_files = "".join([getScript(file["file"]) for file in manifest.values()])
 
     else:
         imports_files = "".join([getScript(file) for file in args])

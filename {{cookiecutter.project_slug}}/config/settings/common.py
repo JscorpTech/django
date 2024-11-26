@@ -1,13 +1,13 @@
+import importlib
 import os
 import pathlib
 from typing import List, Union
 
-from django.utils.translation import gettext_lazy as _
 from config.conf import *  # noqa
+from config.conf.apps import APPS
 from config.conf.modules import MODULES
 from config.env import env
-from config.conf.apps import APPS
-import importlib
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 

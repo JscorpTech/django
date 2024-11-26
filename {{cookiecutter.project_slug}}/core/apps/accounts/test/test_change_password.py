@@ -1,10 +1,9 @@
-from django.test import TestCase
-from core.http.models import User
-from rest_framework.test import APIClient
-from rest_framework import status
-from django.urls import reverse
-
 from core.apps.accounts.serializers import ChangePasswordSerializer
+from core.http.models import User
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
 
 
 class ChangePasswordViewTest(TestCase):
@@ -14,11 +13,7 @@ class ChangePasswordViewTest(TestCase):
         self.password = "12345670"
         self.path = reverse("change-password")
 
-        self.user = User.objects.create_user(
-            phone=self.phone,
-            password=self.password,
-            email="test@example.com",
-        )
+        self.user = User.objects.create_user(phone=self.phone, password=self.password, email="test@example.com")
         self.client.force_authenticate(user=self.user)
 
     def test_change_password_success(self):

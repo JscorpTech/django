@@ -1,1 +1,1 @@
-from .cache import * # noqa
+from .cache import *  # noqa

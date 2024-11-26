@@ -1,7 +1,6 @@
+from core.http import models
 from django.utils.translation import gettext as _
 from rest_framework import exceptions, serializers
-
-from core.http import models
 
 
 class LoginSerializer(serializers.Serializer):
@@ -15,9 +14,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_phone(self, value):
         user = models.User.objects.filter(phone=value, validated_at__isnull=False)
         if user.exists():
-            raise exceptions.ValidationError(
-                _("Phone number already registered."), code="unique"
-            )
+            raise exceptions.ValidationError(_("Phone number already registered."), code="unique")
         return value
 
     class Meta:

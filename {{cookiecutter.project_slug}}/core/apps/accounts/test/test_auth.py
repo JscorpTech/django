@@ -1,15 +1,14 @@
+import logging
 from unittest.mock import patch
 
+from core.apps.accounts.models import ResetToken, User
+from core.http.models import SmsConfirm
+from core.services import SmsService
 from django.test import TestCase
 from django.urls import reverse
+from pydantic import BaseModel
 from rest_framework import status
 from rest_framework.test import APIClient
-
-from core.apps.accounts.models import User, ResetToken
-from core.services import SmsService
-from pydantic import BaseModel
-import logging
-from core.http.models import SmsConfirm
 
 
 class TokenModel(BaseModel):
@@ -30,10 +29,7 @@ class SmsViewTest(TestCase):
         self.code = "1111"
         self.token = "token"
         self.user = User.objects.create_user(
-            phone=self.phone,
-            first_name="John",
-            last_name="Doe",
-            password=self.password,
+            phone=self.phone, first_name="John", last_name="Doe", password=self.password
         )
         SmsConfirm.objects.create(phone=self.phone, code=self.code)
 
@@ -48,10 +44,7 @@ class SmsViewTest(TestCase):
         with patch.object(SmsService, "send_confirm", return_value=True):
             response = self.client.post(reverse("register"), data=data)
             self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
-            self.assertEqual(
-                response.data["detail"],
-                "Sms %(phone)s raqamiga yuborildi" % {"phone": data["phone"]},
-            )
+            self.assertEqual(response.data["detail"], "Sms %(phone)s raqamiga yuborildi" % {"phone": data["phone"]})
 
     def test_confirm_view(self):
         """Test confirm view."""
