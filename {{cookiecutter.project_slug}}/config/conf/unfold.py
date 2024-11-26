@@ -1,31 +1,15 @@
-# from django.templatetags.static import static
-# from django.utils.translation import gettext_lazy as _
-# from django.urls import reverse_lazy
 from . import navigation
 
 UNFOLD = {
     "DASHBOARD_CALLBACK": "core.http.views.dashboard_callback",
     "SITE_TITLE": None,
+    "SHOW_LANGUAGES": True,
+
     "SITE_HEADER": None,
     "SITE_URL": "/",
-    # "SITE_ICON": {
-    # "light": lambda request: static("icon-light.svg"),  # light mode
-    # "dark": lambda request: static("icon-dark.svg"),  # dark mode
-    # },
-    # "SITE_LOGO": {
-    # "light": lambda request: static("logo-light.svg"),  # light mode
-    # "dark": lambda request: static("logo-dark.svg"),  # dark mode
-    # },
     "SITE_SYMBOL": "speed",  # symbol from icon set
     "SHOW_HISTORY": True,  # show/hide "History" button, default: True
     "SHOW_VIEW_ON_SITE": True,
-    # "THEME": "dark",
-    # "STYLES": [
-    # lambda request: static("css/style.css"),
-    # ],
-    # "SCRIPTS": [
-    # lambda request: static("js/script.js"),
-    # ],
     "COLORS": {
         "primary": {
             "50": "220 255 230",

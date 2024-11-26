@@ -10,7 +10,7 @@ django-filter
 django-modeltranslation
 django-redis
 django-rosetta
-django-unfold
+django-unfold==0.42.0
 djangorestframework-simplejwt
 drf-spectacular
 importlib-metadata
