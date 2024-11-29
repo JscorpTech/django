@@ -5,3 +5,4 @@ from .jwt import *  # noqa
 from .logs import *  # noqa
 from .rest_framework import *  # noqa
 from .unfold import *  # noqa
+from .celery import * # noqa
