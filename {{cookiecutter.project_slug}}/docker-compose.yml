@@ -1,17 +1,40 @@
 version: '3.11'
+networks:
+  django:
+    driver: bridge
+
+volumes:
+  pg_data: null
+  rabbitmq: null
+
 services:
+  nginx:
+    networks:
+      - django
+    ports:
+      - ${PORT:-8001}:80
+    volumes:
+      - ./resources/layout/nginx.conf:/etc/nginx/nginx.conf
+      - ./resources/:/usr/share/nginx/html/resources/
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.nginx
   web:
-    build: .
+    networks:
+      - django
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.web
     restart: always
     command: ${COMMAND:-sh ./entrypoint.sh}
     volumes:
       - .:/code
-    ports:
-      - ${PORT:-8001}:8000
     depends_on:
       - db
       - redis
   db:
+    networks:
+      - django
     image: postgres:16
     restart: always
     environment:
@@ -21,9 +44,13 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
   redis:
+    networks:
+      - django
     restart: always
     image: redis
   rabbitmq:
+    networks:
+      - django
     restart: always
     image: rabbitmq:3-management
     environment:
@@ -31,6 +58,3 @@ services:
       - RABBITMQ_DEFAULT_VHOST=vhost
     volumes:
       - rabbitmq:/var/lib/rabbitmq
-volumes:
-  pg_data: null
-  rabbitmq: null

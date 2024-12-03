@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 TIME_ZONE = "Asia/Tashkent"
 USE_I18N = True
 USE_TZ = True
-STATIC_URL = "resource/static/"
+STATIC_URL = "resources/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Date formats
