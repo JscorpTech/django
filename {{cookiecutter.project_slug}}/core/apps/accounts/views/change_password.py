@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from ..serializers import ChangePasswordSerializer
 
 
+@extend_schema(tags=["change password"], description="Parolni o'zgartirish uchun")
 class ChangePasswordView(APIView):
     """usaer password change view"""
 
