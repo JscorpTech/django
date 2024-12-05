@@ -13,6 +13,7 @@ class CustomUserAdmin(admin.UserAdmin, ModelAdmin):
         "last_name",
         "phone",
     )
+    autocomplete_fields = ["groups", "user_permissions"]
     fieldsets = ((None, {"fields": ("phone",)}),) + (
         (None, {"fields": ("username", "password")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
@@ -32,10 +33,15 @@ class CustomUserAdmin(admin.UserAdmin, ModelAdmin):
     )
 
 
+class PermissionAdmin(ModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
+
+
 class GroupAdmin(ModelAdmin):
     list_display = ["name"]
     search_fields = ["name"]
-    filter_horizontal = ("permissions",)
+    autocomplete_fields = ("permissions",)
 
 
 class SmsConfirmAdmin(ModelAdmin):
