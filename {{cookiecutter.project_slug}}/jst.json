@@ -1,0 +1,6 @@
+{
+    "dirs": {
+        "apps": "./core/apps/",
+        "locale": "./resources/locale/"
+    }
+}
