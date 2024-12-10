@@ -29,5 +29,8 @@ class ChangePasswordView(APIView):
         if user.check_password(request.data["old_password"]):
             user.password = make_password(request.data["new_password"])
             user.save()
-            return response.Response(data={"detail": "password changed successfully"}, status=status.HTTP_200_OK)
+            return response.Response(
+                data={"detail": "password changed successfully"},
+                status=status.HTTP_200_OK,
+            )
         raise exceptions.PermissionDenied(_("invalida password"))

@@ -44,7 +44,10 @@ class SmsViewTest(TestCase):
         with patch.object(SmsService, "send_confirm", return_value=True):
             response = self.client.post(reverse("register"), data=data)
             self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
-            self.assertEqual(response.data["detail"], "Sms %(phone)s raqamiga yuborildi" % {"phone": data["phone"]})
+            self.assertEqual(
+                response.data["detail"],
+                "Sms %(phone)s raqamiga yuborildi" % {"phone": data["phone"]},
+            )
 
     def test_confirm_view(self):
         """Test confirm view."""

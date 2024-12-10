@@ -108,7 +108,7 @@ class ResetConfirmationCodeView(views.APIView, services.UserService):
             raise PermissionDenied(str(e))
 
 
-@extend_schema(tags=['reset-password'])
+@extend_schema(tags=["reset-password"])
 class ResetSetPasswordView(views.APIView, services.UserService):
     serializer_class = sms_serializers.SetPasswordSerializer
     permission_classes = [permissions.AllowAny]
@@ -128,21 +128,21 @@ class ResetSetPasswordView(views.APIView, services.UserService):
         return response.Response({"detail": _("password updated")}, status=status.HTTP_200_OK)
 
 
-@extend_schema(tags=['register'])
+@extend_schema(tags=["register"])
 class ResendView(http_views.AbstractSendSms):
     """Resend Otp Code"""
 
     serializer_class = serializers.ResendSerializer
 
 
-@extend_schema(tags=['reset-password'])
+@extend_schema(tags=["reset-password"])
 class ResetPasswordView(http_views.AbstractSendSms):
     """Reset user password"""
 
     serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer
 
 
-@extend_schema(tags=['me'])
+@extend_schema(tags=["me"])
 class MeView(viewsets.ViewSet):
     """Get user information"""
 
@@ -153,7 +153,7 @@ class MeView(viewsets.ViewSet):
         return response.Response(serializers.UserSerializer(user).data)
 
 
-@extend_schema(tags=['me'])
+@extend_schema(tags=["me"])
 class MeUpdateView(generics.UpdateAPIView):
     serializer_class = serializers.UserSerializer
 

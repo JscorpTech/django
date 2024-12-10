@@ -4,7 +4,6 @@ UNFOLD = {
     "DASHBOARD_CALLBACK": "core.http.views.dashboard_callback",
     "SITE_TITLE": None,
     "SHOW_LANGUAGES": True,
-
     "SITE_HEADER": None,
     "SITE_URL": "/",
     "SITE_SYMBOL": "speed",  # symbol from icon set
@@ -37,6 +36,6 @@ UNFOLD = {
     "SIDEBAR": {
         "show_search": True,  # Search in applications and models names
         "show_all_applications": True,
-        "navigation": navigation.PAGES,
+        # "navigation": navigation.PAGES, # Pagelarni qo'lda qo'shish
     },
 }
