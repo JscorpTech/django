@@ -16,7 +16,6 @@ DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS: Union[List[str]] = ["*"]
 
-
 DATABASES = {
     "default": {
         "ENGINE": env.str("DB_ENGINE"),
@@ -29,29 +28,24 @@ DATABASES = {
 }
 
 INSTALLED_APPS = [
-    "modeltranslation",
-    "unfold",
-    "unfold.contrib.filters",
-    "unfold.contrib.forms",
-    "unfold.contrib.guardian",
-    "unfold.contrib.simple_history",
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-] + APPS
+                     "modeltranslation",
+                     "unfold",
+                     "unfold.contrib.filters",
+                     "unfold.contrib.forms",
+                     "unfold.contrib.guardian",
+                     "unfold.contrib.simple_history",
+                     "django.contrib.admin",
+                     "django.contrib.auth",
+                     "django.contrib.contenttypes",
+                     "django.contrib.sessions",
+                     "django.contrib.messages",
+                     "django.contrib.staticfiles",
+                 ] + APPS
 
 MODULES = [app for app in MODULES if isinstance(app, str)]
 
 for module_path in MODULES:
     INSTALLED_APPS.append("{}.apps.ModuleConfig".format(module_path))
-    config_path = "{}.config".format(module_path)
-    if os.path.exists("{}.py".format(config_path.replace(".", "/"))):
-        module = importlib.import_module(config_path)
-        module_dict = module.__dict__
-        globals().update({k: v for k, v in module_dict.items() if not k.startswith('__')})
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -94,11 +88,11 @@ TEMPLATES = [
     },
 ]
 # fmt: off
-{% if cookiecutter.runner == 'asgi' %}
+{ % if cookiecutter.runner == 'asgi' %}
 ASGI_APPLICATION = "config.asgi.application"
-{% else %}
+{ % else %}
 WSGI_APPLICATION = "config.wsgi.application"
-{% endif %}
+{ % endif %}
 # fmt: on
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -123,7 +117,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DATE_FORMAT = "d.m.y"
 TIME_FORMAT = "H:i:s"
 DATE_INPUT_FORMATS = ["%d.%m.%Y", "%Y.%d.%m", "%Y.%d.%m"]
-
 
 SEEDERS = ["core.http.seeder.UserSeeder"]
 
