@@ -9,3 +9,6 @@ from .celery import *  # noqa
 
 # !NOTE: on-storage
 # from .storage import *  # noqa
+
+# !NOTE: on-websocket
+# from .channels import * # noqa

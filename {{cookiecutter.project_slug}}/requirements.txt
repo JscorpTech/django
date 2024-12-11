@@ -27,3 +27,6 @@ uvicorn==0.32.1
 # django-storages
 # boto3
 
+# !NOTE: on-websocket
+# websockets
+# channels-redis
