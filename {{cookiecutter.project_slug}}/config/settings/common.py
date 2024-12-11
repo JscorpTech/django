@@ -47,11 +47,6 @@ MODULES = [app for app in MODULES if isinstance(app, str)]
 
 for module_path in MODULES:
     INSTALLED_APPS.append("{}.apps.ModuleConfig".format(module_path))
-    config_path = "{}.config".format(module_path)
-    if os.path.exists("{}.py".format(config_path.replace(".", "/"))):
-        module = importlib.import_module(config_path)
-        module_dict = module.__dict__
-        globals().update({k: v for k, v in module_dict.items() if not k.startswith('__')})
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
