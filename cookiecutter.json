@@ -8,7 +8,10 @@
     "runner": ["wsgi","asgi"],
     "celery": ["no","yes"],
     "cache": ["no","yes"],
-    "script": "entrypoint.sh",
+    "script": [
+        "entrypoint.sh",
+        "entrypoint-server.sh"
+    ],
     "key": "key",
     "port": "8081",
     "phone": "998888112309",

@@ -24,6 +24,9 @@ tomli==2.2.1
 uvicorn==0.32.1
 django-cacheops~=7.1
 
+# !NOTE: on-server
+# gunicorn
+
 # !NOTE: on-storage
 # django-storages
 # boto3
