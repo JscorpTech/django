@@ -1,4 +1,8 @@
 APPS = [
+    # !NOTE: on-websocket
+    # "channels",
+
+    "cacheops",
     "rest_framework",
     "corsheaders",
     "django_filters",
