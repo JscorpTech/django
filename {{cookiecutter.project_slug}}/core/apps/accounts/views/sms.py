@@ -1,21 +1,21 @@
 import typing
 import uuid
-
-from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
-from rest_framework import generics, permissions
-from rest_framework import request as rest_request
-from rest_framework import response, status, throttling, views, viewsets, request
-from rest_framework.exceptions import PermissionDenied
+from typing import Type
 
 from core import services
-from core.apps.accounts import models
-from core.apps.accounts import serializers as sms_serializers
-from core.http import exceptions
-from .. import serializers
-from core.http import views as http_views
 from django.contrib.auth import get_user_model
-from typing import Type
+from django.utils.translation import gettext_lazy as _
+from django_core import exceptions
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, permissions
+from rest_framework import request
+from rest_framework import request as rest_request
+from rest_framework import response, status, throttling, views, viewsets
+from rest_framework.exceptions import PermissionDenied
+
+from .. import models
+from .. import serializers
+from .. import serializers as sms_serializers
 
 
 class AbstractSendSms(views.APIView):
@@ -148,14 +148,14 @@ class ResetSetPasswordView(views.APIView, services.UserService):
 
 
 @extend_schema(tags=["register"])
-class ResendView(http_views.AbstractSendSms):
+class ResendView(AbstractSendSms):
     """Resend Otp Code"""
 
     serializer_class = serializers.ResendSerializer
 
 
 @extend_schema(tags=["reset-password"])
-class ResetPasswordView(http_views.AbstractSendSms):
+class ResetPasswordView(AbstractSendSms):
     """Reset user password"""
 
     serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer

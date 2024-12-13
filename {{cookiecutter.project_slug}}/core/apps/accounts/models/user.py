@@ -1,7 +1,8 @@
-from ..choices import RoleChoice
-from ..managers import UserManager
 from django.contrib.auth import models as auth_models
 from django.db import models
+
+from ..choices import RoleChoice
+from ..managers import UserManager
 
 
 class User(auth_models.AbstractUser):

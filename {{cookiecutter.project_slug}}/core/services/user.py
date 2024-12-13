@@ -1,10 +1,9 @@
-import typing
 from datetime import datetime
 
-from core.http import exceptions, models
 from core.services import sms
-from django.contrib.auth import hashers
+from django.contrib.auth import get_user_model, hashers
 from django.utils.translation import gettext as _
+from django_core import exceptions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt import tokens
 
@@ -19,7 +18,7 @@ class UserService(sms.SmsService):
         }
 
     def create_user(self, phone, first_name, last_name, password):
-        models.User.objects.update_or_create(
+        get_user_model().objects.update_or_create(
             phone=phone,
             defaults={
                 "phone": phone,
@@ -38,7 +37,7 @@ class UserService(sms.SmsService):
         except Exception:
             raise PermissionDenied(_("Serverda xatolik yuz berdi"))
 
-    def validate_user(self, user: typing.Union[models.User]) -> dict:
+    def validate_user(self, user) -> dict:
         """
         Create user if user not found
         """
@@ -48,7 +47,7 @@ class UserService(sms.SmsService):
         token = self.get_token(user)
         return token
 
-    def is_validated(self, user: typing.Union[models.User]) -> bool:
+    def is_validated(self, user) -> bool:
         """
         User is validated check
         """
@@ -60,6 +59,6 @@ class UserService(sms.SmsService):
         """
         Change password
         """
-        user = models.User.objects.filter(phone=phone).first()
+        user = get_user_model().objects.filter(phone=phone).first()
         user.set_password(password)
         user.save()

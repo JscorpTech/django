@@ -1,5 +1,5 @@
 from core.apps.accounts.serializers import ChangePasswordSerializer
-from core.http.models import User
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -13,7 +13,7 @@ class ChangePasswordViewTest(TestCase):
         self.password = "12345670"
         self.path = reverse("change-password")
 
-        self.user = User.objects.create_user(phone=self.phone, password=self.password, email="test@example.com")
+        self.user = get_user_model().create_user(phone=self.phone, password=self.password, email="test@example.com")
         self.client.force_authenticate(user=self.user)
 
     def test_change_password_success(self):

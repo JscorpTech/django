@@ -1,6 +1,6 @@
-from core.http.models import AbstractBaseModel
 from django.contrib.auth import get_user_model
 from django.db import models
+from django_core.models import AbstractBaseModel
 
 
 class ResetToken(AbstractBaseModel):

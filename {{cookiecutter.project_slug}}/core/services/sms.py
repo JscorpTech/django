@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from core.http import exceptions, models, tasks
+from django_core import exceptions, models, tasks
 
 
 class SmsService:
