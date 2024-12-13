@@ -57,7 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    {% if cookiecutter.packages.silk %}"silk.middleware.SilkyMiddleware"{% endif %}
+    {% if cookiecutter.silk %}"silk.middleware.SilkyMiddleware"{% endif %}
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -141,7 +141,5 @@ CELERY_RESULT_BACKEND = env("RABBITMQ_RESULT_BACKEND")
 
 ALLOWED_HOSTS += env("ALLOWED_HOSTS").split(",")
 CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split(",")
-{% if cookiecutter.packages.silk %}
-SILKY_AUTHORISATION = True
-SILKY_PYTHON_PROFILER = True
-{% endif %}
+{% if cookiecutter.silk %}SILKY_AUTHORISATION = True
+SILKY_PYTHON_PROFILER = True{% endif %}

@@ -1,14 +1,11 @@
 backports.tarfile==1.2.0
 celery==5.4.0
-channels==4.2.0
-django-ckeditor-5==0.2.15
 django-cors-headers==4.6.0
 django-environ==0.11.2
 django-extensions==3.2.3
 django-filter==24.3
 django-modeltranslation==0.19.11
 django-redis==5.4.0
-django-rosetta==0.10.1
 django-unfold==0.42.0
 djangorestframework-simplejwt==5.3.1
 drf-spectacular==0.28.0
@@ -22,17 +19,23 @@ platformdirs==4.3.6
 psycopg2-binary==2.9.10
 tomli==2.2.1
 uvicorn==0.32.1
-django-cacheops~=7.1
-{% if cookiecutter.packages.silk %}
-django-silk
-{% endif %}
+{% if cookiecutter.ckeditor %}django-ckeditor-5==0.2.15{% endif %}
+{% if cookiecutter.channels %}channels==4.2.0{% endif %}
+{% if cookiecutter.rosetta %}django-rosetta==0.10.1{% endif %}
+{% if cookiecutter.cacheops %}django-cacheops~=7.1{% endif %}
+{% if cookiecutter.silk %}django-silk{% endif %}
 
 # !NOTE: on-server
 # gunicorn
 
+{% if cookiecutter.storage %}
+django-storages
+boto3
+{% else %}
 # !NOTE: on-storage
 # django-storages
 # boto3
+{% endif %}
 
 # !NOTE: on-websocket
 # websockets

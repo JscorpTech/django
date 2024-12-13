@@ -10,6 +10,7 @@ CACHES = {
 
 CACHE_MIDDLEWARE_SECONDS = env("CACHE_TIMEOUT")
 
+{% if cookiecutter.cacheops %}
 CACHEOPS_REDIS = env.str("REDIS_URL")
 CACHEOPS_DEFAULTS = {
     "timeout": env.str("CACHE_TIMEOUT"),
@@ -23,3 +24,4 @@ CACHEOPS = {
 }
 CACHEOPS_DEGRADE_ON_FAILURE = True
 CACHEOPS_ENABLED = env.bool("CACHE_ENABLED", False)
+{% endif %}

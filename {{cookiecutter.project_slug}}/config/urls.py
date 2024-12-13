@@ -25,11 +25,11 @@ urlpatterns = [
 ################
 urlpatterns += [
     path("admin/", admin.site.urls),
-    path("rosetta/", include("rosetta.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
-    path("ckeditor5/", include("django_ckeditor_5.urls"), name="ck_editor_5_upload_file"),
-    {% if cookiecutter.packages.silk %}path('silk/', include('silk.urls', namespace='silk')){% endif %}
+    {% if cookiecutter.rosetta %}path("rosetta/", include("rosetta.urls")),{% endif %}
+    {% if cookiecutter.ckeditor %}path("ckeditor5/", include("django_ckeditor_5.urls"), name="ck_editor_5_upload_file"),{% endif %}
+    {% if cookiecutter.silk %}path('silk/', include('silk.urls', namespace='silk')){% endif %}
 ]
 
 ################
