@@ -1,19 +1,38 @@
 import typing
 import uuid
+from typing import Type
 
+from core import services
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from django_core import exceptions
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, permissions
+from rest_framework import request
 from rest_framework import request as rest_request
 from rest_framework import response, status, throttling, views, viewsets
 from rest_framework.exceptions import PermissionDenied
 
-from core import services
-from core.apps.accounts import models
-from core.apps.accounts import serializers as sms_serializers
-from core.http import exceptions, serializers
-from core.http import views as http_views
-from core.http.models import User
+from .. import models
+from .. import serializers
+from .. import serializers as sms_serializers
+
+
+class AbstractSendSms(views.APIView):
+    serializer_class = serializers.ResendSerializer
+    throttle_classes = [throttling.UserRateThrottle]
+    permission_classes = [permissions.AllowAny]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.service = services.UserService()
+
+    def post(self, rq: Type[request.Request]):
+        ser = self.serializer_class(data=rq.data)
+        ser.is_valid(raise_exception=True)
+        phone = ser.data.get("phone")
+        self.service.send_confirmation(phone)
+        return response.Response({"detail": _("Sms %(phone)s raqamiga yuborildi") % {"phone": phone}})
 
 
 @extend_schema(tags=["register"])
@@ -61,7 +80,7 @@ class ConfirmView(views.APIView, services.UserService):
             # Check Sms confirmation otp code
             if services.SmsService.check_confirm(phone, code=code):
                 # Create user
-                token = self.validate_user(User.objects.filter(phone=phone).first())
+                token = self.validate_user(get_user_model().filter(phone=phone).first())
                 return response.Response(
                     data={
                         "detail": _("Tasdiqlash ko'di qabul qilindi"),
@@ -91,7 +110,7 @@ class ResetConfirmationCodeView(views.APIView, services.UserService):
         try:
             services.SmsService.check_confirm(phone, code)
             token = models.ResetToken.objects.create(
-                user=User.objects.filter(phone=phone).first(),
+                user=get_user_model().filter(phone=phone).first(),
                 token=str(uuid.uuid4()),
             )
             return response.Response(
@@ -129,14 +148,14 @@ class ResetSetPasswordView(views.APIView, services.UserService):
 
 
 @extend_schema(tags=["register"])
-class ResendView(http_views.AbstractSendSms):
+class ResendView(AbstractSendSms):
     """Resend Otp Code"""
 
     serializer_class = serializers.ResendSerializer
 
 
 @extend_schema(tags=["reset-password"])
-class ResetPasswordView(http_views.AbstractSendSms):
+class ResetPasswordView(AbstractSendSms):
     """Reset user password"""
 
     serializer_class: typing.Type[serializers.ResetPasswordSerializer] = serializers.ResetPasswordSerializer

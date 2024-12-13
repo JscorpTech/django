@@ -7,7 +7,9 @@ from config.conf.apps import APPS
 from config.conf.modules import MODULES
 from config.env import env
 from django.utils.translation import gettext_lazy as _
+from rich.traceback import install
 
+install(show_locals=True)
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = env.str("DJANGO_SECRET_KEY")
@@ -109,7 +111,7 @@ TIME_FORMAT = "H:i:s"
 DATE_INPUT_FORMATS = ["%d.%m.%Y", "%Y.%d.%m", "%Y.%d.%m"]
 
 
-SEEDERS = ["core.http.seeder.UserSeeder"]
+SEEDERS = ["django_core.seeder.UserSeeder"]
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "resources/static"),
@@ -134,7 +136,7 @@ LANGUAGE_CODE = "uz"
 MEDIA_ROOT = os.path.join(BASE_DIR, "resources/media")  # Media files
 MEDIA_URL = "/resources/media/"
 
-AUTH_USER_MODEL = "http.User"
+AUTH_USER_MODEL = "accounts.User"
 
 CELERY_BROKER_URL = env("RABBITMQ_URL")
 CELERY_RESULT_BACKEND = env("RABBITMQ_RESULT_BACKEND")

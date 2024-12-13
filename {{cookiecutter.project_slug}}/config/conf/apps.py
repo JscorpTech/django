@@ -10,6 +10,6 @@ APPS = [
     "django_filters",
     "django_redis",
     "rest_framework_simplejwt",
-    "core.http.HttpConfig",
+    "django_core",
     "core.apps.accounts.apps.AccountsConfig",
 ]
