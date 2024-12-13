@@ -134,7 +134,7 @@ LANGUAGE_CODE = "uz"
 MEDIA_ROOT = os.path.join(BASE_DIR, "resources/media")  # Media files
 MEDIA_URL = "/resources/media/"
 
-AUTH_USER_MODEL = "http.User"
+AUTH_USER_MODEL = "accounts.User"
 
 CELERY_BROKER_URL = env("RABBITMQ_URL")
 CELERY_RESULT_BACKEND = env("RABBITMQ_RESULT_BACKEND")

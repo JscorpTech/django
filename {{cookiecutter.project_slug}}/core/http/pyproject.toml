@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "jst-django-core"
+version = "v1.0.1"
+description = ""
+authors = ["A'zamov Samandar <JscorpTech@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "*"
+django = "*"
+djangorestframework = "*"
+celery = "*"
+unfold = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

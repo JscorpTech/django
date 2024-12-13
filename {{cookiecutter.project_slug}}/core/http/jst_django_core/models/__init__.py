@@ -1,2 +1,2 @@
-from .core import *  # noqa
+from .base import *  # noqa
 from .user import *  # noqa

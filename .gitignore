@@ -1,5 +1,6 @@
 node_modules
 django_blueprint/
+core/http/
 git.diff
 # OS ignores
 *.DS_Store
