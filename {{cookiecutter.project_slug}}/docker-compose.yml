@@ -1,5 +1,5 @@
 networks:
-  django:
+  {{ cookiecutter.project_slug }}:
     driver: bridge
 
 volumes:
@@ -9,7 +9,7 @@ volumes:
 services:
   nginx:
     networks:
-      - django
+      - {{ cookiecutter.project_slug }}
     ports:
       - ${PORT:-8001}:80
     volumes:
@@ -20,7 +20,7 @@ services:
       dockerfile: ./docker/Dockerfile.nginx
   web:
     networks:
-      - django
+      - {{ cookiecutter.project_slug }}
     build:
       context: .
       dockerfile: ./docker/Dockerfile.web
@@ -33,7 +33,7 @@ services:
       - redis
   db:
     networks:
-      - django
+      - {{ cookiecutter.project_slug }}
     image: postgres:16
     restart: always
     environment:
@@ -44,12 +44,12 @@ services:
       - pg_data:/var/lib/postgresql/data
   redis:
     networks:
-      - django
+      - {{ cookiecutter.project_slug }}
     restart: always
     image: redis
   rabbitmq:
     networks:
-      - django
+      - {{ cookiecutter.project_slug }}
     restart: always
     image: rabbitmq:3-management
     environment:
