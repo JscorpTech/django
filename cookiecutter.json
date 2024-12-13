@@ -1,21 +1,3 @@
 {
-    "project_name": "django-blueprint",
-    "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}",
-    "settings_module": [
-        "config.settings.local",
-        "config.settings.production"
-    ],
-    "runner": ["wsgi","asgi"],
-    "celery": ["no","yes"],
-    "cache": ["no","yes"],
-    "script": [
-        "entrypoint.sh",
-        "entrypoint-server.sh"
-    ],
-    "key": "key",
-    "port": "8081",
-    "phone": "998888112309",
-    "password": "2309",
-    "max_line_length": "120",
-    "version": "0.1.0"
+    "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}"
 }

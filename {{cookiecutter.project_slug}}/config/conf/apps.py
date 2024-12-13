@@ -2,6 +2,7 @@ APPS = [
     # !NOTE: on-websocket
     # "channels",
 
+    {% if cookiecutter.packages.silk %}"silk"{% endif %}
     "cacheops",
     "rest_framework",
     "corsheaders",

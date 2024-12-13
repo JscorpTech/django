@@ -23,6 +23,9 @@ psycopg2-binary==2.9.10
 tomli==2.2.1
 uvicorn==0.32.1
 django-cacheops~=7.1
+{% if cookiecutter.packages.silk %}
+django-silk
+{% endif %}
 
 # !NOTE: on-server
 # gunicorn
