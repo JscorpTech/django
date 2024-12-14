@@ -21,6 +21,7 @@ tomli==2.2.1
 uvicorn==0.32.1
 jst-django-core~=1.0.4
 rich
+pydantic
 {% if cookiecutter.ckeditor %}django-ckeditor-5==0.2.15{% endif %}
 {% if cookiecutter.channels %}channels==4.2.0{% endif %}
 {% if cookiecutter.rosetta %}django-rosetta==0.10.1{% endif %}

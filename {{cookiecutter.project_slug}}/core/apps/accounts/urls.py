@@ -2,33 +2,25 @@
 Accounts app urls
 """
 
-from core.apps.accounts import views
-from django.urls import path
+from django.urls import path, include
 from rest_framework_simplejwt import views as jwt_views
+from .views import RegisterView, ResetPasswordView, MeView, ChangePasswordView
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register("auth", RegisterView, basename="auth")
+router.register("auth", ResetPasswordView, basename="reset-password")
+router.register("auth", MeView, basename="me")
+router.register("auth", ChangePasswordView, basename="change-password")
+
 
 urlpatterns = [
-    path("auth/confirm/", views.ConfirmView.as_view(), name="confirm"),
-    path("auth/register/", views.RegisterView.as_view(), name="register"),
-    path("auth/resend/", views.ResendView.as_view(), name="resend"),
-    path("auth/me/", views.MeView.as_view({"get": "get"}), name="me"),
-    path("auth/me/update/", views.MeUpdateView.as_view(), name="me-update"),
+    path("", include(router.urls)),
     path("auth/token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("auth/token/verify/", jwt_views.TokenVerifyView.as_view(), name="token_verify"),
-    path("auth/reset/password/", views.ResetPasswordView.as_view(), name="reset-password"),
-    path("auth/reset/set/", views.ResetSetPasswordView.as_view(), name="set-password"),
     path(
         "auth/token/refresh/",
         jwt_views.TokenRefreshView.as_view(),
         name="token_refresh",
-    ),
-    path(
-        "auth/reset/confirm/",
-        views.ResetConfirmationCodeView.as_view(),
-        name="reset-confirmation-code",
-    ),
-    path(
-        "auth/change/password/",
-        views.ChangePasswordView.as_view(),
-        name="change-password",
     ),
 ]
