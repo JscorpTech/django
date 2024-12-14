@@ -29,6 +29,10 @@ DATABASES = {
     }
 }
 
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.BCryptPasswordHasher",
+]
+
 INSTALLED_APPS = [
     "modeltranslation",
     "unfold",
