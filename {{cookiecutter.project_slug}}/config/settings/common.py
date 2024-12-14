@@ -111,7 +111,7 @@ TIME_FORMAT = "H:i:s"
 DATE_INPUT_FORMATS = ["%d.%m.%Y", "%Y.%d.%m", "%Y.%d.%m"]
 
 
-SEEDERS = ["django_core.seeder.UserSeeder"]
+SEEDERS = ["core.apps.accounts.seeder.UserSeeder"]
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "resources/static"),
