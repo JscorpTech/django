@@ -8,6 +8,8 @@ class UserSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "password",
+            "groups",
+            "user_permissions"
         ]
         model = get_user_model()
 
