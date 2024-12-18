@@ -63,8 +63,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    {% if cookiecutter.silk %}"silk.middleware.SilkyMiddleware"{% endif %}
 ]
+if env.str("PROJECT_ENV") == "debug":
+    MIDDLEWARE += [
+        {% if cookiecutter.silk %}"silk.middleware.SilkyMiddleware"{% endif %}
+    ]
+
 
 ROOT_URLCONF = "config.urls"
 
