@@ -1,6 +1,7 @@
+from config.env import env
+
 APPS = [
     {% if cookiecutter.channels %}"channels",{% endif %}
-    {% if cookiecutter.silk %}"silk",{% endif %}
     {% if cookiecutter.cacheops %}"cacheops",{% endif %}
     {% if cookiecutter.rosetta %}"rosetta",{% endif %}
     {% if cookiecutter.ckeditor %}"django_ckeditor_5",{% endif %}
@@ -13,3 +14,8 @@ APPS = [
     "django_core",
     "core.apps.accounts.apps.AccountsConfig",
 ]
+
+if env.str("PROJECT_ENV") == "debug":
+    APPS += [
+        {% if cookiecutter.silk %}"silk",{% endif %},
+    ]
