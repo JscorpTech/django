@@ -19,7 +19,7 @@ platformdirs==4.3.6
 psycopg2-binary==2.9.10
 tomli==2.2.1
 uvicorn==0.32.1
-jst-django-core~=1.0.4
+jst-django-core~=1.0.8
 rich
 pydantic
 bcrypt
