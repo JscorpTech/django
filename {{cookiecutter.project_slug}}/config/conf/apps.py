@@ -17,5 +17,5 @@ APPS = [
 
 if env.str("PROJECT_ENV") == "debug":
     APPS += [
-        {% if cookiecutter.silk %}"silk",{% endif %},
+        {% if cookiecutter.silk %}"silk",{% endif %}
     ]

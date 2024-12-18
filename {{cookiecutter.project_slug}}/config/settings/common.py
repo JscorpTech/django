@@ -66,7 +66,7 @@ MIDDLEWARE = [
 ]
 if env.str("PROJECT_ENV") == "debug":
     MIDDLEWARE += [
-        {% if cookiecutter.silk %}"silk.middleware.SilkyMiddleware"{% endif %}
+        {% if cookiecutter.silk %}"silk.middleware.SilkyMiddleware",{% endif %}
     ]
 
 
