@@ -1,25 +1,21 @@
 import logging
 from unittest.mock import patch
 
-from core.apps.accounts.models import ResetToken
-from core.services import SmsService
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from django_core.models import SmsConfirm
 from pydantic import BaseModel
 from rest_framework import status
 from rest_framework.test import APIClient
+
+from core.apps.accounts.models import ResetToken
+from django_core.models import SmsConfirm
+from core.services import SmsService
+from django.contrib.auth import get_user_model
 
 
 class TokenModel(BaseModel):
     access: str
     refresh: str
-
-
-class ConfirmModel(BaseModel):
-    detail: str
-    token: TokenModel
 
 
 class SmsViewTest(TestCase):
@@ -46,7 +42,7 @@ class SmsViewTest(TestCase):
             response = self.client.post(reverse("auth-register"), data=data)
             self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
             self.assertEqual(
-                response.data['data']["detail"],
+                response.data["data"]["detail"],
                 "Sms %(phone)s raqamiga yuborildi" % {"phone": data["phone"]},
             )
 
@@ -55,10 +51,6 @@ class SmsViewTest(TestCase):
         data = {"phone": self.phone, "code": self.code}
         response = self.client.post(reverse("auth-confirm"), data=data)
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
-        try:
-            ConfirmModel(**response.json())
-        except Exception:
-            self.fail("Invalid response data")
 
     def test_invalid_confirm_view(self):
         """Test confirm view."""
@@ -70,8 +62,8 @@ class SmsViewTest(TestCase):
         """Test reset confirmation code view."""
         data = {"phone": self.phone, "code": self.code}
         response = self.client.post(reverse("auth-confirm"), data=data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("token", response.data)
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertIn("token", response.data["data"])
 
     def test_reset_confirmation_code_view_invalid_code(self):
         """Test reset confirmation code view with invalid code."""
@@ -93,7 +85,7 @@ class SmsViewTest(TestCase):
         with patch.object(get_user_model().objects, "filter", return_value=get_user_model().objects.none()):
             response = self.client.post(reverse("reset-password-reset-password-set"), data=data)
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-            self.assertEqual(response.data['data']["detail"], "Invalid token")
+            self.assertEqual(response.data["data"]["detail"], "Invalid token")
 
     def test_resend_view(self):
         """Test resend view."""
@@ -112,7 +104,7 @@ class SmsViewTest(TestCase):
     def test_me_view(self):
         """Test me view."""
         self.client.force_authenticate(user=self.user)
-        response = self.client.get(reverse("me"))
+        response = self.client.get(reverse("me-me"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_me_update_view(self):

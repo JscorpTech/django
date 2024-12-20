@@ -18,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile.nginx
+    depends_on:
+      - web
   web:
     networks:
       - {{ cookiecutter.project_slug }}
