@@ -21,5 +21,5 @@ application = ProtocolTypeRouter(
     }
 )
 {% else %}
-application = asgi_application()
+application = asgi_application
 {% endif %}
