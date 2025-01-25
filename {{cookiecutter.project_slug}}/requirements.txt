@@ -4,7 +4,6 @@ django-cors-headers==4.6.0
 django-environ==0.11.2
 django-extensions==3.2.3
 django-filter==24.3
-django-modeltranslation==0.19.11
 django-redis==5.4.0
 django-unfold==0.42.0
 djangorestframework-simplejwt==5.3.1
@@ -23,6 +22,10 @@ jst-django-core~=1.0.8
 rich
 pydantic
 bcrypt
+
+{% if cookiecutter.parler %}jst-parler{% endif %}
+{% if cookiecutter.parler %}jst-parler-rest{% endif %}
+{% if cookiecutter.modeltranslation %}django-modeltranslation~=0.19.11{% endif %}
 {% if cookiecutter.ckeditor %}django-ckeditor-5==0.2.15{% endif %}
 {% if cookiecutter.channels %}channels==4.2.0{% endif %}
 {% if cookiecutter.rosetta %}django-rosetta==0.10.1{% endif %}
