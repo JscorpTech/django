@@ -36,7 +36,6 @@ PASSWORD_HASHERS = [
 ]
 
 INSTALLED_APPS = [
-    "modeltranslation",
     "unfold",
     "unfold.contrib.filters",
     "unfold.contrib.forms",
@@ -139,8 +138,9 @@ LANGUAGES = (
 )
 LOCALE_PATHS = [os.path.join(BASE_DIR, "resources/locale")]
 
-MODELTRANSLATION_LANGUAGES = ("uz", "ru", "en")
-MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"
+
+
+
 LANGUAGE_CODE = "uz"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "resources/media")  # Media files
@@ -155,3 +155,18 @@ ALLOWED_HOSTS += env("ALLOWED_HOSTS").split(",")
 CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split(",")
 {% if cookiecutter.silk %}SILKY_AUTHORISATION = True
 SILKY_PYTHON_PROFILER = True{% endif %}
+{% if cookiecutter.modeltranslation %}
+MODELTRANSLATION_LANGUAGES = ("uz", "ru", "en")
+MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"{% endif %}
+{% if cookiecutter.parler %}
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'uz',},
+        {'code': 'en',},
+        {'code': 'ru',},
+    ),
+    'default': {
+        'fallbacks': ['uz'],          # defaults to PARLER_DEFAULT_LANGUAGE_CODE
+        'hide_untranslated': False,   # the default; let .active_translations() return fallbacks too.
+    }
+}{% endif %}

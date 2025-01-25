@@ -50,5 +50,13 @@
         true,
         false
     ],
-    "version": "0.1.0"
+    "modeltranslation": [
+        true,
+        false
+    ],
+    "parler": [
+        false,
+        true
+    ],
+    "version": "0.1.1"
 }
