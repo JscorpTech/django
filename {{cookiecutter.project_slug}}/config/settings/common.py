@@ -170,3 +170,20 @@ PARLER_LANGUAGES = {
         'hide_untranslated': False,   # the default; let .active_translations() return fallbacks too.
     }
 }{% endif %}
+
+
+JST_LANGUAGES = [
+    {
+        "code": "uz",
+        "name": "Uzbek",
+        "is_default": True,
+    },
+    {
+        "code": "en",
+        "name": "English",
+    },
+    {
+        "code": "ru",
+        "name": "Russia",
+    }
+]

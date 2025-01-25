@@ -1,1 +1,3 @@
-MODULES = []
+MODULES = [
+    "core.apps.shared",
+]
