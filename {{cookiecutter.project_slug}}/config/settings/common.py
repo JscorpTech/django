@@ -36,6 +36,7 @@ PASSWORD_HASHERS = [
 ]
 
 INSTALLED_APPS = [
+    {% if cookiecutter.modeltranslation %}"modeltranslation",{% endif %}
     "unfold",
     "unfold.contrib.filters",
     "unfold.contrib.forms",
