@@ -5,7 +5,6 @@ APPS = [
     {% if cookiecutter.cacheops %}"cacheops",{% endif %}
     {% if cookiecutter.rosetta %}"rosetta",{% endif %}
     {% if cookiecutter.ckeditor %}"django_ckeditor_5",{% endif %}
-    {% if cookiecutter.modeltranslation %}"modeltranslation",{% endif %}
     {% if cookiecutter.parler %}"parler",{% endif %}
     "drf_spectacular",
     "rest_framework",
