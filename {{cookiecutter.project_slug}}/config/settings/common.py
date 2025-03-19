@@ -138,9 +138,6 @@ LANGUAGES = (
 )
 LOCALE_PATHS = [os.path.join(BASE_DIR, "resources/locale")]
 
-
-
-
 LANGUAGE_CODE = "uz"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "resources/media")  # Media files
@@ -148,8 +145,8 @@ MEDIA_URL = "/resources/media/"
 
 AUTH_USER_MODEL = "accounts.User"
 
-CELERY_BROKER_URL = env("RABBITMQ_URL")
-CELERY_RESULT_BACKEND = env("RABBITMQ_RESULT_BACKEND")
+CELERY_BROKER_URL = env("REDIS_URL")
+CELERY_RESULT_BACKEND = env("REDIS_URL")
 
 ALLOWED_HOSTS += env("ALLOWED_HOSTS").split(",")
 CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split(",")

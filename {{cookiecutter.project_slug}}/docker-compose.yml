@@ -53,13 +53,3 @@ services:
       - {{ cookiecutter.project_slug }}
     restart: always
     image: redis
-  rabbitmq:
-    networks:
-      - {{ cookiecutter.project_slug }}
-    restart: always
-    image: rabbitmq:3-management
-    environment:
-      - RABBITMQ_DEFAULT_PASS=2309
-      - RABBITMQ_DEFAULT_VHOST=vhost
-    volumes:
-      - rabbitmq:/var/lib/rabbitmq
