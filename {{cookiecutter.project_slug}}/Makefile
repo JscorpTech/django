@@ -1,3 +1,6 @@
+
+start: up makemigration migrate seed
+
 up:
 	docker compose up -d
 
@@ -7,11 +10,28 @@ down:
 build:
 	docker compose build
 
+rebuild: down build up
+
 deploy:
 	docker compose down
 	docker compose up -d
 
-log:
+logs:
 	docker compose logs -f
 
-.PHONY: up
+makemigration:
+	docker compose exec web python manage.py makemigrations --noinput
+
+migrate:
+	docker compose exec web python manage.py migrate
+
+seed:
+	docker compose exec web python manage.py seed
+
+fresh:
+	docker compose exec web python manage.py reset_db
+
+test:
+	docker compose exec web pytest -v
+
+makemigrate: makemigration migrate
