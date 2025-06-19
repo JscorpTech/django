@@ -22,6 +22,7 @@ jst-django-core~=1.1.8
 rich
 pydantic
 bcrypt
+pytest-django
 
 {% if cookiecutter.parler %}jst-parler{% endif %}
 {% if cookiecutter.parler %}jst-parler-rest{% endif %}
