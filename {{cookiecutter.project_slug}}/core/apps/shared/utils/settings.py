@@ -14,4 +14,4 @@ def get_exchange_rate():
     exchange_rate = get_config("currency", "exchange_rate")
     if exchange_rate is None:
         raise Exception(_("USD kursi kiritilmagan iltimos adminga murojat qiling"))
-    return float(exchange_rate)
+    return float(exchange_rate[0]) 
