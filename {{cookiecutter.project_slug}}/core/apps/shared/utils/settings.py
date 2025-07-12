@@ -3,10 +3,10 @@ from typing import Optional
 from django.utils.translation import gettext_lazy as _
 
 
-def get_config(settings: str, key: str) -> Optional[str]:
+def get_config(settings: str, key: str, default=None) -> Optional[str]:
     config = OptionsModel.objects.filter(settings__key=settings, key=key)
     if not config.exists():
-        return None
+        return default
     return config.first().value
 
 
