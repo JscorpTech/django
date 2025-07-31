@@ -1,7 +1,7 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
-from django.contrib.postgres.fields import ArrayField
 
 
 class SettingsModel(AbstractBaseModel):

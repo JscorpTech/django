@@ -1,13 +1,19 @@
+import random
 from datetime import datetime, timedelta
 
-from django_core import exceptions, models, tasks
+from config.env import env
+from core.apps.accounts.tasks.sms import SendConfirm
+from django_core import exceptions, models
 
 
 class SmsService:
     @staticmethod
     def send_confirm(phone):
         # TODO: Deploy this change when deploying -> code = random.randint(1000, 9999) # noqa
-        code = 1111
+        if env.bool("OTP_PROD", False):
+            code = "".joint(random.randint(0, 9) for _ in range(env.int("OTP_SIZE", 4)))
+        else:
+            code = env.int("OTP_DEFAULT", 1111) 
 
         sms_confirm, status = models.SmsConfirm.objects.get_or_create(phone=phone, defaults={"code": code})
 
@@ -28,7 +34,7 @@ class SmsService:
         )  # noqa
         sms_confirm.save()
 
-        tasks.SendConfirm.delay(phone, code)
+        SendConfirm.delay(phone, code)
         return True
 
     @staticmethod
@@ -47,7 +53,7 @@ class SmsService:
             expired = sms_confirm.interval(sms_confirm.unlock_time)
             raise exceptions.SmsException(f"Try again in {expired}")
 
-        if sms_confirm.code == code:
+        if str(sms_confirm.code) == str(code):
             sms_confirm.delete()
             return True
 
