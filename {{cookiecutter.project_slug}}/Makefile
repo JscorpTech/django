@@ -1,5 +1,5 @@
 
-start: up makemigration migrate seed
+start: up seed
 
 up:
 	docker compose up -d
