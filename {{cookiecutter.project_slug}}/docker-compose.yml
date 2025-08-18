@@ -28,9 +28,9 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile.web
     restart: always
-    command: ${COMMAND:-sh ./entrypoint.sh}
     environment:
       - PYTHONPYCACHEPREFIX=/var/cache/pycache
+      - SCRIPT=${SCRIPT:-entrypoint.sh}
     volumes:
       - .:/code
       - pycache:/var/cache/pycache
@@ -52,4 +52,5 @@ services:
     networks:
       - {{ cookiecutter.project_slug }}
     restart: always
+
     image: redis
