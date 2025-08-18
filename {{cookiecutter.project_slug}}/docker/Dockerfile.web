@@ -1,6 +1,7 @@
 FROM jscorptech/django:v0.5
 
-ENV SCRIPT="entrypoint.sh"
+ARG SCRIPT="entrypoint.sh"
+ENV SCRIPT=$SCRIPT
 
 WORKDIR /code
 
