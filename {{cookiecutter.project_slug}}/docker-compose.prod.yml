@@ -1,5 +1,5 @@
 networks:
-  {{ cookiecutter.project_slug }}:
+  smart_school:
     driver: bridge
 
 volumes:
@@ -10,7 +10,7 @@ volumes:
 services:
   nginx:
     networks:
-      - {{ cookiecutter.project_slug }}
+      - smart_school
     ports:
       - ${PORT:-8001}:80
     volumes:
@@ -23,35 +23,34 @@ services:
       - web
   web:
     networks:
-      - {{ cookiecutter.project_slug }}
+      - smart_school
     build:
       context: .
       dockerfile: ./docker/Dockerfile.web
     restart: always
+    command: ${COMMAND:-sh ./entrypoint.sh}
     environment:
       - PYTHONPYCACHEPREFIX=/var/cache/pycache
       - SCRIPT=${SCRIPT:-entrypoint.sh}
     volumes:
       - .:/code
-      - ../files/resources/media/:/resources/media
       - pycache:/var/cache/pycache
     depends_on:
       - db
       - redis
   db:
     networks:
-      - {{ cookiecutter.project_slug }}
+      - smart_school
     image: postgres:16
     restart: always
     environment:
       POSTGRES_DB: django
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: '2309'
+      POSTGRES_PASSWORD: "2309"
     volumes:
       - pg_data:/var/lib/postgresql/data
   redis:
     networks:
-      - {{ cookiecutter.project_slug }}
+      - smart_school
     restart: always
-
     image: redis
