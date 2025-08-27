@@ -16,6 +16,7 @@ deploy: down build up makemigrate
 
 deploy-prod:
 	docker compose -f docker-compose.prod.yml down
+	docker compose -f docker-compose.prod.yml build
 	docker compose -f docker-compose.prod.yml up -d
 	docker compose -f docker-compose.prod.yml exec web python manage.py makemigrations --noinput
 	docker compose -f docker-compose.prod.yml exec web python manage.py migrate
