@@ -9,6 +9,8 @@ COPY ./ /code
 
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
-RUN mv ./resources/scripts/$SCRIPT . && chmod +x $SCRIPT
+COPY ./resources/scripts/$SCRIPT /code/$SCRIPT
+RUN chmod +x /code/resources/scripts/$SCRIPT
+CMD sh /code/resources/scripts/$SCRIPT
 
-CMD sh $SCRIPT
+
