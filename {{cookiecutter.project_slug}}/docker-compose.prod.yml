@@ -1,0 +1,57 @@
+networks:
+  {{ cookiecutter.project_slug }}:
+    driver: bridge
+
+volumes:
+  pg_data: null
+  rabbitmq: null
+  pycache: null
+
+services:
+  nginx:
+    networks:
+      - {{ cookiecutter.project_slug }}
+    ports:
+      - ${PORT:-8001}:80
+    volumes:
+      - ./resources/layout/nginx.conf:/etc/nginx/nginx.conf
+      - ./resources/:/usr/share/nginx/html/resources/
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.nginx
+    depends_on:
+      - web
+  web:
+    networks:
+      - {{ cookiecutter.project_slug }}
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.web
+    restart: always
+    environment:
+      - PYTHONPYCACHEPREFIX=/var/cache/pycache
+      - SCRIPT=${SCRIPT:-entrypoint.sh}
+    volumes:
+      - .:/code
+      - ../files/resources/media/:/resources/media
+      - pycache:/var/cache/pycache
+    depends_on:
+      - db
+      - redis
+  db:
+    networks:
+      - {{ cookiecutter.project_slug }}
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: django
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: '2309'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  redis:
+    networks:
+      - {{ cookiecutter.project_slug }}
+    restart: always
+
+    image: redis
