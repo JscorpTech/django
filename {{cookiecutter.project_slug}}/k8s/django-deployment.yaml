@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django 
+  template:
+    metadata:
+      labels:
+        app: django 
+    spec:
+      containers:
+        - name: django 
+          image: "2.0" 
+          ports:
+            - containerPort: 8000 
+          volumeMounts:
+            - name: assets
+              mountPath: /code/resources/staticfiles
+            - name: media
+              mountPath: /code/resources/media
+      volumes:
+        - name: assets
+          persistentVolumeClaim:
+            claimName: assets
+        - name: media 
+          persistentVolumeClaim:
+            claimName: media 
+
+

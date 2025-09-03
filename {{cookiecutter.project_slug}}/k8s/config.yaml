@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    worker_processes 1;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include       mime.types;
+        default_type  application/octet-stream;
+
+        # Logging settings (optional)
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                          '$status $body_bytes_sent "$http_referer" '
+                          '"$http_user_agent" "$http_x_forwarded_for"';
+        access_log  /var/log/nginx/access.log  main;
+
+        sendfile        on;
+        tcp_nopush      on;
+        tcp_nodelay     on;
+        keepalive_timeout  65;
+        types_hash_max_size 2048;
+        client_max_body_size 1024M;
+
+        # Server block for handling requests
+        server {
+            listen 80;
+
+            server_name _;
+
+          location / {
+              proxy_pass http://django:8000;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto https;
+              proxy_set_header Host $http_host;
+          }
+          location /ws/ {
+              proxy_pass http://django:8000;  # Uvicorn serveri ishga tushadigan port
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header Host $http_host;
+          }
+
+          location /resources/static/ {
+              alias /usr/share/nginx/html/resources/staticfiles/;
+          }
+
+          location /resources/media/ {
+              alias /usr/share/nginx/html/resources/media/;
+          }
+      }
+    }
+

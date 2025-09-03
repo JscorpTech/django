@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - name: db 
+          image: postgres:16 
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: "2309" 
+            - name: POSTGRES_DB
+              value: django
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: db
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db
+          persistentVolumeClaim:
+            claimName: db

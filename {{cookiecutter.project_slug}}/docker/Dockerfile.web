@@ -3,12 +3,20 @@ FROM jscorptech/django:v0.5
 ARG SCRIPT="entrypoint.sh"
 ENV SCRIPT=$SCRIPT
 
+
 WORKDIR /code
 
 COPY ./ /code
 
+RUN apk add --no-cache curl || apk add --no-cache openbsd-netcat
+
+
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
-RUN mv ./resources/scripts/$SCRIPT . && chmod +x $SCRIPT
+COPY ./resources/scripts/$SCRIPT /code/$SCRIPT
 
-CMD sh $SCRIPT
+RUN chmod +x /code/resources/scripts/$SCRIPT
+
+CMD sh /code/resources/scripts/$SCRIPT
+
+
