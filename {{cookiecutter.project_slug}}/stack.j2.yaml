@@ -68,7 +68,7 @@ services:
         max-file: "3"
 
   web:
-    image: jscorptech/{{ cookiecutter.project_slug }}:latest
+    image: "{{ '{{ username }}' }}/{{ '{{ name }}' }}:{{ '{{ tag }}' }}"
     environment:
       - SCRIPT=entrypoint.sh
       - PYTHONPYCACHEPREFIX=/var/cache/pycache
