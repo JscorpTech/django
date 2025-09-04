@@ -19,7 +19,7 @@ def home(request):
 # My apps url
 ################
 urlpatterns = [
-    path("", home),
+    path("health/", home),
     path("", include("core.apps.accounts.urls")),
 ]
 
