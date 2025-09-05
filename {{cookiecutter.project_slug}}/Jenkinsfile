@@ -1,0 +1,169 @@
+pipeline {
+    agent any
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
+    environment {
+        PROD_ENV     = "/opt/env/.env.{{ cookiecutter.project_slug }}"
+        IMAGE_NAME   = "{{ cookiecutter.project_slug }}"
+        TEST_TAG     = "test"
+        PROD_TAG     = "latest"
+        CONTAINER_DB = "{{ cookiecutter.project_slug }}_db_test"
+        CONTAINER_WEB = "{{ cookiecutter.project_slug }}_web_test"
+        CONTAINER_REDIS = "{{ cookiecutter.project_slug }}_redis_test"
+        STACK_NAME = "{{ cookiecutter.project_slug }}"
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', credentialsId: 'ssh', url: 'git@github.com:JscorpTech/{{ cookiecutter.project_slug }}.git'
+                stash includes: 'stack.j2.yaml', name: "stack.j2.yaml"
+            }
+        }
+        stage('Build Test Image') {
+            steps {
+                sh """
+                    cp ${PROD_ENV} ./.env
+                    docker build -t ${IMAGE_NAME}:${TEST_TAG} -f ./docker/Dockerfile.web .
+                """
+            }
+        }
+
+        stage('Start Test DB') {
+            steps {
+                sh """
+                    docker run -d --rm --name ${CONTAINER_DB} -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=testdb postgres:16
+                    docker run -d --rm --name ${CONTAINER_REDIS} redis
+                    echo "⏳ Waiting for database..."
+                    for i in {1..30}; do
+                        if docker exec ${CONTAINER_DB} pg_isready -U postgres >/dev/null 2>&1; then
+                            echo "✅ Database ready"
+                            break
+                        fi
+                        echo "Database not ready yet... retrying..."
+                        sleep 2
+                    done
+                """
+            }
+        }
+
+        stage('Run Migrations & Tests') {
+            steps {
+                sh """
+                    docker run --rm --name ${CONTAINER_WEB} --link ${CONTAINER_DB}:db --link ${CONTAINER_REDIS}:redis \
+                        -e DB_HOST=db \
+                        -e DB_PORT=5432 \
+                        -e DB_NAME=testdb \
+                        -e DB_USER=postgres \
+                        -e DB_PASSWORD=postgres \
+                        -e DJANGO_SETTINGS_MODULE=config.settings.test \
+                        ${IMAGE_NAME}:${TEST_TAG} \
+                        sh -c "python manage.py migrate && pytest -v"
+                """
+            }
+        }
+
+        stage('Build Production Image') {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            steps {
+                sh """
+                    cp ${PROD_ENV} ./.env
+                    docker build -t ${IMAGE_NAME}:${PROD_TAG} -f ./docker/Dockerfile.web .
+                """
+            }
+        }
+
+        stage('Publish to DockerHub') {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+                        docker tag ${IMAGE_NAME}:${PROD_TAG} ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
+                        docker tag ${IMAGE_NAME}:${PROD_TAG} ${DOCKER_USER}/${IMAGE_NAME}:${PROD_TAG}
+                        docker push ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}
+                        docker push ${DOCKER_USER}/${IMAGE_NAME}:${PROD_TAG}
+                    '''
+                }
+            }
+        }
+        stage("Generate stack.yaml") {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            agent {
+                docker {
+                    image 'python:3.13-slim'
+                    args '-u root'
+                }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    unstash "stack.j2.yaml"
+                    sh """
+                        pip install jinja2-cli
+                        jinja2 stack.j2.yaml -D username=${DOCKER_USER} -D name=${IMAGE_NAME} -D tag=${BUILD_NUMBER} > stack.yaml
+                    """
+                    stash includes: 'stack.yaml', name: 'stackfile'
+                }
+            }
+        }
+        stage('Deploy stack') {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            steps {
+                unstash 'stackfile'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                       docker stack deploy -c stack.yaml ${STACK_NAME}
+                    '''
+                }
+            }
+        }
+
+    }
+
+    post {
+        always {
+            sh """
+                docker stop ${CONTAINER_DB} || true
+                docker stop ${CONTAINER_REDIS} || true
+            """
+            echo "Pipeline finished: ${currentBuild.currentResult}"
+        }
+
+        success {
+            withCredentials([
+                string(credentialsId: 'bot-token', variable: 'BOT_TOKEN'),
+                string(credentialsId: 'chat-id', variable: 'CHAT_ID')
+            ]) {
+                sh '''
+                curl -s -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage \
+                -d chat_id=${CHAT_ID} \
+                -d text="✅ SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}"
+                '''
+            }
+        }
+
+        failure {
+            withCredentials([
+                string(credentialsId: 'bot-token', variable: 'BOT_TOKEN'),
+                string(credentialsId: 'chat-id', variable: 'CHAT_ID')
+            ]) {
+                sh '''
+                curl -s -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage \
+                -d chat_id=${CHAT_ID} \
+                -d text="🚨 FAILED: ${JOB_NAME} #${BUILD_NUMBER}"
+                '''
+            }
+        }
+    }
+}
