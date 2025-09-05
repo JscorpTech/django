@@ -120,7 +120,7 @@ pipeline {
                 unstash 'stackfile'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
-                       docker stack deploy -c stack.yaml ${STACK_NAME}
+                       docker stack deploy -c stack.yaml --env-file .env ${STACK_NAME}
                     '''
                 }
             }
