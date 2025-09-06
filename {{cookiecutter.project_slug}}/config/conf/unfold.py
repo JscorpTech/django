@@ -41,9 +41,6 @@ UNFOLD = {
     # "LOGIN": {
     #     "image": lambda request: static("images/login.png"),
     # },
-    "STYLES": [
-        lambda request: static("css/tailwind.css"),
-    ],
     "BORDER_RADIUS": "10px",
     "COLORS": {
         "base": {
