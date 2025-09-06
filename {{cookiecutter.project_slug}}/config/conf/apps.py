@@ -16,7 +16,7 @@ APPS = [
     "core.apps.accounts.apps.AccountsConfig",
 ]
 
-if env.str("PROJECT_ENV") == "debug":
+if env.bool("SILK_ENEBLED", False):
     APPS += [
         {% if cookiecutter.silk %}"silk",{% endif %}
     ]
