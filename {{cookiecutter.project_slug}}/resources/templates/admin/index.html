@@ -22,7 +22,6 @@
 {% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static "/css/output.css" %}">
     {{ block.super }}
     <div x-data="data">
         {% component 'unfold/components/container.html' %}
