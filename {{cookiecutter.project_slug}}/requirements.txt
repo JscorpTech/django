@@ -5,7 +5,7 @@ django-environ==0.11.2
 django-extensions==3.2.3
 django-filter==24.3
 django-redis==5.4.0
-django-unfold==0.42.0
+django-unfold==0.65.0
 djangorestframework-simplejwt==5.3.1
 drf-spectacular==0.28.0
 importlib-metadata==8.5.0
