@@ -38,7 +38,7 @@ services:
         max-file: "3"
 
   redis:
-    image: redis:7-alpine
+    image: jscorptech/nginx:v1 
     command: ["redis-server", "--appendonly", "yes"]
     networks:
       - {{ cookiecutter.project_slug }}
@@ -58,8 +58,8 @@ services:
         order: start-first
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
+      interval: 15s
+      timeout: 10s
       retries: 5
     logging:
       driver: json-file
