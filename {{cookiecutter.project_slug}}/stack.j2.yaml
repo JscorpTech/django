@@ -38,7 +38,7 @@ services:
         max-file: "3"
 
   redis:
-    image: nginx:1.27-alpine
+    image: redis:alpine 
     command: ["redis-server", "--appendonly", "yes"]
     networks:
       - {{ cookiecutter.project_slug }}
