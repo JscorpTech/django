@@ -38,7 +38,7 @@ services:
         max-file: "3"
 
   redis:
-    image: jscorptech/nginx:v1 
+    image: nginx:1.27-alpine
     command: ["redis-server", "--appendonly", "yes"]
     networks:
       - {{ cookiecutter.project_slug }}
@@ -106,7 +106,7 @@ services:
         max-file: "3"
 
   nginx:
-    image: nginx:1.27-alpine
+    image: jscorptech/nginx:v1
     ports:
       - mode: ingress 
         target: 80
