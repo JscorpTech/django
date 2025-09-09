@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    triggers {
-        pollSCM('* * * * *')
-    }
-
     environment {
         PROD_ENV     = "/opt/env/.env.{{ cookiecutter.project_slug }}"
         IMAGE_NAME   = "{{ cookiecutter.project_slug }}"
@@ -20,7 +16,6 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main', credentialsId: 'ssh', url: 'git@github.com:JscorpTech/{{ cookiecutter.project_slug }}.git'
-                stash includes: 'stack.j2.yaml', name: "stack.j2.yaml"
             }
         }
         stage('Build Image') {
@@ -91,25 +86,22 @@ pipeline {
                 }
             }
         }
-        stage("Generate stack.yaml") {
+        stage("Update stack.yaml") {
             when {
                 expression { currentBuild.currentResult == "SUCCESS" }
             }
-            agent {
-                docker {
-                    image 'python:3.13-slim'
-                    args '-u root'
-                }
-            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    unstash "stack.j2.yaml"
                     sh """
-                        pip install jinja2-cli
-                        jinja2 stack.j2.yaml -D username=${DOCKER_USER} -D name=${IMAGE_NAME} -D tag=${BUILD_NUMBER} > stack.yaml
+                        sed -i 's|image: ${DOCKER_USER}/${IMAGE_NAME}:.*|image: ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}|' stack.yaml
+                        git config --global user.email "admin@jscorp.uz"
+                        git config --global user.name "Jenkins"
+                        git add stack.yaml
+                        git commit -m "feat(swarm) Update image tag to ${BUILD_NUMBER} [ci skip]"
+                        git push origin dev
                     """
-                    stash includes: 'stack.yaml', name: 'stackfile'
                 }
+
             }
         }
         stage('Deploy stack') {
@@ -117,7 +109,6 @@ pipeline {
                 expression { currentBuild.currentResult == "SUCCESS" }
             }
             steps {
-                unstash 'stackfile'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                        docker stack deploy -c stack.yaml ${STACK_NAME}
