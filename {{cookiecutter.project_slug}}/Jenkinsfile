@@ -96,6 +96,7 @@ pipeline {
                         sed -i 's|image: ${DOCKER_USER}/${IMAGE_NAME}:.*|image: ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}|' stack.yaml
                         git config --global user.email "admin@jscorp.uz"
                         git config --global user.name "Jenkins"
+                        git branch -M dev
                         git add stack.yaml
                         git commit -m "feat(swarm) Update image tag to ${BUILD_NUMBER} [ci skip]"
                         git push origin dev
