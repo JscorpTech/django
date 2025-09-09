@@ -11,7 +11,7 @@ class SmsService:
     def send_confirm(phone):
         # TODO: Deploy this change when deploying -> code = random.randint(1000, 9999) # noqa
         if env.bool("OTP_PROD", False):
-            code = "".joint(random.randint(0, 9) for _ in range(env.int("OTP_SIZE", 4)))
+            code = "".join(random.randint(0, 9) for _ in range(env.int("OTP_SIZE", 4)))
         else:
             code = env.int("OTP_DEFAULT", 1111) 
 
