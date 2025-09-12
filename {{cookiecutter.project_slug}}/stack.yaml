@@ -68,7 +68,7 @@ services:
         max-file: "3"
 
   web:
-    image: "{{ '{{ username }}' }}/{{ '{{ name }}' }}:{{ '{{ tag }}' }}"
+    image: jscorptech/{{ cookiecutter.project_slug }}:latest 
     env_file:
       - .env
     environment:
