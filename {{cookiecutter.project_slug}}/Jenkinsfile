@@ -112,9 +112,13 @@ pipeline {
                         sed -i 's|image: ${DOCKER_USER}/${IMAGE_NAME}:.*|image: ${DOCKER_USER}/${IMAGE_NAME}:${TAG_NAME}|' stack.yaml
                         git config --global user.email "admin@jscorp.uz"
                         git config --global user.name "Jenkins"
-                        git add stack.yaml
-                        git commit -m "feat(swarm) Update image tag to ${TAG_NAME} [ci skip]"
-                        git push origin main
+                        if ! git diff --quiet stack.yaml; then
+                            git add stack.yaml
+                            git commit -m "feat(swarm) Update image tag to ${TAG_NAME} [ci skip]"
+                            git push origin main
+                        else
+                            echo "No changes in stack.yaml"
+                        fi
                     """
                 }
 
