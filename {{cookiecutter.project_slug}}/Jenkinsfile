@@ -34,6 +34,29 @@ pipeline {
                 git branch: 'main', credentialsId: 'ssh', url: 'git@github.com:JscorpTech/{{ cookiecutter.project_slug }}.git'
             }
         }
+        stage("Update files") {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        sed -i 's|image: ${DOCKER_USER}/${IMAGE_NAME}:.*|image: ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}|' stack.yaml
+                        sed -i 's/return HttpResponse("OK.*"/return HttpResponse("OK: #${BUILD_NUMBER}"/' config/urls.py
+                    """
+                        // git config --global user.email "admin@jscorp.uz"
+                        // git config --global user.name "Jenkins"
+                        // if ! git diff --quiet stack.yaml; then
+                        //     git add stack.yaml
+                        //     git commit -m "feat(swarm) Update image tag to ${BUILD_NUMBER} [ci skip]"
+                        //     git push origin main
+                        // else
+                        //     echo "No changes in stack.yaml"
+                        // fi
+                }
+
+            }
+        }
         stage('Build Image') {
             steps {
                 sh '''
@@ -100,29 +123,6 @@ pipeline {
                         docker push ${DOCKER_USER}/${IMAGE_NAME}:${PROD_TAG}
                     '''
                 }
-            }
-        }
-        stage("Update stack.yaml") {
-            when {
-                expression { currentBuild.currentResult == "SUCCESS" }
-            }
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
-                        sed -i 's|image: ${DOCKER_USER}/${IMAGE_NAME}:.*|image: ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}|' stack.yaml
-                        sed -i 's/return HttpResponse("OK.*"/return HttpResponse("OK: #${BUILD_NUMBER}"/' config/urls.py
-                    """
-                        // git config --global user.email "admin@jscorp.uz"
-                        // git config --global user.name "Jenkins"
-                        // if ! git diff --quiet stack.yaml; then
-                        //     git add stack.yaml
-                        //     git commit -m "feat(swarm) Update image tag to ${BUILD_NUMBER} [ci skip]"
-                        //     git push origin main
-                        // else
-                        //     echo "No changes in stack.yaml"
-                        // fi
-                }
-
             }
         }
         stage('Deploy stack') {
