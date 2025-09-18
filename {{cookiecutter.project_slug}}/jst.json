@@ -4,5 +4,6 @@
         "locale": "./resources/locale/"
     },
     "stubs": {},
-    "apps": "core.apps."
+    "apps": "core.apps.",
+    "jst": true
 }
