@@ -52,7 +52,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh """
                         sed -i 's|image: ${DOCKER_USER}/${IMAGE_NAME}:.*|image: ${DOCKER_USER}/${IMAGE_NAME}:${BUILD_NUMBER}|' stack.yaml
-                        sed -i 's/return HttpResponse("OK.*"/return HttpResponse("OK: #${BUILD_NUMBER}"/' config/urls.py
+                        sed -i 's/return HttpResponse("OK.*"/return HttpResponse("OK: #${GIT_COMMIT}"/' config/urls.py
                     """
                         // git config --global user.email "admin@jscorp.uz"
                         // git config --global user.name "Jenkins"
