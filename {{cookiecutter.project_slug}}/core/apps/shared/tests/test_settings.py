@@ -1,16 +1,20 @@
-from django.test import TestCase
+import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 
 
-class SettingsTest(TestCase):
+@pytest.fixture
+def api_client():
+    return APIClient()
 
-    def setUp(self):
-        self.client = APIClient()
-        self.urls = {
-            "languages": reverse("settings-languages"),
-        }
 
-    def test_languages(self):
-        response = self.client.get(self.urls["languages"])
-        self.assertEqual(response.status_code, 200)
+@pytest.fixture
+def settings_urls():
+    return {
+        "languages": reverse("settings-languages"),
+    }
+
+
+def test_languages(api_client, settings_urls):
+    response = api_client.get(settings_urls["languages"])
+    assert response.status_code == 200
