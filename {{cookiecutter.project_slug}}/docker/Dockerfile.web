@@ -1,4 +1,4 @@
-FROM jscorptech/django:v0.5
+FROM jscorptech/django:latest
 
 ARG SCRIPT="entrypoint.sh"
 ENV SCRIPT=$SCRIPT
