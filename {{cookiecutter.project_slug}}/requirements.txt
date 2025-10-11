@@ -23,6 +23,7 @@ rich
 pydantic
 bcrypt
 pytest-django
+requests
 
 {% if cookiecutter.parler %}jst-parler{% endif %}
 {% if cookiecutter.parler %}jst-parler-rest{% endif %}
