@@ -1,13 +1,19 @@
 FROM python:3.13-alpine
 
 ENV PYTHONPYCACHEPREFIX=/dev/null
+ENV UV_CACHE_DIR=/root/.cache/uv
+ENV UV_LINK_MODE=copy
+ENV VENV_PATH=/opt/venv
 
-RUN apk update && apk add git gettext
+RUN apk update && apk add --no-cache git gettext curl netcat-openbsd
 
 WORKDIR /code
 
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+ENV PATH="/root/.cargo/bin:$VENV_PATH/bin:/root/.local/bin:$PATH"
+
 COPY requirements.txt /code/requirements.txt
-
-RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
-
+RUN uv venv $VENV_PATH
+RUN --mount=type=cache,target=/root/.cache/uv uv pip install -r requirements.txt
 CMD ["sh", "./entrypoint.sh"]
