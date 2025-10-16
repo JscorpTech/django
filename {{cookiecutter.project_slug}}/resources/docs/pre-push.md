@@ -11,7 +11,7 @@
 
 echo "🚀 Testlar ishga tushmoqda (Docker konteyner ichida)..."
 
-docker compose exec -T web pytest -v
+docker compose run --rm -T web pytest -v
 
 RESULT=$?
 
