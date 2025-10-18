@@ -1,4 +1,4 @@
-# GitHub Actions CI/CD sozlash
+{% raw %}# GitHub Actions CI/CD sozlash
 
 Bu dokumentatsiya loyihangizga GitHub Actions orqali avtomatik test va deploy qo'shishni tushuntiradi.
 
@@ -76,13 +76,14 @@ update_env \
 ```bash
 docker stack deploy -c stack.yaml ${{ env.PROJECT_NAME }}  # 👈 Stack nomi
 ```
-Stack nomi `PROJECT_NAME` bilan bir xil bo'ladi.
+Stack nomi `PROJECT_NAME` bilan bir xil bo'ladi.{% endraw %}
 
+{% raw %}
 ---
 
-## CI/CD jarayoni vizualizatsiyasi
+## CI/CD jarayoni vizualizatsiyasi{% endraw %}
 
-```
+{% raw %}```
 ┌─────────────────────────────────────────────────────────────┐
 │  1. TRIGGER: main branchga push/merge qilinadi              │
 └───────────────────────┬─────────────────────────────────────┘
@@ -357,4 +358,4 @@ jobs:
               "API_URL=https://botlarnionasi.jscorp.uz" \
 
             docker stack deploy -c stack.yaml ${{ env.PROJECT_NAME }} 
-```
+```{% endraw %}
