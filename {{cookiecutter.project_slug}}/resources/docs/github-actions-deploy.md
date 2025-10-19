@@ -14,6 +14,10 @@ on:
 env:
   PROJECT_NAME: {{ cookiecutter.project_slug }}  # O'ZGARTIRING: Loyihangiz nomi
 {% raw %}
+
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -107,7 +111,8 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
+          # key: ${{ secrets.KEY }}
+          password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
             PROJECTS=/opt/projects/
