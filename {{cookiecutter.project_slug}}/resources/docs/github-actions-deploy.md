@@ -1,3 +1,4 @@
+{% raw %}
 # GitHub Actions Deploy.yaml Tushuntirish
 
 `.github/workflows/deploy.yaml` faylidagi har bir qismning tushuntirishi:
@@ -9,10 +10,10 @@ on:
   push:
     branches:
       - main
-
+{% endraw %}
 env:
-  PROJECT_NAME: myproject  # O'ZGARTIRING: Loyihangiz nomi
-
+  PROJECT_NAME: {{ cookiecutter.project_slug }}  # O'ZGARTIRING: Loyihangiz nomi
+{% raw %}
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -194,3 +195,4 @@ Repository Settings → Secrets and variables → Actions:
 - `USERNAME` - SSH user
 - `KEY` - SSH private key
 - `PORT` - SSH port (22)
+{% endraw %}
