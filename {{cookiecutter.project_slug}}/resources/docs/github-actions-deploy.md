@@ -51,8 +51,14 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: |
-          docker build -t ${{ env.PROJECT_NAME }}:test .
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile.web
+          push: false
+          load: true
+          tags: ${{ env.PROJECT_NAME }}:test
+          no-cache: true
 
       - name: Run migrations and tests
         run: |
