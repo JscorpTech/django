@@ -18,8 +18,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "{levelname} {asctime} {module} {message}",
-            "style": "{",
+            "format": "%(asctime)s %(name)s %(levelname)s %(filename)s:%(lineno)d - %(message)s",
         },
     },
     "filters": {
