@@ -79,7 +79,7 @@ pipeline {
                     cp ${PROD_ENV} ./.env
                 '''
                 sh """
-                    docker build -t ${IMAGE_NAME}:${PROD_TAG} -f ./docker/Dockerfile.web .
+                    docker build -t ${IMAGE_NAME}:${PROD_TAG} --build-arg SCRIPT=entrypoint-server.sh -f ./docker/Dockerfile.web .
                 """
             }
         }
