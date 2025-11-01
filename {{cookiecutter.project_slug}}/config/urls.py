@@ -39,7 +39,7 @@ urlpatterns += [
 ################
 # Project env debug mode
 ################
-if env.bool("SILK_ENEBLED", False):
+if env.bool("SILK_ENABLED", False):
     urlpatterns += [
         {% if cookiecutter.silk %}path('silk/', include('silk.urls', namespace='silk')){% endif %}
     ]

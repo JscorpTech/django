@@ -66,7 +66,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-if env.bool("SILK_ENEBLED", False):
+if env.bool("SILK_ENABLED", False):
     MIDDLEWARE += [
         {% if cookiecutter.silk %}"silk.middleware.SilkyMiddleware",{% endif %}
     ]
