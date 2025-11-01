@@ -12,7 +12,7 @@ build:
 
 rebuild: down build up
 
-deploy: down build up makemigrate
+deploy: down build up migrations
 
 deploy-prod:
 	docker compose -f docker-compose.prod.yml down
@@ -23,7 +23,7 @@ deploy-prod:
 logs:
 	docker compose logs -f
 
-makemigration:
+makemigrations:
 	docker compose exec web python manage.py makemigrations --noinput
 
 migrate:
@@ -35,9 +35,9 @@ seed:
 reset_db:
 	docker compose exec web python manage.py reset_db --no-input
 
-makemigrate: makemigration migrate
+migrations: makemigrations migrate
 
-fresh: reset_db makemigrate seed
+fresh: reset_db migrations seed
 
 test:
 	docker compose exec web pytest -v
