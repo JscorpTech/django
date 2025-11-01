@@ -14,6 +14,15 @@ from django.utils.translation import gettext as _
 
 @shared_task
 def SendConfirm(phone, code):
+    """Tasdiqlash ko'dini yuborish
+
+    Args:
+        phone (str, int): telefon no'mer
+        code (str, int): tasdiqlash ko'di
+
+    Raises:
+        Exception: [TODO:description]
+    """
     try:
         service = getattr(
             import_module(os.getenv("OTP_MODULE")), os.getenv("OTP_SERVICE")

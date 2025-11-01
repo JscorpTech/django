@@ -1,3 +1,4 @@
+#type: ignore
 import random
 from datetime import datetime, timedelta
 
@@ -9,6 +10,14 @@ from django_core import exceptions, models
 class SmsService:
     @staticmethod
     def send_confirm(phone):
+        """Tasdiqlash ko'dini yuborish
+
+        Args:
+            phone (str): telefon no'mer
+
+        Raises:
+            exceptions.SmsException: [TODO:description]
+        """
         # TODO: Deploy this change when deploying -> code = random.randint(1000, 9999) # noqa
         if env.bool("OTP_PROD", False):
             code = "".join(str(random.randint(0, 9)) for _ in range(env.int("OTP_SIZE", 4)))
@@ -39,6 +48,18 @@ class SmsService:
 
     @staticmethod
     def check_confirm(phone, code):
+        """Tasdiqlash ko'dini haqiqiyligini tekshirish
+
+        Args:
+            phone ([TODO:type]): [TODO:description]
+            code ([TODO:type]): [TODO:description]
+
+        Raises:
+            exceptions.SmsException: [TODO:description]
+            exceptions.SmsException: [TODO:description]
+            exceptions.SmsException: [TODO:description]
+            exceptions.SmsException: [TODO:description]
+        """
         sms_confirm = models.SmsConfirm.objects.filter(phone=phone).first()
 
         if sms_confirm is None:

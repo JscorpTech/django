@@ -1,17 +1,20 @@
-version: "3.9"
+version: "3.8"
 
 services:
-  db:
-    image: postgres:16.3-alpine
+  postgres:
+    image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=django
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=2309
-    volumes:
-      - pg_data:/var/lib/postgresql/data
+      - POSTGRES_DB={{ cookiecutter.project_slug }}
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+    secrets:
+      - postgres_password
     networks:
       - {{ cookiecutter.project_slug }}
+    volumes:
+      - pg_data:/var/lib/postgresql/data:rw
     deploy:
+      mode: replicated
       replicas: 1
       placement:
         constraints:
@@ -22,27 +25,35 @@ services:
       update_config:
         parallelism: 1
         order: start-first
-        failure_action: rollback 
+        failure_action: rollback
         monitor: 30s
         delay: 30s
         max_failure_ratio: 0.2
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: 512M
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d {{ cookiecutter.project_slug }}"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     logging:
       driver: json-file
       options:
         max-size: "10m"
-        max-file: "3"
+        max-file: "5"
 
   redis:
-    image: redis:alpine 
+    image: redis:7-alpine
     command: ["redis-server", "--appendonly", "yes"]
     networks:
       - {{ cookiecutter.project_slug }}
+    volumes:
+      - redis_data:/data:rw
     deploy:
+      mode: replicated
       replicas: 1
       placement:
         constraints:
@@ -50,67 +61,79 @@ services:
       restart_policy:
         condition: any
       update_config:
-        failure_action: rollback 
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
         monitor: 30s
         delay: 30s
         max_failure_ratio: 0.2
-        parallelism: 1
-        order: start-first
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 15s
       timeout: 10s
       retries: 5
+      start_period: 15s
     logging:
       driver: json-file
       options:
         max-size: "10m"
-        max-file: "3"
+        max-file: "5"
 
   web:
-    image: jscorptech/{{ cookiecutter.project_slug }}:latest 
+    image: jscorptech/{{ cookiecutter.project_slug }}:latest
     env_file:
       - .env
     environment:
       - PYTHONPYCACHEPREFIX=/var/cache/pycache
+      - DJANGO_SETTINGS_MODULE=config.settings.production
     networks:
       - {{ cookiecutter.project_slug }}
     volumes:
-      - logs:/code/resources/logs/
-      - media:/code/resources/media/
-      - static:/code/resources/staticfiles/
-      - pycache:/var/cache/pycache
+      - logs:/code/resources/logs/:rw
+      - media:/code/resources/media/:rw
+      - static:/code/resources/staticfiles/:rw
+      - pycache:/var/cache/pycache:rw
     tmpfs:
       - /tmp
       - /run
     deploy:
+      mode: replicated
       replicas: 1
       restart_policy:
-        condition: any 
+        condition: any
       update_config:
-        failure_action: rollback 
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
         monitor: 30s
         delay: 30s
         max_failure_ratio: 0.2
-        parallelism: 1
-        order: start-first
+      resources:
+        limits:
+          cpus: '1.50'
+          memory: 1024M
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/health/ || exit 1"]
       interval: 15s
       timeout: 15s
       retries: 5
+      start_period: 30s
     logging:
       driver: json-file
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: "50m"
+        max-file: "5"
 
   nginx:
-    image: jscorptech/nginx:v1
+    image: jscorptech/nginx:latest
     ports:
-      - mode: ingress 
+      - mode: ingress
         target: 80
-        published: 8080 
+        published: ${PORT:?enviromentda PORT topilmadi} 
         protocol: tcp
     volumes:
       - type: bind
@@ -122,19 +145,23 @@ services:
     networks:
       - {{ cookiecutter.project_slug }}
     deploy:
-      replicas: 1
-      restart_policy:
-        condition: any
+      mode: global
       placement:
         constraints:
           - node.role == manager
+      restart_policy:
+        condition: any
       update_config:
-        failure_action: rollback 
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
         monitor: 10s
         delay: 10s
         max_failure_ratio: 0.2
-        parallelism: 1
-        order: start-first
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
     tmpfs:
       - /var/cache/nginx
       - /var/run
@@ -144,19 +171,32 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
     logging:
       driver: json-file
       options:
         max-size: "10m"
-        max-file: "3"
+        max-file: "5"
 
 networks:
   {{ cookiecutter.project_slug }}:
-    driver: overlay 
+    driver: overlay
+    attachable: true
 
 volumes:
   media:
+    driver: local
   pg_data:
+    driver: local
+  redis_data:
+    driver: local
   pycache:
+    driver: local
   static:
+    driver: local
   logs:
+    driver: local
+
+secrets:
+  postgres_password:
+    external: false

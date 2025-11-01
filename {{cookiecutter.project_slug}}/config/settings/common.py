@@ -1,3 +1,4 @@
+#type: ignore
 import os
 import pathlib
 from typing import List, Union

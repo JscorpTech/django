@@ -1,14 +1,6 @@
+#type: ignore
 import requests
 from config.env import env
-
-
-class ConsoleService:
-
-    def __init__(self) -> None: ...
-
-    def send_sms(self, phone_number, message):
-        
-        print(phone_number, message)
 
 
 class EskizService:
@@ -32,6 +24,19 @@ class EskizService:
         }
 
     def request(self, api_path, data=None, method=None, headers=None):
+        """[TODO:summary]
+
+        [TODO:description]
+
+        Args:
+            api_path ([TODO:type]): [TODO:description]
+            data ([TODO:type]): [TODO:description]
+            method ([TODO:type]): [TODO:description]
+            headers ([TODO:type]): [TODO:description]
+
+        Raises:
+            Exception: [TODO:description]
+        """
         incoming_data = {"status": "error"}
 
         try:
@@ -53,11 +58,19 @@ class EskizService:
         return incoming_data
 
     def auth(self):
+        """[TODO:summary]
+
+        [TODO:description]
+        """
         data = {"email": self.email, "password": self.password}
 
         return self.request(self.methods["auth_login"], data=data, method=self.POST)
 
     def refresh_token(self):
+        """[TODO:summary]
+
+        [TODO:description]
+        """
         token = self.auth()["data"]["token"]
         self.headers["Authorization"] = "Bearer " + token
 
@@ -74,6 +87,10 @@ class EskizService:
         )
 
     def get_my_user_info(self):
+        """[TODO:summary]
+
+        [TODO:description]
+        """
         token = self.auth()["data"]["token"]
         self.headers["Authorization"] = "Bearer " + token
 
@@ -86,6 +103,15 @@ class EskizService:
         return self.request(data["api_path"], method=data["method"], headers=data["headers"])
 
     def add_sms_contact(self, first_name, phone_number, group):
+        """[TODO:summary]
+
+        [TODO:description]
+
+        Args:
+            first_name ([TODO:type]): [TODO:description]
+            phone_number ([TODO:type]): [TODO:description]
+            group ([TODO:type]): [TODO:description]
+        """
         token = self.auth()["data"]["token"]
         self.headers["Authorization"] = "Bearer " + token
 
@@ -111,6 +137,12 @@ class EskizService:
         )
 
     def send_sms(self, phone_number, message):
+        """Sms yuborish
+
+        Args:
+            phone_number (str): telefon no'mer
+            message (str): xabar
+        """
         token = self.auth()["data"]["token"]
         self.headers["Authorization"] = "Bearer " + token
 
