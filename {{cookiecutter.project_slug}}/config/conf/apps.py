@@ -16,7 +16,7 @@ APPS = [
     "core.apps.accounts.apps.AccountsConfig",
 ]
 
-if env.bool("SILK_ENEBLED", False):
+if env.bool("SILK_ENABLED", False):
     APPS += [
         {% if cookiecutter.silk %}"silk",{% endif %}
     ]

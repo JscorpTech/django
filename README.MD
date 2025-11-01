@@ -1,5 +1,7 @@
 # jst-django docs
 
+**Til / Language:** O'zbek | [English]({{cookiecutter.project_slug}}/README.EN.md)
+
 Assalomu Alaykum bu dasturni o’rganishdan avval bu dastur haqida biroz aytib bermoqchiman bu dastur nega kerak kimlar uchun shu haqida birlib olishingiz muhum.
 
 bu dastur ikkita bo’lakga bo’lingan biri cli dastur ikkinchisi asosiy arxitiktura.
