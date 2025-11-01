@@ -149,6 +149,7 @@ jobs:
                 done
             }
 
+            export PORT=8000
             docker stack deploy -c stack.yaml ${{ env.PROJECT_NAME }}
 ```
 
