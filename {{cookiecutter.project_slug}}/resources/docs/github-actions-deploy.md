@@ -51,6 +51,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Copy env
+        run: |
+          cp .env.example .env
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 

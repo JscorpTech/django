@@ -199,4 +199,4 @@ volumes:
 
 secrets:
   postgres_password:
-    external: true 
+    external: true
