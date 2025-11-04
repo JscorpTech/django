@@ -8,6 +8,8 @@ volumes:
 
 services:
   web:
+    env_file:
+      - .env
     networks:
       - {{ cookiecutter.project_slug }}
     build:

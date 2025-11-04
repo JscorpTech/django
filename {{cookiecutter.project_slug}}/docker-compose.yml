@@ -8,6 +8,8 @@ volumes:
 
 services:
   nginx:
+    env_file:
+      - .env
     networks:
       - {{ cookiecutter.project_slug }}
     ports:
