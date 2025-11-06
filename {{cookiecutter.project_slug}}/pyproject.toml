@@ -25,3 +25,4 @@ typeCheckingMode = "basic"
 reportMissingImports = false
 reportMissingTypeStubs = false
 pythonVersion = "3.12"
+enableReachabilityAnalysis = false
