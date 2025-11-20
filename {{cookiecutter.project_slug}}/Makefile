@@ -41,3 +41,6 @@ fresh: reset_db migrations seed
 
 test:
 	docker compose exec web pytest -v
+
+shell:
+	docker compose exec web python manage.py shell
