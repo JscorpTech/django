@@ -8,8 +8,6 @@ volumes:
 
 services:
   nginx:
-    env_file:
-      - .env
     networks:
       - {{ cookiecutter.project_slug }}
     ports:
@@ -23,6 +21,8 @@ services:
     depends_on:
       - web
   web:
+    env_file:
+      - .env
     networks:
       - {{ cookiecutter.project_slug }}
     build:
@@ -55,3 +55,4 @@ services:
     restart: always
 
     image: redis
+
