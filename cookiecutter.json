@@ -27,36 +27,36 @@
     "password": "changeme123",
     "max_line_length": "120",
     "silk": [
-        "no",
-        "yes"
+        false,
+        true
     ],
     "storage": [
-        "no",
-        "yes"
+        false,
+        true
     ],
     "channels": [
-        "no",
-        "yes"
+        false,
+        true
     ],
     "rosetta": [
-        "no",
-        "yes"
+        false,
+        true
     ],
     "cacheops": [
-        "no",
-        "yes"
+        false,
+        true
     ],
     "ckeditor": [
-        "no",
-        "yes"
+        false,
+        true
     ],
     "modeltranslation": [
-        "no",
-        "yes"
+        false,
+        true
     ],
     "parler": [
-        "no",
-        "yes"
+        false,
+        true
     ],
     "version": "0.1.1"
 }

@@ -10,18 +10,20 @@ import tempfile
 import tomllib
 from pathlib import Path
 
+from cookiecutter.main import cookiecutter
+
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PROJECT = "django_blueprint"
 OPTIONAL_TRUE = {
-    "channels": "yes",
-    "rosetta": "yes",
-    "cacheops": "yes",
-    "ckeditor": "yes",
-    "modeltranslation": "yes",
-    "parler": "yes",
-    "storage": "yes",
-    "silk": "yes",
+    "channels": True,
+    "rosetta": True,
+    "cacheops": True,
+    "ckeditor": True,
+    "modeltranslation": True,
+    "parler": True,
+    "storage": True,
+    "silk": True,
     "cache": "yes",
     "celery": "yes",
 }
@@ -32,10 +34,12 @@ def run(command: list[str], cwd: Path = ROOT) -> None:
 
 
 def render_project(output_dir: Path, extra_context: dict[str, str] | None = None) -> Path:
-    command = ["cookiecutter", str(ROOT), "--no-input", "--output-dir", str(output_dir)]
-    for key, value in (extra_context or {}).items():
-        command.append(f"{key}={value}")
-    run(command)
+    cookiecutter(
+        str(ROOT),
+        no_input=True,
+        output_dir=str(output_dir),
+        extra_context=extra_context,
+    )
     return output_dir / DEFAULT_PROJECT
 
 
