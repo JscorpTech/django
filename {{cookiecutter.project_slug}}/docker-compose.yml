@@ -37,7 +37,9 @@ services:
       - pycache:/var/cache/pycache
     depends_on:
       - db
+      {% if cookiecutter.cache in ['yes', 'y', True] or cookiecutter.cacheops in [true, 'true', 'True', 'yes', 'y'] or cookiecutter.celery in ['yes', 'y', True] %}
       - redis
+      {% endif %}
   db:
     networks:
       - {{ cookiecutter.project_slug }}
@@ -49,10 +51,12 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-2309}
     volumes:
       - pg_data:/var/lib/postgresql/data
+  {% if cookiecutter.cache in ['yes', 'y', True] or cookiecutter.cacheops in [true, 'true', 'True', 'yes', 'y'] or cookiecutter.celery in ['yes', 'y', True] %}
   redis:
     networks:
       - {{ cookiecutter.project_slug }}
     restart: always
 
     image: redis
+  {% endif %}
 

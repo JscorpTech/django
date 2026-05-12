@@ -1,4 +1,4 @@
-#type: ignore
+# type: ignore
 """
 Base celery tasks
 """
@@ -7,9 +7,16 @@ import logging
 import os
 from importlib import import_module
 
-from celery import shared_task
-from config.env import env
 from django.utils.translation import gettext as _
+
+from config.env import env
+
+try:
+    from celery import shared_task
+except ImportError:
+
+    def shared_task(func):
+        return func
 
 
 @shared_task
@@ -30,9 +37,12 @@ def SendConfirm(phone, code):
         service.send_sms(
             phone, env.str("OTP_MESSAGE", _("Sizning Tasdiqlash ko'dingiz: %(code)s")) % {"code": code}
         )
-        logging.info("Sms send: %s-%s" % (phone, code))
+        logging.info("Sms confirmation sent to phone ending with %s", str(phone)[-4:])
     except Exception as e:
         logging.error(
-            "Error: {phone}-{code}\n\n{error}".format(phone=phone, code=code, error=e)
+            "Sms provider error for phone ending with {phone_suffix}: {error}".format(
+                phone_suffix=str(phone)[-4:],
+                error=e,
+            )
         )  # noqa
         raise Exception

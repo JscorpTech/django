@@ -172,6 +172,12 @@ make migrations      # Make and apply migrations
 make seed            # Seed database with initial data
 make fresh           # Reset DB, migrate, and seed
 make test            # Run tests
+make test-cov        # Run tests with coverage
+make lint            # Run flake8
+make format          # Run isort and black
+make format-check    # Check formatting without changes
+make typecheck       # Run pyright
+make check           # Run formatting, lint, typecheck, and tests
 make deploy          # Deploy (local)
 make deploy-prod     # Deploy (production)
 ```
@@ -185,9 +191,10 @@ make deploy-prod     # Deploy (production)
 - ✅ Change default admin password
 - ✅ Set `DEBUG=False` in production
 - ✅ Configure proper `ALLOWED_HOSTS`
+- ✅ Keep CORS disabled by default and allow only trusted origins
 - ✅ Use HTTPS (`PROTOCOL_HTTPS=True`)
 - ✅ Change database password
-- ✅ Never commit `.env` file
+- ✅ Never commit `.env`, private keys, dumps, local media, logs, or cache artifacts
 
 ## Environment Variables
 
@@ -199,6 +206,10 @@ Key environment variables in `.env`:
 - `DJANGO_SETTINGS_MODULE`: Settings module to use
 - `PROJECT_ENV`: debug | prod
 - `SILK_ENABLED`: Enable Silk profiling (optional)
+- `CORS_ALLOW_ALL_ORIGINS`: Keep `False` unless a local-only use case explicitly needs it
+- `CORS_ALLOWED_ORIGINS`: Comma-separated trusted browser origins
+- `SECURE_SSL_REDIRECT`: Redirect HTTP to HTTPS in production
+- `SECURE_HSTS_SECONDS`: HSTS duration in production
 
 See `.env.example` for all available options.
 
@@ -206,6 +217,7 @@ See `.env.example` for all available options.
 
 The template supports optional packages:
 
+- Default generation is intentionally minimal. Optional features render only when selected.
 - **modeltranslation**: Model field translation
 - **parler**: Alternative translation solution
 - **silk**: Performance profiling
@@ -213,6 +225,8 @@ The template supports optional packages:
 - **ckeditor**: Rich text editor
 - **rosetta**: Translation management
 - **cacheops**: Advanced caching
+- **storage**: S3/MinIO-style object storage
+- **celery**: Async worker support
 
 ## Testing
 
@@ -221,6 +235,9 @@ Tests are written using pytest-django:
 ```bash
 # Run all tests
 make test
+
+# Run the full local quality gate
+make check
 
 # Run specific tests
 docker compose exec web pytest path/to/test.py -v
@@ -243,4 +260,3 @@ For issues and questions:
 ---
 
 **Happy Coding! 🚀**
-

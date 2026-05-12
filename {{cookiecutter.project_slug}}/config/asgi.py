@@ -7,7 +7,7 @@ from config.env import env  # noqa
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", env("DJANGO_SETTINGS_MODULE"))
 
-{% if cookiecutter.channels %}
+{% if cookiecutter.channels in [true, 'true', 'True', 'yes', 'y'] %}
 from channels.routing import ProtocolTypeRouter  # noqa
 from channels.routing import URLRouter  # noqa
 

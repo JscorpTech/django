@@ -36,6 +36,18 @@
    - Use docker secrets for sensitive data
    - Keep Docker images updated
 
+7. **Endpoint and Integration Boundaries**
+   - Keep admin, debug, schema, metrics, and profiling routes unavailable to public production traffic unless explicitly protected
+   - Verify webhook/callback authenticity with a signature, shared secret, or provider token
+   - Use idempotency for payment-like, webhook, deploy, and external side-effect flows
+   - Validate user-provided paths, URLs, filters, callbacks, and file metadata before use
+   - Never log authorization headers, tokens, passwords, private keys, reset codes, or provider credentials
+
+8. **Repository Hygiene**
+   - Do not commit `.env.*` files, private keys, database dumps, local media, logs, caches, or generated runtime artifacts
+   - Keep `.env.example` safe: sample values only, no real credentials
+   - Use `.pre-commit-config.yaml` and `make check` before opening a pull request
+
 ## O'zbekcha
 
 ### Muhim xavfsizlik eslatmalari
@@ -71,6 +83,18 @@
    - Keraksiz portlarni ochib qo'ymang
    - Maxfiy ma'lumotlar uchun docker secrets dan foydalaning
    - Docker imagelarni yangilab turing
+
+7. **Endpoint va integratsiya chegaralari**
+   - Admin, debug, schema, metrics va profiling routelar productionda public ochiq qolmasin, kerak bo'lsa qat'iy himoyalansin
+   - Webhook/callback haqiqiyligini signature, shared secret yoki provider token orqali tekshiring
+   - Payment-like, webhook, deploy va external side-effect flowlarida idempotency ishlating
+   - User kiritgan path, URL, filter, callback va file metadatalarini validatsiyasiz ishlatmang
+   - Authorization header, token, password, private key, reset code yoki provider credential logga yozilmasin
+
+8. **Repo gigiyenasi**
+   - `.env.*`, private key, database dump, local media, log, cache va runtime artifactlarni commit qilmang
+   - `.env.example` faqat xavfsiz sample qiymatlarni saqlasin, real credential bo'lmasin
+   - Pull requestdan oldin `.pre-commit-config.yaml` va `make check` ishlating
 
 ## Reporting Security Issues / Xavfsizlik muammolarini xabar qilish
 

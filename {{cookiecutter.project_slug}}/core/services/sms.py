@@ -1,10 +1,10 @@
-#type: ignore
+# type: ignore
 import random
 from datetime import datetime, timedelta
 
-from config.env import env
-from core.apps.accounts.tasks.sms import SendConfirm
 from django_core import exceptions, models
+
+from config.env import env
 
 
 class SmsService:
@@ -22,7 +22,7 @@ class SmsService:
         if env.bool("OTP_PROD", False):
             code = "".join(str(random.randint(0, 9)) for _ in range(env.int("OTP_SIZE", 4)))
         else:
-            code = env.int("OTP_DEFAULT", 1111) 
+            code = env.int("OTP_DEFAULT", 1111)
 
         sms_confirm, status = models.SmsConfirm.objects.get_or_create(phone=phone, defaults={"code": code})
 
@@ -43,7 +43,12 @@ class SmsService:
         )  # noqa
         sms_confirm.save()
 
-        SendConfirm.delay(phone, code)
+        from core.apps.accounts.tasks.sms import SendConfirm
+
+        if hasattr(SendConfirm, "delay"):
+            SendConfirm.delay(phone, code)
+        else:
+            SendConfirm(phone, code)
         return True
 
     @staticmethod

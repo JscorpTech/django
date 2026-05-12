@@ -1,34 +1,27 @@
-import uuid
 from typing import Type
 
-from core.services import UserService, SmsService
-from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-from django_core import exceptions
-from drf_spectacular.utils import extend_schema
-from rest_framework import status, throttling, request
-from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.viewsets import GenericViewSet
 from django_core.mixins import BaseViewSetMixin
+from drf_spectacular.utils import OpenApiResponse, extend_schema
+from rest_framework import request, status, throttling
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
+from core.services import UserService
+
 from ..serializers import (
-    RegisterSerializer,
+    ChangePasswordSerializer,
     ConfirmSerializer,
+    RegisterSerializer,
     ResendSerializer,
-    ResetPasswordSerializer,
     ResetConfirmationSerializer,
+    ResetPasswordSerializer,
     SetPasswordSerializer,
     UserSerializer,
     UserUpdateSerializer,
 )
-from rest_framework.permissions import AllowAny
-from django.contrib.auth.hashers import make_password
-from drf_spectacular.utils import OpenApiResponse
-from rest_framework.permissions import IsAuthenticated
-from ..serializers import ChangePasswordSerializer
-
-from .. import models
 
 
 @extend_schema(tags=["register"])
@@ -51,11 +44,10 @@ class RegisterView(BaseViewSetMixin, GenericViewSet, UserService):
     def register(self, request):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
-        data = ser.data
+        data = ser.validated_data
         phone = data.get("phone")
-        # Create pending user
         self.create_user(phone, data.get("first_name"), data.get("last_name"), data.get("password"))
-        self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
+        self.send_confirmation(phone)
         return Response(
             {"detail": _("Sms %(phone)s raqamiga yuborildi") % {"phone": phone}},
             status=status.HTTP_202_ACCEPTED,
@@ -66,28 +58,22 @@ class RegisterView(BaseViewSetMixin, GenericViewSet, UserService):
     def confirm(self, request):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
-        data = ser.data
+        data = ser.validated_data
         phone, code = data.get("phone"), data.get("code")
-        try:
-            if SmsService.check_confirm(phone, code=code):
-                token = self.validate_user(get_user_model().objects.filter(phone=phone).first())
-                return Response(
-                    data={
-                        "detail": _("Tasdiqlash ko'di qabul qilindi"),
-                        "token": token,
-                    },
-                    status=status.HTTP_202_ACCEPTED,
-                )
-        except exceptions.SmsException as e:
-            raise PermissionDenied(e)  # Response exception for APIException
-        except Exception as e:
-            raise PermissionDenied(e)  # Api exception for APIException
+        token = self.confirm_user(phone, code)
+        return Response(
+            data={
+                "detail": _("Tasdiqlash kodi qabul qilindi"),
+                "token": token,
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
 
     @action(methods=["POST"], detail=False, url_path="resend")
     def resend(self, rq: Type[request.Request]):
         ser = self.get_serializer(data=rq.data)
         ser.is_valid(raise_exception=True)
-        phone = ser.data.get("phone")
+        phone = ser.validated_data.get("phone")
         self.send_confirmation(phone)
         return Response({"detail": _("Sms %(phone)s raqamiga yuborildi") % {"phone": phone}})
 
@@ -111,7 +97,7 @@ class ResetPasswordView(BaseViewSetMixin, GenericViewSet, UserService):
     def reset_password(self, request):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
-        phone = ser.data.get("phone")
+        phone = ser.validated_data.get("phone")
         self.send_confirmation(phone)
         return Response({"detail": _("Sms %(phone)s raqamiga yuborildi") % {"phone": phone}})
 
@@ -120,40 +106,26 @@ class ResetPasswordView(BaseViewSetMixin, GenericViewSet, UserService):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
 
-        data = ser.data
+        data = ser.validated_data
         code, phone = data.get("code"), data.get("phone")
-        try:
-            SmsService.check_confirm(phone, code)
-            token = models.ResetToken.objects.create(
-                user=get_user_model().objects.filter(phone=phone).first(),
-                token=str(uuid.uuid4()),
-            )
-            return Response(
-                data={
-                    "token": token.token,
-                    "created_at": token.created_at,
-                    "updated_at": token.updated_at,
-                },
-                status=status.HTTP_200_OK,
-            )
-        except exceptions.SmsException as e:
-            raise PermissionDenied(str(e))
-        except Exception as e:
-            raise PermissionDenied(str(e))
+        token = self.create_reset_token(phone, code)
+        return Response(
+            data={
+                "token": token.token,
+                "created_at": token.created_at,
+                "updated_at": token.updated_at,
+            },
+            status=status.HTTP_200_OK,
+        )
 
     @action(methods=["POST"], detail=False, url_path="reset-password-set")
     def reset_password_set(self, request):
         ser = self.get_serializer(data=request.data)
         ser.is_valid(raise_exception=True)
-        data = ser.data
+        data = ser.validated_data
         token = data.get("token")
         password = data.get("password")
-        token = models.ResetToken.objects.filter(token=token)
-        if not token.exists():
-            raise PermissionDenied(_("Invalid token"))
-        phone = token.first().user.phone
-        token.delete()
-        self.change_password(phone, password)
+        self.set_password_with_reset_token(token, password)
         return Response({"detail": _("password updated")}, status=status.HTTP_200_OK)
 
 
@@ -199,11 +171,9 @@ class ChangePasswordView(BaseViewSetMixin, GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        if user.check_password(request.data["old_password"]):
-            user.password = make_password(request.data["new_password"])
-            user.save()
-            return Response(
-                data={"detail": "password changed successfully"},
-                status=status.HTTP_200_OK,
-            )
-        raise PermissionDenied(_("invalida password"))
+        data = serializer.validated_data
+        UserService().change_authenticated_password(user, data["old_password"], data["new_password"])
+        return Response(
+            data={"detail": _("password changed successfully")},
+            status=status.HTTP_200_OK,
+        )

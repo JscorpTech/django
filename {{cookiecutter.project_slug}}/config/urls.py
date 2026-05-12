@@ -15,6 +15,7 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
 def home(request):
     return HttpResponse("OK")
 
+
 ################
 # My apps url
 ################
@@ -32,8 +33,8 @@ urlpatterns += [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
-    {% if cookiecutter.rosetta %}path("rosetta/", include("rosetta.urls")),{% endif %}
-    {% if cookiecutter.ckeditor %}path("ckeditor5/", include("django_ckeditor_5.urls"), name="ck_editor_5_upload_file"),{% endif %}
+    {% if cookiecutter.rosetta in [true, 'true', 'True', 'yes', 'y'] %}path("rosetta/", include("rosetta.urls")),{% endif %}
+    {% if cookiecutter.ckeditor in [true, 'true', 'True', 'yes', 'y'] %}path("ckeditor5/", include("django_ckeditor_5.urls"), name="ck_editor_5_upload_file"),{% endif %}
 ]
 
 ################
@@ -41,7 +42,7 @@ urlpatterns += [
 ################
 if env.bool("SILK_ENABLED", False):
     urlpatterns += [
-        {% if cookiecutter.silk %}path('silk/', include('silk.urls', namespace='silk')){% endif %}
+        {% if cookiecutter.silk in [true, 'true', 'True', 'yes', 'y'] %}path('silk/', include('silk.urls', namespace='silk')){% endif %}
     ]
 if env.str("PROJECT_ENV") == "debug":
 
@@ -54,10 +55,11 @@ if env.str("PROJECT_ENV") == "debug":
         path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     ]
 
-################
-# Media urls
-################
-urlpatterns += [
-    re_path(r"static/(?P<path>.*)", serve, {"document_root": settings.STATIC_ROOT}),
-    re_path(r"media/(?P<path>.*)", serve, {"document_root": settings.MEDIA_ROOT}),
-]
+if settings.DEBUG:
+    ################
+    # Local static/media urls
+    ################
+    urlpatterns += [
+        re_path(r"static/(?P<path>.*)", serve, {"document_root": settings.STATIC_ROOT}),
+        re_path(r"media/(?P<path>.*)", serve, {"document_root": settings.MEDIA_ROOT}),
+    ]
