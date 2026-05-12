@@ -1,46 +1,69 @@
 
 start: up seed
 
+PYTHON ?= python
+COMPOSE ?= docker compose
+WEB ?= web
+
 up:
-	docker compose up -d
+	$(COMPOSE) up -d
 
 down:
-	docker compose down
+	$(COMPOSE) down
 
 build:
-	docker compose build
+	$(COMPOSE) build
 
 rebuild: down build up
 
 deploy: down build up migrations
 
 deploy-prod:
-	docker compose -f docker-compose.prod.yml down
-	docker compose -f docker-compose.prod.yml up -d
-	docker compose -f docker-compose.prod.yml exec web python manage.py makemigrations --noinput
-	docker compose -f docker-compose.prod.yml exec web python manage.py migrate
+	$(COMPOSE) -f docker-compose.prod.yml down
+	$(COMPOSE) -f docker-compose.prod.yml up -d
+	$(COMPOSE) -f docker-compose.prod.yml exec $(WEB) python manage.py makemigrations --noinput
+	$(COMPOSE) -f docker-compose.prod.yml exec $(WEB) python manage.py migrate
 
 logs:
-	docker compose logs -f
+	$(COMPOSE) logs -f
 
 makemigrations:
-	docker compose exec web python manage.py makemigrations --noinput
+	$(COMPOSE) exec $(WEB) python manage.py makemigrations --noinput
 
 migrate:
-	docker compose exec web python manage.py migrate
+	$(COMPOSE) exec $(WEB) python manage.py migrate
 
 seed:
-	docker compose exec web python manage.py seed
+	$(COMPOSE) exec $(WEB) python manage.py seed
 
 reset_db:
-	docker compose exec web python manage.py reset_db --no-input
+	$(COMPOSE) exec $(WEB) python manage.py reset_db --no-input
 
 migrations: makemigrations migrate
 
 fresh: reset_db migrations seed
 
 test:
-	docker compose exec web pytest -v
+	$(COMPOSE) exec $(WEB) pytest -v
+
+test-cov:
+	$(COMPOSE) exec $(WEB) pytest --cov=core --cov=config --cov-report=term-missing
+
+lint:
+	$(COMPOSE) exec $(WEB) flake8 .
+
+format:
+	$(COMPOSE) exec $(WEB) isort .
+	$(COMPOSE) exec $(WEB) black .
+
+format-check:
+	$(COMPOSE) exec $(WEB) isort --check-only --diff .
+	$(COMPOSE) exec $(WEB) black --check .
+
+typecheck:
+	$(COMPOSE) exec $(WEB) pyright
+
+check: format-check lint typecheck test
 
 shell:
-	docker compose exec web python manage.py shell
+	$(COMPOSE) exec $(WEB) python manage.py shell

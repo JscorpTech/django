@@ -1,8 +1,8 @@
 from django.conf import settings
-from django.templatetags.static import static
+from django.templatetags.static import static  # noqa: F401
 from django.utils.translation import gettext_lazy as _
 
-from . import navigation
+from . import navigation  # noqa: F401
 
 
 def environment_callback(request):

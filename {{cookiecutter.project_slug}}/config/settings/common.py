@@ -1,7 +1,6 @@
-#type: ignore
+# type: ignore
 import os
 import pathlib
-from typing import List, Union
 
 from config.conf import *  # noqa
 from config.conf.apps import APPS
@@ -16,7 +15,8 @@ BASE_DIR = pathlib.Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 DEBUG = env.bool("DEBUG")
 
-ALLOWED_HOSTS: Union[List[str]] = ["*"]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 if env.bool("PROTOCOL_HTTPS", False):
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -37,7 +37,7 @@ PASSWORD_HASHERS = [
 ]
 
 INSTALLED_APPS = [
-    {% if cookiecutter.modeltranslation %}"modeltranslation",{% endif %}
+    {% if cookiecutter.modeltranslation in [true, 'true', 'True', 'yes', 'y'] %}"modeltranslation",{% endif %}
     "unfold",
     "unfold.contrib.filters",
     "unfold.contrib.forms",
@@ -69,7 +69,7 @@ MIDDLEWARE = [
 ]
 if env.bool("SILK_ENABLED", False):
     MIDDLEWARE += [
-        {% if cookiecutter.silk %}"silk.middleware.SilkyMiddleware",{% endif %}
+        {% if cookiecutter.silk in [true, 'true', 'True', 'yes', 'y'] %}"silk.middleware.SilkyMiddleware",{% endif %}
     ]
 
 
@@ -128,7 +128,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "resources/static"),
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=False)
+CORS_ORIGIN_ALLOW_ALL = CORS_ALLOW_ALL_ORIGINS
+CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 
 STATIC_ROOT = os.path.join(BASE_DIR, "resources/staticfiles")
 VITE_APP_DIR = os.path.join(BASE_DIR, "resources/static/vite")
@@ -150,14 +152,12 @@ AUTH_USER_MODEL = "accounts.User"
 CELERY_BROKER_URL = env("REDIS_URL")
 CELERY_RESULT_BACKEND = env("REDIS_URL")
 
-ALLOWED_HOSTS += env("ALLOWED_HOSTS").split(",")
-CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS").split(",")
-{% if cookiecutter.silk %}SILKY_AUTHORISATION = True
+{% if cookiecutter.silk in [true, 'true', 'True', 'yes', 'y'] %}SILKY_AUTHORISATION = True
 SILKY_PYTHON_PROFILER = True{% endif %}
-{% if cookiecutter.modeltranslation %}
+{% if cookiecutter.modeltranslation in [true, 'true', 'True', 'yes', 'y'] %}
 MODELTRANSLATION_LANGUAGES = ("uz", "ru", "en")
 MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"{% endif %}
-{% if cookiecutter.parler %}
+{% if cookiecutter.parler in [true, 'true', 'True', 'yes', 'y'] %}
 PARLER_LANGUAGES = {
     None: (
         {'code': 'uz',},

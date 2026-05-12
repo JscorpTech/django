@@ -1,5 +1,6 @@
-#type: ignore
+# type: ignore
 import requests
+
 from config.env import env
 
 

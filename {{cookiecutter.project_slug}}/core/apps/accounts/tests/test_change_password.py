@@ -1,9 +1,10 @@
 import pytest
-from core.apps.accounts.serializers import ChangePasswordSerializer
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
+
+from core.apps.accounts.serializers import ChangePasswordSerializer
 
 
 @pytest.fixture
@@ -49,7 +50,7 @@ def test_change_password_invalid_old_password(api_client, test_user, change_pass
     }
     response = api_client.post(change_password_url, data=data, format="json")
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert response.data["data"]["detail"] == "invalida password"
+    assert response.data["data"]["detail"] == "Invalid password"
 
 
 @pytest.mark.django_db

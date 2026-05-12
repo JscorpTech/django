@@ -1,24 +1,61 @@
 [tool.black]
 line-length = {{cookiecutter.max_line_length}}
+extend-exclude = '''
+(
+  migrations
+  | config
+  | core/apps/shared
+  | core/apps/accounts/serializers/user.py
+  | core/apps/accounts/signals/__init__.py
+  | core/apps/accounts/tasks/sms.py
+  | resources/static
+  | resources/media
+  | resources/logs
+)
+'''
 
 [tool.isort]
 profile = "black"
 line_length = {{cookiecutter.max_line_length}}
+skip_glob = [
+    "config/*",
+    "config/**/*",
+    "core/apps/shared/*",
+    "core/apps/shared/**/*",
+]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.local"
 python_files = "tests.py test_*.py *_tests.py"
+testpaths = ["core"]
+addopts = "-ra --strict-markers --strict-config"
+markers = [
+    "integration: tests that touch external services or require optional infrastructure",
+    "slow: tests that are intentionally slower than the unit/API suite",
+]
 filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::PendingDeprecationWarning",
     "ignore::ResourceWarning",
-    "ignore::Warning" # This line will ignore all warnings
 ]
 
 
 [tool.flake8]
 max-line-length = {{cookiecutter.max_line_length}}
 ignore = ["E701", "E704", "W503"]
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "env",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    "resources/static",
+    "resources/media",
+    "resources/logs",
+    "*/migrations/*",
+]
 
 [tool.pyright]
 typeCheckingMode = "basic"
@@ -26,3 +63,34 @@ reportMissingImports = false
 reportMissingTypeStubs = false
 pythonVersion = "3.12"
 enableReachabilityAnalysis = false
+exclude = [
+    "**/__pycache__",
+    "**/.pytest_cache",
+    "**/.mypy_cache",
+    "**/migrations",
+    "resources/static",
+    "resources/media",
+    "resources/logs",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["core", "config"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "manage.py",
+    "config/asgi.py",
+    "config/wsgi.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 70
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]

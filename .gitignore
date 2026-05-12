@@ -1,9 +1,16 @@
-node_modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 django_blueprint/
 core/http/
 git.diff
 # OS ignores
 *.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -52,6 +59,7 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
+.ruff_cache/
 nosetests.xml
 coverage.xml
 *.cover
@@ -66,9 +74,18 @@ cover/
 
 # Django stuff:
 *.log
+*.log.*
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+media/
+staticfiles/
+resources/media/*
+!resources/media/.gitignore
+resources/logs/*
+!resources/logs/.gitignore
+core/apps/logs/*
+!core/apps/logs/.gitignore
 
 # Flask stuff:
 instance/
@@ -122,6 +139,8 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+!.env.example
 .venv
 env/
 venv/
@@ -158,3 +177,37 @@ cython_debug/
 
 # Visual Studio Code
 .vscode
+
+# Secrets / credentials / dumps
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+*.sqlite3
+*.dump
+*.sql
+*.sql.gz
+*.backup
+*.bak
+*.enc
+secrets/
+private/
+credentials/
+
+# Runtime artifacts
+celerybeat-schedule.*
+*.pid
+*.sock
+*.tmp
+*.swp
+*.swo
+
+# Generated build outputs
+resources/static/vite/.vite/
+resources/static/vite/assets/*.map

@@ -1,3 +1,15 @@
 [flake8]
 max-line-length = 120
-ignore = E701, E704, W503
+ignore = E303, E701, E704, W503, W293, W391
+exclude =
+    .git,
+    .venv,
+    venv,
+    env,
+    __pycache__,
+    .pytest_cache,
+    .mypy_cache,
+    resources/static,
+    resources/media,
+    resources/logs,
+    */migrations/*

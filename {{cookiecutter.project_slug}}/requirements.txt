@@ -1,10 +1,8 @@
 backports.tarfile==1.2.0
-celery==5.4.0
 django-cors-headers==4.6.0
 django-environ==0.11.2
 django-extensions==3.2.3
 django-filter==24.3
-django-redis==5.4.0
 django-unfold==0.65.0
 djangorestframework-simplejwt==5.3.1
 drf-spectacular==0.28.0
@@ -23,22 +21,30 @@ rich
 pydantic
 bcrypt
 pytest-django
+pytest-cov
 requests
 model_bakery
+black
+isort
+flake8
+pyright
+pre-commit
 
-{% if cookiecutter.parler %}jst-parler{% endif %}
-{% if cookiecutter.parler %}jst-parler-rest{% endif %}
-{% if cookiecutter.modeltranslation %}django-modeltranslation~=0.19.11{% endif %}
-{% if cookiecutter.ckeditor %}django-ckeditor-5==0.2.15{% endif %}
-{% if cookiecutter.channels %}channels==4.2.0{% endif %}
-{% if cookiecutter.rosetta %}django-rosetta==0.10.1{% endif %}
-{% if cookiecutter.cacheops %}django-cacheops~=7.1{% endif %}
-{% if cookiecutter.silk %}django-silk{% endif %}
+{% if cookiecutter.celery in ['yes', 'y', True] %}celery==5.4.0{% endif %}
+{% if cookiecutter.cache in ['yes', 'y', True] or cookiecutter.cacheops in [true, 'true', 'True', 'yes', 'y'] %}django-redis==5.4.0{% endif %}
+{% if cookiecutter.parler in [true, 'true', 'True', 'yes', 'y'] %}jst-parler{% endif %}
+{% if cookiecutter.parler in [true, 'true', 'True', 'yes', 'y'] %}jst-parler-rest{% endif %}
+{% if cookiecutter.modeltranslation in [true, 'true', 'True', 'yes', 'y'] %}django-modeltranslation~=0.19.11{% endif %}
+{% if cookiecutter.ckeditor in [true, 'true', 'True', 'yes', 'y'] %}django-ckeditor-5==0.2.15{% endif %}
+{% if cookiecutter.channels in [true, 'true', 'True', 'yes', 'y'] %}channels==4.2.0{% endif %}
+{% if cookiecutter.rosetta in [true, 'true', 'True', 'yes', 'y'] %}django-rosetta==0.10.1{% endif %}
+{% if cookiecutter.cacheops in [true, 'true', 'True', 'yes', 'y'] %}django-cacheops~=7.1{% endif %}
+{% if cookiecutter.silk in [true, 'true', 'True', 'yes', 'y'] %}django-silk{% endif %}
 
 # !NOTE: on-server
 # gunicorn
 
-{% if cookiecutter.storage %}
+{% if cookiecutter.storage in [true, 'true', 'True', 'yes', 'y'] %}
 django-storages
 boto3
 {% else %}

@@ -10,11 +10,10 @@ python3 manage.py migrate --noinput
 
 gunicorn config.wsgi:application -b 0.0.0.0:8000 --workers $(($(nproc) * 2 + 1))
 
-{% if cookiecutter.celery == 'y' %}
+{% if cookiecutter.celery in ['yes', 'y', True] %}
 & celery -A config worker --loglevel=info &
 sleep 10 && celery -A config flower --loglevel=info
 {% endif %}
 
 exit $?
-
 

@@ -11,11 +11,10 @@ python3 manage.py migrate --noinput
 
 uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --reload --reload-dir core --reload-dir config
 
-{% if cookiecutter.celery == 'y' %}
+{% if cookiecutter.celery in ['yes', 'y', True] %}
 & celery -A config worker --loglevel=info &
 sleep 10 && celery -A config flower --loglevel=info
 {% endif %}
 
 exit $?
-
 

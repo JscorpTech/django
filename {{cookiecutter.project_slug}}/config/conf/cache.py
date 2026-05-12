@@ -1,5 +1,6 @@
 from config.env import env
 
+{% if cookiecutter.cache in ['yes', 'y', True] or cookiecutter.cacheops in [true, 'true', 'True', 'yes', 'y'] %}
 CACHES = {
     "default": {
         "BACKEND": env.str("CACHE_BACKEND"),
@@ -7,10 +8,19 @@ CACHES = {
         "TIMEOUT": env.str("CACHE_TIMEOUT"),
     },
 }
+{% else %}
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "jst-template-cache",
+        "TIMEOUT": env.str("CACHE_TIMEOUT"),
+    },
+}
+{% endif %}
 
 CACHE_MIDDLEWARE_SECONDS = env("CACHE_TIMEOUT")
 
-{% if cookiecutter.cacheops %}
+{% if cookiecutter.cacheops in [true, 'true', 'True', 'yes', 'y'] %}
 CACHEOPS_REDIS = env.str("REDIS_URL")
 CACHEOPS_DEFAULTS = {
     "timeout": env.str("CACHE_TIMEOUT"),

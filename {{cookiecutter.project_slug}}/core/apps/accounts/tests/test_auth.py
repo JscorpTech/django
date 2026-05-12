@@ -1,19 +1,15 @@
 from unittest.mock import patch
 
 import pytest
-from core.apps.accounts.models import ResetToken
-from core.services import SmsService
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.utils import timezone
 from django_core.models import SmsConfirm
-from pydantic import BaseModel
 from rest_framework import status
 from rest_framework.test import APIClient
 
-
-class TokenModel(BaseModel):
-    access: str
-    refresh: str
+from core.apps.accounts.models import ResetToken
+from core.apps.accounts.tasks.sms import SendConfirm
 
 
 @pytest.fixture
@@ -23,10 +19,12 @@ def api_client():
 
 @pytest.fixture
 def test_user(db):
-    phone = "998999999999"
-    password = "password"
-    user = get_user_model().objects.create_user(phone=phone, first_name="John", last_name="Doe", password=password)
-    return user
+    return get_user_model().objects.create_user(
+        phone="998999999999",
+        first_name="John",
+        last_name="Doe",
+        password="password123",
+    )
 
 
 @pytest.fixture
@@ -37,90 +35,161 @@ def sms_code(test_user):
 
 
 @pytest.mark.django_db
-def test_reg_view(api_client):
+def test_register_creates_pending_user_and_sends_sms(api_client):
     data = {
         "phone": "998999999991",
         "first_name": "John",
         "last_name": "Doe",
-        "password": "password",
+        "password": "password123",
     }
-    with patch.object(SmsService, "send_confirm", return_value=True):
+
+    with patch.object(SendConfirm, "delay", return_value=True) as send_confirm:
         response = api_client.post(reverse("auth-register"), data=data)
+
     assert response.status_code == status.HTTP_202_ACCEPTED
     assert response.data["data"]["detail"] == f"Sms {data['phone']} raqamiga yuborildi"
+    user = get_user_model().objects.get(phone=data["phone"])
+    assert user.validated_at is None
+    assert user.check_password(data["password"])
+    send_confirm.assert_called_once_with(data["phone"], 1111)
 
 
 @pytest.mark.django_db
-def test_confirm_view(api_client, test_user, sms_code):
-    data = {"phone": test_user.phone, "code": sms_code}
-    response = api_client.post(reverse("auth-confirm"), data=data)
-    assert response.status_code == status.HTTP_202_ACCEPTED
+def test_register_rejects_already_validated_phone(api_client, test_user):
+    test_user.validated_at = timezone.now()
+    test_user.save(update_fields=["validated_at"])
 
+    response = api_client.post(
+        reverse("auth-register"),
+        data={
+            "phone": test_user.phone,
+            "first_name": "John",
+            "last_name": "Doe",
+            "password": "password123",
+        },
+    )
 
-@pytest.mark.django_db
-def test_invalid_confirm_view(api_client, test_user):
-    data = {"phone": test_user.phone, "code": "1112"}
-    response = api_client.post(reverse("auth-confirm"), data=data)
-    assert response.status_code == status.HTTP_403_FORBIDDEN
-
-
-@pytest.mark.django_db
-def test_reset_confirmation_code_view(api_client, test_user, sms_code):
-    data = {"phone": test_user.phone, "code": sms_code}
-    response = api_client.post(reverse("auth-confirm"), data=data)
-    assert response.status_code == status.HTTP_202_ACCEPTED
-    assert "token" in response.data["data"]
-
-
-@pytest.mark.django_db
-def test_reset_confirmation_code_view_invalid_code(api_client, test_user):
-    data = {"phone": test_user.phone, "code": "123456"}
-    response = api_client.post(reverse("auth-confirm"), data=data)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.django_db
-def test_reset_set_password_view(api_client, test_user):
-    token = ResetToken.objects.create(user=test_user, token="token")
-    data = {"token": token.token, "password": "new_password"}
-    response = api_client.post(reverse("reset-password-reset-password-set"), data=data)
-    assert response.status_code == status.HTTP_200_OK
+def test_confirm_validates_user_and_returns_token(api_client, test_user, sms_code):
+    response = api_client.post(reverse("auth-confirm"), data={"phone": test_user.phone, "code": sms_code})
+
+    assert response.status_code == status.HTTP_202_ACCEPTED
+    assert "token" in response.data["data"]
+    test_user.refresh_from_db()
+    assert test_user.validated_at is not None
+    assert not SmsConfirm.objects.filter(phone=test_user.phone).exists()
 
 
 @pytest.mark.django_db
-def test_reset_set_password_view_invalid_token(api_client):
-    token = "test_token"
-    data = {"token": token, "password": "new_password"}
-    with patch.object(get_user_model().objects, "filter", return_value=get_user_model().objects.none()):
-        response = api_client.post(reverse("reset-password-reset-password-set"), data=data)
+def test_confirm_rejects_invalid_code(api_client, test_user, sms_code):
+    response = api_client.post(reverse("auth-confirm"), data={"phone": test_user.phone, "code": "1112"})
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    test_user.refresh_from_db()
+    assert test_user.validated_at is None
+
+
+@pytest.mark.django_db
+def test_resend_sends_sms(api_client, test_user):
+    with patch.object(SendConfirm, "delay", return_value=True) as send_confirm:
+        response = api_client.post(reverse("auth-resend"), data={"phone": test_user.phone})
+
+    assert response.status_code == status.HTTP_200_OK
+    send_confirm.assert_called_once_with(test_user.phone, 1111)
+
+
+@pytest.mark.django_db
+def test_reset_password_sends_sms_for_existing_user(api_client, test_user):
+    with patch.object(SendConfirm, "delay", return_value=True) as send_confirm:
+        response = api_client.post(reverse("reset-password-reset-password"), data={"phone": test_user.phone})
+
+    assert response.status_code == status.HTTP_200_OK
+    send_confirm.assert_called_once_with(test_user.phone, 1111)
+
+
+@pytest.mark.django_db
+def test_reset_password_rejects_unknown_user(api_client):
+    response = api_client.post(reverse("reset-password-reset-password"), data={"phone": "998000000000"})
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_reset_confirm_creates_reset_token(api_client, test_user, sms_code):
+    response = api_client.post(
+        reverse("reset-password-reset-confirm"),
+        data={"phone": test_user.phone, "code": sms_code},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    token = response.data["data"]["token"]
+    assert ResetToken.objects.filter(user=test_user, token=token).exists()
+
+
+@pytest.mark.django_db
+def test_reset_confirm_rejects_invalid_code(api_client, test_user, sms_code):
+    response = api_client.post(
+        reverse("reset-password-reset-confirm"),
+        data={"phone": test_user.phone, "code": "1112"},
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert not ResetToken.objects.filter(user=test_user).exists()
+
+
+@pytest.mark.django_db
+def test_reset_set_password_updates_password_and_consumes_token(api_client, test_user):
+    token = ResetToken.objects.create(user=test_user, token="token")
+    response = api_client.post(
+        reverse("reset-password-reset-password-set"),
+        data={"token": token.token, "password": "new_password123"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    test_user.refresh_from_db()
+    assert test_user.check_password("new_password123")
+    assert not ResetToken.objects.filter(token=token.token).exists()
+
+
+@pytest.mark.django_db
+def test_reset_set_password_rejects_reused_or_invalid_token(api_client):
+    response = api_client.post(
+        reverse("reset-password-reset-password-set"),
+        data={"token": "missing-token", "password": "new_password123"},
+    )
+
     assert response.status_code == status.HTTP_403_FORBIDDEN
     assert response.data["data"]["detail"] == "Invalid token"
 
 
 @pytest.mark.django_db
-def test_resend_view(api_client, test_user):
-    data = {"phone": test_user.phone}
-    response = api_client.post(reverse("auth-resend"), data=data)
-    assert response.status_code == status.HTTP_200_OK
+def test_me_view_requires_authentication(api_client):
+    response = api_client.get(reverse("me-me"))
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db
-def test_reset_password_view(api_client, test_user):
-    data = {"phone": test_user.phone}
-    response = api_client.post(reverse("reset-password-reset-password"), data=data)
-    assert response.status_code == status.HTTP_200_OK
-
-
-@pytest.mark.django_db
-def test_me_view(api_client, test_user):
+def test_me_view_returns_authenticated_user(api_client, test_user):
     api_client.force_authenticate(user=test_user)
     response = api_client.get(reverse("me-me"))
+
     assert response.status_code == status.HTTP_200_OK
+    assert response.data["data"]["phone"] == test_user.phone
 
 
 @pytest.mark.django_db
-def test_me_update_view(api_client, test_user):
+def test_me_update_changes_only_authenticated_user(api_client, test_user):
+    other_user = get_user_model().objects.create_user(phone="998888888888", password="password123", first_name="Other")
     api_client.force_authenticate(user=test_user)
-    data = {"first_name": "Updated"}
-    response = api_client.patch(reverse("me-user-update"), data=data)
+
+    response = api_client.patch(reverse("me-user-update"), data={"first_name": "Updated"})
+
     assert response.status_code == status.HTTP_200_OK
+    test_user.refresh_from_db()
+    other_user.refresh_from_db()
+    assert test_user.first_name == "Updated"
+    assert other_user.first_name == "Other"

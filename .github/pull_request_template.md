@@ -32,6 +32,8 @@
 - [ ] Template generation with various package combinations
 - [ ] Generated project builds successfully
 - [ ] Generated project tests pass
+- [ ] Generated project `make check` passes or skipped with reason
+- [ ] Permission/ownership/failure-path tests added for changed backend behavior
 - [ ] Documentation is up to date
 
 ## Screenshots
@@ -46,6 +48,8 @@
 - [ ] I have tested the changes with different cookiecutter options
 - [ ] All existing tests pass
 - [ ] I have checked for security issues
+- [ ] No secrets, private keys, dumps, `.pyc`, cache, local media, or generated runtime artifacts are included
+- [ ] Optional integrations remain optional and domain-neutral
 
 ## Additional Notes
 <!-- Any additional information for reviewers -->
